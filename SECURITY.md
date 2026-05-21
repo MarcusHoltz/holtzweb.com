@@ -1,16 +1,15 @@
 # Security Policy
 
-## What This Is
+## What is this repo?
 
 A static site theme. Astro. Builds HTML. No server. No database. No user accounts. No sessions. Attack surface is small by nature, not by clever engineering.
 
 All content is public. All output is static. The runtime is the browser, the web server, and whatever CDN you put in front of it — none of which are this project.
 
+
 ---
 
-## What This Is Not
-
-Responsible for:
+## What we are not responsible for:
 
 - Your web server configuration
 - Your CDN headers
@@ -19,7 +18,8 @@ Responsible for:
 - Vulnerabilities in upstream dependencies you chose not to update
 - Whatever you put in your JSON content files
 
-HTTPS, HTTP security headers, and TLS configuration are the responsibility of the deployment environment. This is documented. This will not change.
+HTTPS, HTTP security headers, and TLS configuration are the responsibility of the deployment environment.
+
 
 ---
 
@@ -28,6 +28,7 @@ HTTPS, HTTP security headers, and TLS configuration are the responsibility of th
 This project takes supply chain seriously, which is more than most. pnpm 11 with `strictDepBuilds`, `blockExoticSubdeps`, `minimumReleaseAge`, `trustPolicy: no-downgrade`, and `verifyDepsBeforeRun` — all active, all the time, on every install.
 
 If a dependency is compromised, update the lockfile. That is what the lockfile is for.
+
 
 ---
 
