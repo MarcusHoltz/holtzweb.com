@@ -56,9 +56,9 @@ const otherSites = navigationData.otherSites ?? [];
   <!-- Logo bar -->
   <div id="sidebar-logo-bar" class="bg-navy-800 flex items-center justify-center py-0 border-b border-black" style="height: 80px;">
     <!-- Expanded logo — flex keeps the existing show/hide CSS working; text is absolutely placed -->
-    <a href={withBase('/')} data-astro-reload aria-label={`${siteData.name} home`} id="sidebar-logo-box" class="sidebar-logo-expanded site-logo-box flex items-center justify-center flex-shrink-0" style="width: 164px; height: 94px; margin-top: 0; margin-bottom: 0; position: relative; overflow: visible;">
+    <a href={withBase('/')} data-astro-reload aria-label={`${siteData.name} home`} id="sidebar-logo-box" class="sidebar-logo-expanded site-logo-box flex flex-shrink-0" style="width: 164px; height: 94px; margin-top: 0; margin-bottom: 0; position: relative; overflow: visible;">
       <div id="sidebar-logo-gif" data-base={base} data-gif-count={gifCount} style="position: absolute; inset: 0; opacity: 0; transition: opacity 1.5s ease; background-size: 107% auto; background-position: top left; overflow: hidden;"></div>
-      <span id="logo-glitch-wrap" style="position: relative; z-index: 1; display: inline-block; line-height: 1;">
+      <span id="logo-glitch-wrap" style="position: absolute; top: 25px; left: -14px; z-index: 1; display: inline-block; line-height: 1;">
         <span style="font-family: var(--font-logo); font-weight: bold; font-size: 2.5rem; letter-spacing: 3px; text-transform: uppercase; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.6);">{siteData.logoText}</span>
         <span class="logo-glitch-layer logo-glitch-blue" aria-hidden="true">{siteData.logoText}</span>
         <span class="logo-glitch-layer logo-glitch-red" aria-hidden="true">{siteData.logoText}</span>
@@ -268,7 +268,7 @@ const otherSites = navigationData.otherSites ?? [];
     left: 0;
     height: 2.5rem;
     color: white;
-    background: black;
+    background: var(--color-logo-box);
     overflow: hidden;
     clip-path: inset(0 0 100% 0); /* fully hidden by default */
     white-space: nowrap;
