@@ -2,6 +2,11 @@
 
 Static marketing site for [holtzweb.com](https://www.holtzweb.com) built from [astro-marketing-theme](https://github.com/MarcusHoltz/astro-marketing-theme).
 
+---
+
+
+![A Fun Marketing Website named Holtzweb](https://raw.githubusercontent.com/MarcusHoltz/marcusholtz.github.io/refs/heads/main/assets/img/posts/astro-holtzweb-theme-with-sidebar-nav-blog-portfolio-contact-widget.jpg "Your website could be this cute too")
+
 
 ---
 
