@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulting & Project Support</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; }
+
+        /* Gantt bar load animation */
+        .gantt-bar {
+            transform-box: fill-box;
+            transform-origin: left center;
+            animation: growBar 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transform: scaleX(0);
+        }
+        @keyframes growBar {
+            from { transform: scaleX(0); opacity: 0.7; }
+            to { transform: scaleX(1); opacity: 1; }
+        }
+
+        /* Staggered delays for bars */
+        .bar-1 { animation-delay: 0.3s; }
+        .bar-2 { animation-delay: 0.5s; }
+        .bar-3 { animation-delay: 0.7s; }
+        .bar-4 { animation-delay: 0.9s; }
+        .bar-5 { animation-delay: 1.1s; }
+        .bar-6 { animation-delay: 1.3s; }
+        .bar-7 { animation-delay: 1.5s; }
+        .bar-8 { animation-delay: 1.7s; }
+
+        /* Today line pulse */
+        .today-line { animation: pulseLine 4s ease-in-out infinite; }
+        @keyframes pulseLine {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.9; }
+        }
+
+        /* Milestone pop */
+        .milestone {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transform: scale(0);
+        }
+        @keyframes popIn {
+            to { transform: scale(1); }
+        }
+        .ms-1 { animation-delay: 1.2s; }
+
+        /* Row hover effects */
+        .gantt-row:hover .row-bg { fill: rgba(255,255,255,0.02); }
+        .gantt-row:hover .gantt-bar { filter: brightness(1.15); }
+        .gantt-row:hover .row-label { fill: #e2e8f0; }
+        .gantt-row { cursor: default; }
+
+        .row-label, .gantt-bar, .row-bg { transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 md:p-8" style="background: #020617;">
+
+    <div class="w-full max-w-3xl mx-auto">
+        <div class="rounded-2xl border overflow-hidden shadow-2xl" style="background: #0B1120; border-color: rgba(255,255,255,0.06); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b" style="border-color: rgba(255,255,255,0.04);">
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-1.5 h-1.5 rounded-full bg-emerald-400" style="box-shadow: 0 0 8px rgba(52,211,153,0.6);"></div>
+                        <h3 class="text-sm font-semibold text-white tracking-wide">Consulting & Project Support</h3>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1 ml-4">Engagement Lifecycle Roadmap</p>
+                </div>
+                <div class="flex gap-2">
+                    <span class="px-2.5 py-1 text-[10px] font-medium bg-white/[0.04] text-slate-400 rounded-md border border-white/[0.06]">12–24 Mo</span>
+                    <span class="px-2.5 py-1 text-[10px] font-medium bg-emerald-500/10 text-emerald-400 rounded-md border border-emerald-500/20">Active</span>
+                </div>
+            </div>
+
+            <!-- Gantt Chart -->
+            <div class="p-4 md:p-6">
+                <svg viewBox="0 0 640 340" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Bar Gradients -->
+                        <linearGradient id="gradCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#06b6d4" />
+                            <stop offset="100%" stop-color="#0891b2" />
+                        </linearGradient>
+                        <linearGradient id="gradIndigo" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#6366f1" />
+                            <stop offset="100%" stop-color="#818cf8" />
+                        </linearGradient>
+                        <linearGradient id="gradEmerald" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#10b981" />
+                            <stop offset="100%" stop-color="#059669" />
+                        </linearGradient>
+
+                        <!-- Glow Filters -->
+                        <filter id="glowCyan" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feFlood flood-color="#06b6d4" flood-opacity="0.25" />
+                            <feComposite in2="blur" operator="in" />
+                            <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+                        </filter>
+                        <filter id="glowIndigo" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feFlood flood-color="#6366f1" flood-opacity="0.25" />
+                            <feComposite in2="blur" operator="in" />
+                            <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+                        </filter>
+                        <filter id="glowEmerald" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feFlood flood-color="#10b981" flood-opacity="0.25" />
+                            <feComposite in2="blur" operator="in" />
+                            <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+                        </filter>
+                        <filter id="todayGlow" x="-50%" y="-10%" width="200%" height="120%">
+                            <feGaussianBlur stdDeviation="4" result="blur" />
+                            <feFlood flood-color="#ffffff" flood-opacity="0.4" />
+                            <feComposite in2="blur" operator="in" />
+                            <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+                        </filter>
+                    </defs>
+
+                    <!-- Q1-Q6 Time Headers -->
+                    <text x="180" y="25" text-anchor="middle" fill="#475569" font-size="9" font-weight="600" letter-spacing="0.1em">Q1</text>
+                    <text x="260" y="25" text-anchor="middle" fill="#475569" font-size="9" font-weight="600" letter-spacing="0.1em">Q2</text>
+                    <text x="340" y="25" text-anchor="middle" fill="#475569" font-size="9" font-weight="600" letter-spacing="0.1em">Q3</text>
+                    <text x="420" y="25" text-anchor="middle" fill="#475569" font-size="9" font-weight="600" letter-spacing="0.1em">Q4</text>
+                    <text x="500" y="25" text-anchor="middle" fill="#475569" font-size="9" font-weight="600" letter-spacing="0.1em">Q5</text>
+                    <text x="580" y="25" text-anchor="middle" fill="#475569" font-size="9" font-weight="600" letter-spacing="0.1em">Q6</text>
+
+                    <!-- Vertical Grid Lines (Quarters) -->
+                    <line x1="140" y1="35" x2="140" y2="305" stroke="#1E293B" stroke-width="1" />
+                    <line x1="220" y1="35" x2="220" y2="305" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="2 4" />
+                    <line x1="300" y1="35" x2="300" y2="305" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="2 4" />
+                    <line x1="380" y1="35" x2="380" y2="305" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="2 4" />
+                    <line x1="460" y1="35" x2="460" y2="305" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="2 4" />
+                    <line x1="540" y1="35" x2="540" y2="305" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="2 4" />
+                    <line x1="620" y1="35" x2="620" y2="305" stroke="#1E293B" stroke-width="1" />
+
+                    <!-- Horizontal Row Separators -->
+                    <line x1="140" y1="75" x2="620" y2="75" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+                    <line x1="140" y1="120" x2="620" y2="120" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+                    <line x1="140" y1="165" x2="620" y2="165" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+                    <line x1="140" y1="210" x2="620" y2="210" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+                    <line x1="140" y1="255" x2="620" y2="255" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+
+                    <!-- Row 1: IT Infrastructure Audits -->
+                    <g class="gantt-row">
+                        <rect class="row-bg" x="0" y="40" width="640" height="35" fill="transparent" />
+                        <text class="row-label" x="130" y="62" text-anchor="end" fill="#64748b" font-size="11" font-weight="500">Infra Audit</text>
+                        <!-- M1-M2.5 -->
+                        <rect class="gantt-bar bar-1" x="140" y="48" width="66" height="18" rx="4" fill="url(#gradCyan)" filter="url(#glowCyan)" />
+                    </g>
+
+                    <!-- Row 2: Technology Roadmapping -->
+                    <g class="gantt-row">
+                        <rect class="row-bg" x="0" y="85" width="640" height="35" fill="transparent" />
+                        <text class="row-label" x="130" y="107" text-anchor="end" fill="#64748b" font-size="11" font-weight="500">Tech Roadmap</text>
+                        <!-- M2.5-M5 -->
+                        <rect class="gantt-bar bar-2" x="207" y="93" width="66" height="18" rx="4" fill="url(#gradCyan)" filter="url(#glowCyan)" />
+                        <!-- 12-24mo notation -->
+                        <text x="278" y="106" fill="#0e7490" font-size="8" font-weight="600" opacity="0.6">12-24mo</text>
+                    </g>
+
+                    <!-- Row 3: Vendor Selection -->
+                    <g class="gantt-row">
+                        <rect class="row-bg" x="0" y="130" width="640" height="35" fill="transparent" />
+                        <text class="row-label" x="130" y="152" text-anchor="end" fill="#64748b" font-size="11" font-weight="500">Vendor Select</text>
+                        <!-- M5-M6.5 -->
+                        <rect class="gantt-bar bar-3" x="273" y="138" width="40" height="18" rx="4" fill="url(#gradIndigo)" filter="url(#glowIndigo)" />
+                        <!-- Decision Milestone -->
+                        <rect class="milestone ms-1" x="310" y="143" width="10" height="10" rx="2" fill="#818cf8" transform="rotate(45 315 148)" filter="url(#glowIndigo)" />
+                    </g>
+
+                    <!-- Row 4: Project Management -->
+                    <g class="gantt-row">
+                        <rect class="row-bg" x="0" y="175" width="640" height="35" fill="transparent" />
+                        <text class="row-label" x="130" y="197" text-anchor="end" fill="#64748b" font-size="11" font-weight="500">Project Mgmt</text>
+                        <!-- M6.5-M18 -->
+                        <rect class="gantt-bar bar-4" x="313" y="183" width="307" height="18" rx="4" fill="url(#gradIndigo)" filter="url(#glowIndigo)" opacity="0.85" />
+                        <!-- Progress Indicator -->
+                        <rect x="313" y="183" width="55" height="18" rx="4" fill="rgba(255,255,255,0.1)" />
+                    </g>
+
+                    <!-- Row 5: Team Augmentation -->
+                    <g class="gantt-row">
+                        <rect class="row-bg" x="0" y="220" width="640" height="35" fill="transparent" />
+                        <text class="row-label" x="130" y="242" text-anchor="end" fill="#64748b" font-size="11" font-weight="500">Team Augment</text>
+                        <!-- M8-M10.5 -->
+                        <rect class="gantt-bar bar-5" x="353" y="228" width="67" height="18" rx="4" fill="url(#gradEmerald)" filter="url(#glowEmerald)" />
+                        <!-- M12-M15 -->
+                        <rect class="gantt-bar bar-6" x="460" y="228" width="80" height="18" rx="4" fill="url(#gradEmerald)" filter="url(#glowEmerald)" />
+                        <!-- Capacity Icons -->
+                        <circle cx="360" cy="237" r="3" fill="#0B1120" />
+                        <circle cx="365" cy="237" r="3" fill="#0B1120" />
+                        <path d="M357 237 a3 3 0 0 1 6 0 M355 242 a5 5 0 0 1 10 0" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.7"/>
+                        <path d="M362 237 a3 3 0 0 1 6 0 M360 242 a5 5 0 0 1 10 0" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.7"/>
+                    </g>
+
+                    <!-- Row 6: New Office / Site Buildouts -->
+                    <g class="gantt-row">
+                        <rect class="row-bg" x="0" y="265" width="640" height="35" fill="transparent" />
+                        <text class="row-label" x="130" y="287" text-anchor="end" fill="#64748b" font-size="11" font-weight="500">Site Buildout</text>
+                        <!-- M9-M18 -->
+                        <rect class="gantt-bar bar-7" x="380" y="273" width="240" height="18" rx="4" fill="url(#gradEmerald)" filter="url(#glowEmerald)" />
+                        <!-- Delivery Milestone -->
+                        <rect class="milestone ms-1" x="613" y="278" width="10" height="10" rx="2" fill="#34d399" transform="rotate(45 618 283)" filter="url(#glowEmerald)" />
+                    </g>
+
+                    <!-- TODAY MARKER (M8.5) -->
+                    <g class="today-line" filter="url(#todayGlow)">
+                        <line x1="367" y1="32" x2="367" y2="305" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 3" />
+                        <rect x="354" y="30" width="26" height="14" rx="3" fill="#ffffff" />
+                        <text x="367" y="40" text-anchor="middle" fill="#020617" font-size="7" font-weight="700">TODAY</text>
+                    </g>
+
+                </svg>
+            </div>
+
+            <!-- Footer Legend -->
+            <div class="flex items-center justify-between px-6 py-3 border-t" style="border-color: rgba(255,255,255,0.04);">
+                <div class="flex gap-5">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2.5 h-2.5 rounded-sm bg-cyan-500"></div>
+                        <span class="text-[10px] text-slate-500 font-medium tracking-wide">ASSESS & PLAN</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2.5 h-2.5 rounded-sm bg-indigo-500"></div>
+                        <span class="text-[10px] text-slate-500 font-medium tracking-wide">DECIDE & MANAGE</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></div>
+                        <span class="text-[10px] text-slate-500 font-medium tracking-wide">EXECUTE & DELIVER</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2 h-2 bg-white/40 rotate-45 rounded-[1px]"></div>
+                        <span class="text-[10px] text-slate-500 font-medium tracking-wide">MILESTONE</span>
+                    </div>
+                </div>
+                <span class="text-[9px] text-slate-600 font-medium tracking-wider uppercase">Live View</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

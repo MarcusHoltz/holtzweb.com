@@ -1,0 +1,526 @@
+---
+import { withBase } from '@/lib/assetPath';
+
+interface Value {
+  title: string;
+  description: string;
+  icon?: string;
+  orbColor?: string;
+}
+interface Props {
+  values: Value[];
+}
+
+const { values } = Astro.props;
+const defaultColors = ['#00e5ff', '#3b82f6', '#818cf8', '#34d399'];
+---
+
+<style>
+  .about-scene {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    min-height: 320px;
+    background: transparent;
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+  }
+
+  .about-scene:active {
+    cursor: grabbing;
+  }
+
+  .about-scene canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .about-scene-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    background: rgba(8, 10, 20, 0.88);
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 4px 11px;
+    opacity: 0;
+    z-index: 10;
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background 0.15s;
+  }
+
+  .about-scene-label:hover {
+    background: rgba(14, 18, 34, 0.97);
+  }
+
+  .about-scene-tooltip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.68rem;
+    line-height: 1.45;
+    color: var(--color-text-muted, #94a3b8);
+    background: rgba(8, 10, 22, 0.93);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 6px 10px;
+    opacity: 0;
+    z-index: 15;
+    max-width: 230px;
+    white-space: normal;
+    transition: opacity 0.15s;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .about-scene {
+      height: 320px;
+    }
+    .about-scene-label {
+      font-size: 0.75rem;
+      max-width: 200px;
+    }
+    .about-scene-tooltip {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .about-scene {
+      display: none;
+    }
+  }
+</style>
+
+<div
+  class="about-scene"
+  id="about-scene-wrap"
+  aria-hidden="true"
+  data-scene={JSON.stringify({ values })}
+>
+  {values.map((v, i) => {
+    const color = v.orbColor ?? defaultColors[i] ?? '#00e5ff';
+    return (
+      <div
+        class="about-scene-label"
+        data-orb-idx={String(i)}
+        style={`color:${color}; border-color:${color}`}
+      >
+        {v.title}
+      </div>
+    );
+  })}
+  <div id="about-scene-tooltip" class="about-scene-tooltip"></div>
+</div>
+
+<script is:inline define:vars={{ threeSrc: withBase('/scripts/three.min.js') }} data-astro-rerun>
+(function () {
+  var wrap = document.getElementById('about-scene-wrap');
+  if (!wrap) return;
+
+  function init() {
+  if (typeof THREE === 'undefined') return;
+
+  if (window.__aboutSceneRAF) {
+    cancelAnimationFrame(window.__aboutSceneRAF);
+    window.__aboutSceneRAF = null;
+  }
+  var oldCanvas = wrap.querySelector('canvas');
+  if (oldCanvas) oldCanvas.remove();
+
+  var sceneData = {};
+  try { sceneData = JSON.parse(wrap.dataset.scene || '{}'); } catch (e) {}
+  var values = sceneData.values || [];
+  var fallback = [0x00e5ff, 0x3b82f6, 0x818cf8, 0x34d399];
+
+  // ── Renderer ──
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(52, wrap.clientWidth / wrap.clientHeight, 0.1, 1000);
+  var lookTarget = new THREE.Vector3(1, 2.5, 0);
+  var baseCamDir = new THREE.Vector3(7, 5.5, 15); // (8,8,15) - lookTarget
+  var zoomTarget = 0.72;
+  var zoomCurrent = 0.72;
+  camera.position.copy(lookTarget).addScaledVector(baseCamDir, zoomCurrent);
+  camera.lookAt(lookTarget);
+
+  var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setClearColor(0x000000, 0);
+  renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  wrap.appendChild(renderer.domElement);
+
+  // ── Scene group — drag rotates this ──
+  var sg = new THREE.Group();
+  scene.add(sg);
+
+  var D = []; // disposables
+
+  function makeBox(w, h, d, fill, fillA, edge, edgeA) {
+    var geo = new THREE.BoxGeometry(w, h, d);
+    var mat = new THREE.MeshBasicMaterial({ color: fill, transparent: true, opacity: fillA });
+    var mesh = new THREE.Mesh(geo, mat);
+    var eGeo = new THREE.EdgesGeometry(geo);
+    var eMat = new THREE.LineBasicMaterial({ color: edge, transparent: true, opacity: edgeA !== undefined ? edgeA : 0.9 });
+    mesh.add(new THREE.LineSegments(eGeo, eMat));
+    D.push(geo, mat, eGeo, eMat);
+    return mesh;
+  }
+
+  // ── Desk ──
+  var desk = makeBox(10, 0.3, 5, 0x0f172a, 0.6, 0x00e5ff);
+  desk.position.set(0, 0, 0);
+  sg.add(desk);
+
+  // ── Monitor stands ──
+  var s1 = makeBox(0.28, 1.4, 0.28, 0x1e293b, 0.8, 0x475569);
+  s1.position.set(-2.5, 0.85, -2.3);
+  sg.add(s1);
+
+  var s2 = makeBox(0.22, 1.1, 0.22, 0x1e293b, 0.8, 0x475569);
+  s2.position.set(1.0, 0.7, -2.3);
+  sg.add(s2);
+
+  // ── Monitors ──
+  var m1 = makeBox(3.8, 2.6, 0.14, 0x0a0f1e, 0.95, 0x00e5ff);
+  m1.position.set(-2.5, 2.7, -2.34);
+  sg.add(m1);
+
+  var sg1 = new THREE.PlaneGeometry(3.4, 2.2);
+  var sm1 = new THREE.MeshBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.12 });
+  var scrMesh1 = new THREE.Mesh(sg1, sm1);
+  scrMesh1.position.set(-2.5, 2.7, -2.26);
+  sg.add(scrMesh1);
+  D.push(sg1, sm1);
+
+  var m2 = makeBox(2.8, 2.0, 0.14, 0x0a0f1e, 0.95, 0x3b82f6);
+  m2.position.set(1.0, 2.25, -2.34);
+  sg.add(m2);
+
+  var sg2 = new THREE.PlaneGeometry(2.4, 1.6);
+  var sm2 = new THREE.MeshBasicMaterial({ color: 0x3b82f6, transparent: true, opacity: 0.09 });
+  var scrMesh2 = new THREE.Mesh(sg2, sm2);
+  scrMesh2.position.set(1.0, 2.25, -2.26);
+  sg.add(scrMesh2);
+  D.push(sg2, sm2);
+
+  // ── Keyboard ──
+  var kb = makeBox(2.4, 0.1, 0.9, 0x1e293b, 0.9, 0x475569);
+  kb.position.set(-1.5, 0.2, -0.6);
+  sg.add(kb);
+
+  // ── Server rack ──
+  var rack = makeBox(2.5, 6.5, 1.8, 0x080e1f, 0.9, 0x3b82f6);
+  rack.position.set(6.5, 3.5, -3.5);
+  sg.add(rack);
+
+  for (var si = 0; si < 5; si++) {
+    var unit = makeBox(2.0, 0.62, 1.38, si % 2 === 0 ? 0x0f2647 : 0x162035, 0.95, 0x2563eb);
+    unit.position.set(6.5, 0.76 + si * 1.1, -3.5);
+    sg.add(unit);
+  }
+
+  var ledClrs = [0x00ff88, 0x00ff88, 0xffaa00];
+  var leds = [];
+  for (var li = 0; li < 3; li++) {
+    var lGeo = new THREE.SphereGeometry(0.09, 6, 4);
+    var lMat = new THREE.MeshBasicMaterial({ color: ledClrs[li], transparent: true, opacity: 1 });
+    var led = new THREE.Mesh(lGeo, lMat);
+    led.position.set(7.63, 1.4 + li * 1.6, -2.6);
+    sg.add(led);
+    leds.push(led);
+    D.push(lGeo, lMat);
+  }
+
+  // ── Network lines ──
+  var nPos = new Float32Array([
+    -1, 0.16, -2.5,  6.5, 4.5, -3.5,
+     0, 0.16, -2.5,  6.5, 3.5, -3.5,
+     1, 0.16, -2.5,  6.5, 2.5, -3.5
+  ]);
+  var nGeo = new THREE.BufferGeometry();
+  nGeo.setAttribute('position', new THREE.BufferAttribute(nPos, 3));
+  var nMat = new THREE.LineBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.22 });
+  sg.add(new THREE.LineSegments(nGeo, nMat));
+  D.push(nGeo, nMat);
+
+  // ── Chair ──
+  var chSeat = makeBox(1.6, 0.18, 1.6, 0x1e293b, 0.85, 0x64748b);
+  chSeat.position.set(-2.0, 1.45, 3.2);
+  sg.add(chSeat);
+
+  var chBack = makeBox(1.4, 2.2, 0.14, 0x1e293b, 0.85, 0x64748b);
+  chBack.position.set(-2.0, 2.65, 3.85);
+  sg.add(chBack);
+
+  var legPos = [[-2.65, 0.75, 2.7], [-1.35, 0.75, 2.7], [-2.65, 0.75, 3.7], [-1.35, 0.75, 3.7]];
+  for (var legi = 0; legi < legPos.length; legi++) {
+    var leg = makeBox(0.12, 1.3, 0.12, 0x1e293b, 0.8, 0x475569);
+    leg.position.set(legPos[legi][0], legPos[legi][1], legPos[legi][2]);
+    sg.add(leg);
+  }
+
+  // ── Person (seated, behind desk) ──
+  var hGeo = new THREE.SphereGeometry(0.5, 12, 8);
+  var hMat = new THREE.MeshBasicMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.85 });
+  var head = new THREE.Mesh(hGeo, hMat);
+  head.position.set(-2.0, 4.0, 2.7);
+  sg.add(head);
+  D.push(hGeo, hMat);
+
+  var heGeo = new THREE.EdgesGeometry(new THREE.SphereGeometry(0.5, 8, 6));
+  var heMat = new THREE.LineBasicMaterial({ color: 0x94a3b8, transparent: true, opacity: 0.4 });
+  var hEdge = new THREE.LineSegments(heGeo, heMat);
+  hEdge.position.copy(head.position);
+  sg.add(hEdge);
+  D.push(heGeo, heMat);
+
+  var torso = makeBox(1.1, 1.6, 0.72, 0x334155, 0.88, 0x64748b);
+  torso.position.set(-2.0, 2.75, 3.0);
+  sg.add(torso);
+
+  // ── Thought bubble anchors — label is the hover element, trail dots float below ──
+  var oAngles = [0.3, 2.5, 4.1, 5.7];
+  var oRadii  = [4.5, 5.1, 4.7, 5.3];
+  var oHgts   = [7.0, 6.4, 7.5, 6.8];
+  var oSpds   = [0.40, 0.34, 0.46, 0.38];
+  var orbs = [];
+
+  for (var oi = 0; oi < Math.min(values.length, 4); oi++) {
+    var raw = (values[oi].orbColor || '').replace('#', '');
+    var clr = raw ? parseInt(raw, 16) : fallback[oi];
+
+    var anchor = new THREE.Object3D();
+    var trailMats = [];
+
+    var trailSizes   = [0.18, 0.12, 0.07];
+    var trailOffsets = [[0, -0.95, 0], [0, -1.35, 0], [0, -1.65, 0]];
+    for (var ti = 0; ti < 3; ti++) {
+      var tGeo = new THREE.SphereGeometry(trailSizes[ti], 8, 6);
+      var tMat = new THREE.MeshBasicMaterial({ color: clr, transparent: true, opacity: 0.72 });
+      var tMesh = new THREE.Mesh(tGeo, tMat);
+      tMesh.position.set(trailOffsets[ti][0], trailOffsets[ti][1], trailOffsets[ti][2]);
+      anchor.add(tMesh);
+      trailMats.push(tMat);
+      D.push(tGeo, tMat);
+    }
+
+    var initAng = oAngles[oi];
+    anchor.position.set(Math.cos(initAng) * oRadii[oi], oHgts[oi], Math.sin(initAng) * oRadii[oi]);
+    sg.add(anchor);
+
+    orbs.push({ anchor: anchor, trailMats: trailMats, ang: initAng, r: oRadii[oi], h: oHgts[oi], spd: oSpds[oi] });
+  }
+
+  var lbls = wrap.querySelectorAll('.about-scene-label');
+  var tooltip = document.getElementById('about-scene-tooltip');
+  var hoveredIdx = -1;
+
+  // Labels own hover state — stop propagation so label clicks don't start a drag
+  Array.prototype.forEach.call(lbls, function (lbl, idx) {
+    lbl.addEventListener('mouseenter', function () { hoveredIdx = idx; });
+    lbl.addEventListener('mouseleave', function () { hoveredIdx = -1; });
+    lbl.addEventListener('mousedown', function (e) { e.stopPropagation(); });
+  });
+
+  // ── Drag rotation ──
+  var isDragging = false;
+  var prevMx = 0, prevMy = 0;
+
+  function startDrag(cx, cy) {
+    isDragging = true;
+    hoveredIdx = -1;
+    prevMx = cx; prevMy = cy;
+    wrap.style.cursor = 'grabbing';
+  }
+
+  function doDrag(cx, cy) {
+    if (!isDragging) return;
+    var dx = cx - prevMx, dy = cy - prevMy;
+    sg.rotation.y += dx * 0.008;
+    sg.rotation.x = Math.max(-0.85, Math.min(0.85, sg.rotation.x + dy * 0.008));
+    prevMx = cx; prevMy = cy;
+  }
+
+  function endDrag() {
+    isDragging = false;
+    wrap.style.cursor = 'grab';
+  }
+
+  function onWinMouseMove(e) { doDrag(e.clientX, e.clientY); }
+  function onWinMouseUp() { endDrag(); }
+
+  wrap.addEventListener('mousedown', function (e) { startDrag(e.clientX, e.clientY); });
+  window.addEventListener('mousemove', onWinMouseMove);
+  window.addEventListener('mouseup', onWinMouseUp);
+
+  wrap.addEventListener('touchstart', function (e) {
+    if (e.touches.length === 1) startDrag(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+  wrap.addEventListener('touchmove', function (e) {
+    if (!isDragging || e.touches.length !== 1) return;
+    e.preventDefault();
+    doDrag(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: false });
+  wrap.addEventListener('touchend', endDrag);
+
+  // ── Wheel zoom ──
+  function onWheel(e) {
+    e.preventDefault();
+    zoomTarget = Math.max(0.3, Math.min(1.8, zoomTarget * (e.deltaY > 0 ? 1.1 : 0.9)));
+  }
+  wrap.addEventListener('wheel', onWheel, { passive: true });
+
+  // ── Animation ──
+  var clock = new THREE.Clock();
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tv = new THREE.Vector3();
+
+  function animate() {
+    window.__aboutSceneRAF = requestAnimationFrame(animate);
+    var t = reduced ? 0 : clock.getElapsedTime();
+
+    // Screen glows
+    sm1.opacity = 0.08 + Math.sin(t * 1.8) * 0.05;
+    sm2.opacity = 0.06 + Math.cos(t * 2.2) * 0.04;
+
+    // LED blinks
+    for (var i = 0; i < leds.length; i++) {
+      leds[i].material.opacity = 0.5 + Math.sin(t * 2.8 + i * 1.4) * 0.5;
+    }
+
+    if (!reduced) {
+      // Head bob
+      head.position.y = 4.0 + Math.sin(t * 0.75) * 0.04;
+      hEdge.position.y = head.position.y;
+
+      // Orbit anchors
+      for (var oi2 = 0; oi2 < orbs.length; oi2++) {
+        orbs[oi2].ang += orbs[oi2].spd * 0.008;
+        var ox = Math.cos(orbs[oi2].ang) * orbs[oi2].r;
+        var oz = Math.sin(orbs[oi2].ang) * orbs[oi2].r;
+        var oy = orbs[oi2].h + Math.sin(t * 1.1 + oi2 * 0.9) * 0.25;
+        orbs[oi2].anchor.position.set(ox, oy, oz);
+      }
+    }
+
+    // Smooth zoom — dolly camera along its original direction
+    zoomCurrent += (zoomTarget - zoomCurrent) * 0.1;
+    camera.position.copy(lookTarget).addScaledVector(baseCamDir, zoomCurrent);
+    camera.lookAt(lookTarget);
+
+    renderer.render(scene, camera);
+
+    // Hover effects + label positions
+    for (var li2 = 0; li2 < orbs.length; li2++) {
+      var isHov = li2 === hoveredIdx;
+
+      // Scale trail cluster
+      var ts = isHov ? 1.3 : 1.0;
+      var cs = orbs[li2].anchor.scale.x;
+      orbs[li2].anchor.scale.setScalar(cs + (ts - cs) * 0.1);
+
+      // Trail opacity
+      var targetOp = isHov ? 1.0 : 0.72;
+      for (var ti2 = 0; ti2 < orbs[li2].trailMats.length; ti2++) {
+        var curOp = orbs[li2].trailMats[ti2].opacity;
+        orbs[li2].trailMats[ti2].opacity = curOp + (targetOp - curOp) * 0.12;
+      }
+
+      // Label position
+      if (li2 < lbls.length) {
+        orbs[li2].anchor.getWorldPosition(tv);
+        tv.project(camera);
+        var px = (tv.x * 0.5 + 0.5) * wrap.clientWidth;
+        var py = (-tv.y * 0.5 + 0.5) * wrap.clientHeight;
+        lbls[li2].style.transform = 'translate(-50%,-50%) translate(' + px + 'px,' + py + 'px)';
+        lbls[li2].style.opacity = tv.z < 1 ? '1' : '0';
+      }
+    }
+
+    // Tooltip
+    if (tooltip) {
+      if (hoveredIdx >= 0 && values[hoveredIdx]) {
+        tooltip.textContent = values[hoveredIdx].description;
+        orbs[hoveredIdx].anchor.getWorldPosition(tv);
+        tv.project(camera);
+        var tx = (tv.x * 0.5 + 0.5) * wrap.clientWidth;
+        var ty = (-tv.y * 0.5 + 0.5) * wrap.clientHeight + 28;
+        tooltip.style.transform = 'translate(-50%,0) translate(' + tx + 'px,' + ty + 'px)';
+        tooltip.style.borderColor = values[hoveredIdx].orbColor || 'rgba(255,255,255,0.15)';
+        tooltip.style.opacity = '1';
+      } else {
+        tooltip.style.opacity = '0';
+      }
+    }
+  }
+
+  // ── Resize ──
+  var rt;
+  function onResize() {
+    clearTimeout(rt);
+    rt = setTimeout(function () {
+      var w = wrap.clientWidth, h = wrap.clientHeight;
+      if (!w || !h) return;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }, 80);
+  }
+  window.addEventListener('resize', onResize);
+
+  // ── Cleanup ──
+  function cleanup() {
+    if (window.__aboutSceneRAF) {
+      cancelAnimationFrame(window.__aboutSceneRAF);
+      window.__aboutSceneRAF = null;
+    }
+    window.removeEventListener('mousemove', onWinMouseMove);
+    window.removeEventListener('mouseup', onWinMouseUp);
+    window.removeEventListener('resize', onResize);
+    wrap.removeEventListener('wheel', onWheel);
+    for (var i = 0; i < D.length; i++) {
+      if (D[i] && D[i].dispose) D[i].dispose();
+    }
+    renderer.dispose();
+  }
+  document.addEventListener('astro:before-swap', cleanup, { once: true });
+
+  animate();
+  } // end init()
+
+  if (typeof THREE !== 'undefined') {
+    init();
+    return;
+  }
+
+  // Inject Three.js async — non-blocking. On subsequent navigations THREE is
+  // already in scope so init() runs immediately above.
+  var existing = document.querySelector('script[data-three-loader]');
+  if (!existing) {
+    var s = document.createElement('script');
+    s.src = threeSrc;
+    s.setAttribute('data-three-loader', '');
+    s.addEventListener('load', init, { once: true });
+    document.head.appendChild(s);
+  } else if (typeof THREE !== 'undefined') {
+    init();
+  } else {
+    existing.addEventListener('load', init, { once: true });
+  }
+})();
+</script>

@@ -1,0 +1,51 @@
+---
+import testimonials from '@/data/projects/testimonials.json';
+import { icons } from '@/lib/icons';
+---
+
+<section id="testimonials" class="relative py-20 px-6 lg:px-12" style="background: var(--bg-deep);" aria-labelledby="testimonials-heading">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-12">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="h-px w-8" style="background: var(--color-primary);"></div>
+        <span class="text-xs font-mono font-semibold tracking-[3px] uppercase" style="color: var(--color-primary);">Client Feedback</span>
+      </div>
+      <h2 id="testimonials-heading" class="font-display font-bold text-4xl sm:text-5xl text-white uppercase tracking-wide mb-4">
+        Clients Who Stopped Dreading IT
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-site-border">
+      {testimonials.map((t) => (
+        <figure class="p-6 bg-navy-800 hover:bg-navy-700 transition-colors duration-200">
+          <!-- Stars -->
+          <div class="flex gap-1 mb-4">
+            {Array(5).fill(0).map(() => (
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-amber-400 text-amber-400" viewBox="0 0 24 24" set:html={icons['star-filled']} />
+            ))}
+          </div>
+
+          <!-- Quote bar -->
+          <div class="w-6 h-0.5 mb-4" style="background: var(--color-primary);"></div>
+
+          <blockquote class="text-site-text leading-relaxed mb-6 text-sm italic">
+            "{t.quote}"
+          </blockquote>
+
+          <figcaption class="flex items-center gap-3">
+            <div class="w-9 h-9 flex items-center justify-center text-sm font-display font-bold flex-shrink-0 border" style="background: rgb(var(--primary-ch) / 0.12); color: var(--color-primary); border-color: var(--color-primary);">
+              {t.initials}
+            </div>
+            <div>
+              <div class="font-display font-bold text-white text-sm uppercase tracking-wide">{t.name}</div>
+              <div class="text-site-muted text-xs font-mono">{t.role}, {t.company}</div>
+            </div>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Gray band -->
+<div class="site-band"></div>

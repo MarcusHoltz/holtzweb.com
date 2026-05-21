@@ -1,15 +1,15 @@
 {
-  "name": "The Leadership Team",
-  "title": "Managing Partners & Operating Executives",
-  "email": "ir@apexcap.example",
-  "location": "New York, New York",
-  "linkedin": "apex-capital-group",
-  "github": "",
-  "education": "Combined +40 Years Capital Markets & Operations Experience",
-  "yearsExperience": "20+",
-  "personal_url": "https://apexcap.example",
-  "apex_url": "https://apexcap.example",
-  "apex_email": "ir@apexcap.example",
-  "blog_url": "https://apexcap.example/blog",
-  "aboutLong": "Apex Capital Group is a private holding company focused on the disciplined acquisition and optimization of operating businesses. We identify companies with durable fundamentals that benefit from strategic capital injection and operational expertise. Our portfolio spans multiple sectors with a unified mandate: generate superior risk-adjusted returns for investors while building companies that outlast the deal."
+  "name": "Marcus Holtz",
+  "title": "Senior System Administrator & Web Program Lead",
+  "email": "contact@holtzhost.com",
+  "location": "Denver, Colorado",
+  "linkedin": "marcus-holtz",
+  "github": "marcusholtz",
+  "education": "BS Finance, Southern Illinois University Carbondale",
+  "yearsExperience": "11+",
+  "personal_url": "https://marcusholtz.com",
+  "holtzhost_url": "https://holtzhost.com",
+  "holtzhost_email": "contact@holtzhost.com",
+  "blog_url": "https://blog.holtzweb.com",
+  "aboutLong": "Holtzweb is a systems engineering and web development firm built on over 10 years of experience. Founder, Marcus Holtz, has spent the last decade building and maintaining servers, networks, and web infrastructure for municipalities, tech companies, tourism organizations, and non-profits.  As the senior engineer, Marcus delivers technical solutions across IT, development, and operations — the full stack: network design and virtualization, CI/CD pipelines (local or cloud), and custom application development. Need a seasoned expert who knows your environment inside and out? Let's talk."
 }

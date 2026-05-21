@@ -1,0 +1,108 @@
+---
+import { withBase } from '@/lib/assetPath';
+import { icons } from '@/lib/icons';
+const features = [
+  { iconKey: 'refresh-arrows', title: "Automated Patching",   description: "OS and app patches staged and deployed on your schedule. No 2am surprises." },
+  { iconKey: 'eye',            title: "24/7 Monitoring",      description: "Every server, every service, every minute. Alerts reach me — not a bot." },
+  { iconKey: 'cube-3d',        title: "Backup Automation",    description: "Incremental backups, off-site replication, automated restore testing. \"We have backups\" is the beginning of the sentence, not the end." },
+  { iconKey: 'shield-check',   title: "Security Automation",  description: "Vulnerability scans, failed login alerts, firewall rule enforcement — running continuously, not just when someone remembers to check." },
+  { iconKey: 'clipboard-simple', title: "Runbook Automation", description: "New user onboarding, SSL renewals, log rotation — automated so they actually happen." },
+  { iconKey: 'phone',          title: "Human Escalation",     description: "When something needs a real decision, it gets one. Not another automated response." },
+];
+---
+
+<section id="concierge-it" class="relative py-20 px-6 lg:px-12 overflow-hidden" style="background: var(--bg-deep);" aria-labelledby="concierge-heading">
+  <div class="relative z-10 max-w-5xl mx-auto">
+    <!-- Section header -->
+    <div class="grid lg:grid-cols-2 gap-12 items-center mb-14">
+      <div>
+        <div class="flex items-center gap-3 mb-5">
+          <div class="h-px w-8" style="background: var(--color-primary);"></div>
+          <span class="text-[9px] font-display font-bold uppercase tracking-[3px]" style="color: var(--color-primary);">Flagship Product</span>
+        </div>
+
+        <h2 id="concierge-heading" class="font-display font-bold text-3xl sm:text-4xl text-white uppercase tracking-wide mb-4 leading-tight">
+          Concierge IT —<br />
+          <span style="color: var(--color-primary);">Your Environment, Running. Whether You're Watching or Not.</span>
+        </h2>
+
+        <p class="text-site-text-muted text-lg leading-relaxed mb-5 border-l border-site-border pl-4">
+          Most managed IT products automate the billing. This one automates the work. Patches run on schedule. Backups run and get tested. SSL certs renew before they expire. Monitoring alerts reach me — not a queue.
+        </p>
+
+        <p class="text-site-text-muted leading-relaxed mb-8">
+          When something needs a real decision — a config drift, a suspicious login attempt, something that tripped an alert at 2am — that's me. The engineer who set it up and knows what normal looks like.
+        </p>
+
+        <a
+          href={withBase('/services/concierge-it')}
+          class="inline-flex items-center gap-2 px-7 py-3.5 text-white font-display font-semibold tracking-[2px] uppercase shadow-glow-md hover:brightness-110 transition-all duration-300"
+          style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);"
+        >
+          Explore Concierge IT
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" set:html={icons['arrow-right']} />
+        </a>
+      </div>
+
+      <!-- Automation pipeline visual -->
+      <div class="relative">
+        <div class="border border-site-border bg-site-surface p-6">
+          <p class="text-[9px] font-display font-bold text-site-muted mb-4 uppercase tracking-[3px]">Automation Pipeline</p>
+          <div class="space-y-2">
+            {[
+              { step: "01", label: "Event detected", status: "complete", icon: "🔍" },
+              { step: "02", label: "Runbook triggered", status: "complete", icon: "⚡" },
+              { step: "03", label: "Automated resolution", status: "complete", icon: "✅" },
+              { step: "04", label: "Human review", status: "active", icon: "👤" },
+              { step: "05", label: "Report generated", status: "pending", icon: "📊" },
+            ].map((item) => (
+              <div class={`flex items-center gap-3 px-3 py-2.5 border transition-colors ${
+                item.status === "complete" ? "border-site-green/20 bg-site-green/5" :
+                item.status === "active" ? "border-site-green/40 bg-site-green/8" :
+                "border-site-border bg-transparent"
+              }`}>
+                <span class="text-base">{item.icon}</span>
+                <div class="flex-1">
+                  <span class="text-xs font-mono text-site-muted">{item.step}</span>
+                  <span class={`ml-2 text-sm font-medium ${
+                    item.status === "complete" ? "" :
+                    item.status === "active" ? "text-white" :
+                    "text-site-muted"
+                  }`} style={item.status === "complete" ? "color: var(--color-primary);" : ""}>{item.label}</span>
+                </div>
+                {item.status === "complete" && (
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color: var(--color-primary);" set:html={icons['check']} />
+                )}
+                {item.status === "active" && (
+                  <span class="w-2 h-2 rounded-full animate-pulse" style="background: var(--color-primary);"></span>
+                )}
+              </div>
+            ))}
+          </div>
+          <div class="mt-4 pt-4 border-t border-site-border flex items-center justify-between text-xs">
+            <span class="text-site-muted font-mono">avg resolution time</span>
+            <span class="font-bold font-mono" style="color: var(--color-primary);">4m 23s</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-site-border">
+      {features.map((feature) => (
+        <div class="p-5 bg-navy-900 hover:bg-navy-800 transition-colors duration-200 border-l-2 border-transparent hover:border-site-green">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="p-2 border border-site-border" style="color: var(--color-primary);">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" set:html={icons[feature.iconKey]} />
+            </div>
+            <h3 class="font-display font-bold text-white text-sm uppercase tracking-wide">{feature.title}</h3>
+          </div>
+          <p class="text-site-muted text-sm leading-relaxed">{feature.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Gray band -->
+<div class="site-band"></div>

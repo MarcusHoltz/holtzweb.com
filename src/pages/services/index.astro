@@ -13,7 +13,7 @@ const schema = {
   provider: { "@type": "LocalBusiness", name: siteData.name },
   hasOfferCatalog: {
     "@type": "OfferCatalog",
-    name: `${siteData.name} Services`,
+    name: `${siteData.name} IT Services`,
     itemListElement: servicesData.map((s) => ({
       "@type": "Offer",
       itemOffered: { "@type": "Service", name: s.title, description: s.description },

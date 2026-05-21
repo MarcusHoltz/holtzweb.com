@@ -1,0 +1,254 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Footer from "@/components/Footer.astro";
+import servicesData from "@/data/services/services.json";
+import { withBase } from "@/lib/assetPath";
+
+const service = servicesData.find((s) => s.slug === "wordpress-web-development")!;
+---
+
+<Layout
+  title={service.pageMeta.title}
+  description={service.pageMeta.description}
+>
+  <div class="px-6 lg:px-12 py-16">
+    <div class="max-w-5xl mx-auto">
+      <nav aria-label="Breadcrumb" class="mb-8">
+        <ol class="flex items-center gap-2 text-sm text-site-muted font-mono">
+          <li><a href={withBase('/')} data-astro-reload class="hover:text-white transition-colors">Home</a></li>
+          <li class="text-site-border">/</li>
+          <li><a href={withBase('/services')} class="hover:text-white transition-colors">Services</a></li>
+          <li class="text-site-border">/</li>
+          <li class={service.theme.accent}>WordPress & Web Dev</li>
+        </ol>
+      </nav>
+
+      <div class="mb-12">
+        <div class={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border ${service.theme.badgeBorder} ${service.theme.badgeBg} mb-5`}>
+          <span class={`text-xs font-mono font-medium ${service.theme.accent} uppercase tracking-wider`}>{service.intro.badge}</span>
+        </div>
+        <h1 class="font-display font-bold text-4xl sm:text-5xl text-white mb-4">{service.intro.heading}</h1>
+        <p class="text-site-text-muted text-xl leading-relaxed max-w-3xl">
+          {service.intro.subHeading}
+        </p>
+      </div>
+
+      <!-- CMS / Block Editor visual -->
+      <div class="mb-12 rounded-2xl border border-site-border bg-navy-800/80 overflow-hidden">
+
+        <!-- Window chrome -->
+        <div class="flex items-center justify-between px-4 py-3 bg-navy-950/60 border-b border-site-border">
+          <div class="flex items-center gap-1.5">
+            <span class="inline-flex items-center justify-center w-4 h-3 text-[9px] leading-none text-site-muted/50 border border-site-muted/20 rounded-[2px] font-mono select-none">─</span>
+            <span class="inline-flex items-center justify-center w-4 h-3 text-[9px] leading-none text-site-muted/50 border border-site-muted/20 rounded-[2px] font-mono select-none">□</span>
+            <span class="inline-flex items-center justify-center w-4 h-3 text-[9px] leading-none text-site-muted/50 border border-site-muted/20 rounded-[2px] font-mono select-none">×</span>
+          </div>
+          <div class="text-[10px] font-mono uppercase tracking-[0.25em] text-site-muted hidden sm:block">
+            WordPress · Block Editor
+          </div>
+          <div class="flex items-center gap-1.5 font-mono text-[10px] text-site-muted/60">
+            <span>site.com/wp-admin</span>
+          </div>
+        </div>
+
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 300" width="100%" style="display:block" role="img" aria-label="WordPress block editor interface">
+          <defs>
+            <clipPath id="wp-img-clip">
+              <rect x="240" y="167" width="100" height="44" rx="3"/>
+            </clipPath>
+            <style>
+              @keyframes wp-cursor {
+                0%,  8%   { transform: translate(296px,  60px); }
+                26%        { transform: translate(214px, 121px); }
+                34%, 46%  { transform: translate(214px, 121px); }
+                61%        { transform: translate(214px, 247px); }
+                69%, 81%  { transform: translate(214px, 247px); }
+                96%,100%  { transform: translate(296px,  60px); }
+              }
+              @keyframes wp-sel-h {
+                0%,10%  { opacity:1; } 18%,82% { opacity:0; } 92%,100% { opacity:1; }
+              }
+              @keyframes wp-sel-p {
+                0%,23%  { opacity:0; } 31%,51% { opacity:1; } 59%,100% { opacity:0; }
+              }
+              @keyframes wp-btn-glow {
+                0%,57%  { opacity:0; } 65%,79% { opacity:1; } 87%,100% { opacity:0; }
+              }
+              .wp-cursor { animation: wp-cursor  9s cubic-bezier(.4,0,.2,1) infinite; }
+              .wp-sel-h  { animation: wp-sel-h   9s ease-in-out infinite; }
+              .wp-sel-p  { animation: wp-sel-p   9s ease-in-out infinite; }
+              .wp-btn-gl { animation: wp-btn-glow 9s ease-in-out infinite; }
+            </style>
+          </defs>
+
+          <!-- Base bg -->
+          <rect width="580" height="300" fill="#071120"/>
+
+          <!-- ── SIDEBAR ─────────────────────────────── -->
+          <rect width="110" height="300" fill="#050c17"/>
+          <line x1="110" y1="0" x2="110" y2="300" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+          <!-- WP logo -->
+          <circle cx="55" cy="27" r="18" fill="#2271b1" opacity="0.85"/>
+          <text x="55" y="34" text-anchor="middle" font-family="Georgia,serif" font-size="18" font-weight="bold" fill="white">W</text>
+          <text x="55" y="55" text-anchor="middle" font-family="system-ui,sans-serif" font-size="7" letter-spacing="1.2" fill="rgba(255,255,255,0.26)">MY WEBSITE</text>
+
+          <!-- Dashboard -->
+          <rect x="7" y="63" width="96" height="22" rx="3" fill="rgba(255,255,255,0.04)"/>
+          <rect x="13" y="69" width="4.5" height="4.5" rx="0.5" fill="rgba(255,255,255,0.3)"/>
+          <rect x="19.5" y="69" width="4.5" height="4.5" rx="0.5" fill="rgba(255,255,255,0.3)"/>
+          <rect x="13" y="75.5" width="4.5" height="4.5" rx="0.5" fill="rgba(255,255,255,0.3)"/>
+          <rect x="19.5" y="75.5" width="4.5" height="4.5" rx="0.5" fill="rgba(255,255,255,0.3)"/>
+          <text x="32" y="78" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Dashboard</text>
+
+          <!-- Pages (active) -->
+          <rect x="7" y="89" width="96" height="22" rx="3" fill="rgba(34,113,177,0.22)"/>
+          <rect x="7" y="89" width="3" height="22" rx="1.5" fill="#4a9fd4"/>
+          <rect x="13" y="94" width="9" height="12" rx="1" fill="none" stroke="#6bb1e8" stroke-width="1.2"/>
+          <line x1="16" y1="98"  x2="19.5" y2="98"  stroke="#6bb1e8" stroke-width="0.9"/>
+          <line x1="16" y1="101" x2="19.5" y2="101" stroke="#6bb1e8" stroke-width="0.9"/>
+          <line x1="16" y1="104" x2="19.5" y2="104" stroke="#6bb1e8" stroke-width="0.9"/>
+          <text x="32" y="103" font-family="system-ui,sans-serif" font-size="9" font-weight="600" fill="#6bb1e8">Pages</text>
+
+          <!-- Posts -->
+          <rect x="7" y="115" width="96" height="22" rx="3" fill="transparent"/>
+          <path d="M 14 122 L 19 117 L 22 120 L 17 125 Z" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1" stroke-linejoin="round"/>
+          <path d="M 14 122 L 13.5 126 L 17 125" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.28)" stroke-width="0.8"/>
+          <text x="32" y="129" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.35)">Posts</text>
+
+          <!-- Media -->
+          <rect x="7" y="141" width="96" height="22" rx="3" fill="transparent"/>
+          <rect x="13" y="146" width="11" height="9" rx="1" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1"/>
+          <path d="M 13 153 L 16 149.5 L 18.5 152 L 21 150 L 24 153" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="0.9" stroke-linejoin="round"/>
+          <text x="32" y="155" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.35)">Media</text>
+
+          <!-- Appearance -->
+          <rect x="7" y="167" width="96" height="22" rx="3" fill="transparent"/>
+          <circle cx="17.5" cy="178" r="5" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1"/>
+          <circle cx="17.5" cy="178" r="2.2" fill="rgba(255,255,255,0.18)"/>
+          <text x="32" y="181" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.35)">Appearance</text>
+
+          <!-- Plugins -->
+          <rect x="7" y="193" width="96" height="22" rx="3" fill="transparent"/>
+          <path d="M 14 198 L 22 198 L 22 202 L 24 202 L 24 206 L 22 206 L 22 208 L 14 208 Z" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1" stroke-linejoin="round"/>
+          <text x="32" y="207" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.35)">Plugins</text>
+
+          <line x1="14" y1="225" x2="96" y2="225" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+          <!-- Settings -->
+          <rect x="7" y="231" width="96" height="22" rx="3" fill="transparent"/>
+          <circle cx="17.5" cy="242" r="4.5" fill="none" stroke="rgba(255,255,255,0.24)" stroke-width="1.2"/>
+          <circle cx="17.5" cy="242" r="1.8" fill="rgba(255,255,255,0.22)"/>
+          <text x="32" y="245" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.3)">Settings</text>
+
+          <!-- ── TOOLBAR ──────────────────────────────── -->
+          <rect x="110" y="0" width="470" height="36" fill="#030810"/>
+          <line x1="110" y1="36" x2="580" y2="36" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+          <!-- + Add Block -->
+          <rect x="118" y="8" width="20" height="20" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.11)" stroke-width="1"/>
+          <line x1="128" y1="13" x2="128" y2="23" stroke="rgba(255,255,255,0.48)" stroke-width="1.5"/>
+          <line x1="123" y1="18" x2="133" y2="18" stroke="rgba(255,255,255,0.48)" stroke-width="1.5"/>
+
+          <!-- Undo / redo -->
+          <text x="148" y="24" font-family="sans-serif" font-size="14" fill="rgba(255,255,255,0.2)">↩</text>
+          <text x="164" y="24" font-family="sans-serif" font-size="14" fill="rgba(255,255,255,0.2)">↪</text>
+
+          <!-- Centre label -->
+          <text x="345" y="22" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="rgba(255,255,255,0.27)">Editing: Home</text>
+
+          <!-- Preview -->
+          <rect x="458" y="9" width="44" height="18" rx="9" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <text x="480" y="21" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)">Preview</text>
+
+          <!-- Update -->
+          <rect x="508" y="9" width="58" height="18" rx="9" fill="#2271b1"/>
+          <text x="537" y="21" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" font-weight="600" fill="white">Update</text>
+
+          <!-- ── EDITOR AREA ──────────────────────────── -->
+          <rect x="110" y="36" width="438" height="264" fill="#08121e"/>
+
+          <!-- Right settings panel -->
+          <rect x="548" y="36" width="32" height="264" fill="#030810" opacity="0.65"/>
+          <line x1="548" y1="36" x2="548" y2="300" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <rect x="554" y="46" width="20" height="18" rx="3" fill="rgba(255,255,255,0.06)"/>
+          <line x1="558" y1="53" x2="570" y2="53" stroke="rgba(255,255,255,0.26)" stroke-width="1"/>
+          <line x1="558" y1="56" x2="568" y2="56" stroke="rgba(255,255,255,0.16)" stroke-width="1"/>
+          <line x1="558" y1="59" x2="570" y2="59" stroke="rgba(255,255,255,0.26)" stroke-width="1"/>
+          <rect x="554" y="68" width="20" height="18" rx="3" fill="transparent"/>
+          <line x1="558" y1="75" x2="570" y2="75" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <line x1="558" y1="78" x2="568" y2="78" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+          <!-- ── BLOCK 1: Heading ─────────────────────── -->
+          <!-- Content (always visible) -->
+          <text x="174" y="73" font-family="system-ui,sans-serif" font-size="15.5" font-weight="700" fill="rgba(255,255,255,0.87)" letter-spacing="-0.3">Welcome to your new website!</text>
+          <!-- Selection UI (animated) -->
+          <g class="wp-sel-h">
+            <rect x="150" y="49" width="388" height="46" rx="4" fill="rgba(59,130,246,0.05)" stroke="#3b82f6" stroke-width="1.5"/>
+            <rect x="150" y="37" width="52" height="13" rx="3" fill="#3b82f6"/>
+            <text x="176" y="47" text-anchor="middle" font-family="system-ui,sans-serif" font-size="7.5" fill="white">Heading</text>
+            <circle cx="161" cy="60" r="1.4" fill="rgba(59,130,246,0.85)"/>
+            <circle cx="161" cy="66" r="1.4" fill="rgba(59,130,246,0.85)"/>
+            <circle cx="161" cy="72" r="1.4" fill="rgba(59,130,246,0.85)"/>
+          </g>
+
+          <!-- ── BLOCK 2: Paragraph ──────────────────── -->
+          <!-- Content (always visible) -->
+          <rect x="168" y="112" width="312" height="5" rx="2.5" fill="rgba(255,255,255,0.17)"/>
+          <rect x="168" y="121" width="284" height="5" rx="2.5" fill="rgba(255,255,255,0.12)"/>
+          <rect x="168" y="130" width="238" height="5" rx="2.5" fill="rgba(255,255,255,0.09)"/>
+          <!-- Selection UI (animated) -->
+          <g class="wp-sel-p">
+            <rect x="150" y="100" width="388" height="50" rx="4" fill="rgba(59,130,246,0.05)" stroke="#3b82f6" stroke-width="1.5"/>
+            <rect x="150" y="88" width="60" height="13" rx="3" fill="#3b82f6"/>
+            <text x="180" y="98" text-anchor="middle" font-family="system-ui,sans-serif" font-size="7.5" fill="white">Paragraph</text>
+          </g>
+
+          <!-- ── BLOCK 3: Image ──────────────────────── -->
+          <rect x="150" y="158" width="388" height="62" rx="4" fill="rgba(255,255,255,0.012)" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="5,3"/>
+          <rect x="240" y="167" width="100" height="44" rx="3" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.09)" stroke-width="1"/>
+          <g clip-path="url(#wp-img-clip)">
+            <path d="M 240 211 L 256 190 L 267 200 L 277 185 L 292 200 L 340 211 Z" fill="rgba(255,255,255,0.09)"/>
+          </g>
+          <circle cx="254" cy="178" r="5" fill="rgba(255,255,255,0.14)"/>
+          <text x="352" y="186" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.26)">Upload image</text>
+          <text x="352" y="198" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.17)">or browse media</text>
+          <text x="163" y="170" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.2)">Image</text>
+
+          <!-- ── BLOCK 4: Button ────────────────────── -->
+          <rect x="150" y="228" width="388" height="48" rx="4" fill="rgba(255,255,255,0.012)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <!-- Glow ring (animated) -->
+          <rect x="168" y="236" width="133" height="30" rx="15" fill="none" stroke="#3b82f6" stroke-width="5" class="wp-btn-gl"/>
+          <!-- Button -->
+          <rect x="170" y="238" width="130" height="26" rx="13" fill="#2271b1"/>
+          <text x="235" y="255" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="white">Get Started →</text>
+          <text x="315" y="255" font-family="system-ui,sans-serif" font-size="8.5" fill="rgba(255,255,255,0.18)">+ Add more blocks</text>
+
+          <!-- ── CURSOR ───────────────────────────────── -->
+          <g class="wp-cursor">
+            <path d="M 1.5 1.5 L 1.5 17 L 5.5 13.5 L 7.5 18.5 L 10 17.5 L 8 12.5 L 13.5 12.5 Z" fill="rgba(0,0,0,0.4)"/>
+            <path d="M 0 0 L 0 15.5 L 4 12 L 6 17 L 8.5 16 L 6.5 11 L 12 11 Z" fill="white" stroke="rgba(0,0,0,0.12)" stroke-width="0.6"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-16">
+        {service.capabilities.map((cap) => (
+          <div class={`p-5 rounded-xl border border-site-border/60 bg-site-surface/30 hover:${service.theme.borderAccent} transition-colors`}>
+            <h3 class="font-semibold text-white mb-2">{cap.title}</h3>
+            <p class="text-site-muted text-sm leading-relaxed">{cap.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class={`p-8 rounded-2xl border ${service.theme.borderAccent} bg-site-surface/40 text-center`}>
+        <h2 class="font-display font-bold text-2xl text-white mb-3">{service.cta.heading}</h2>
+        <p class="text-site-muted mb-6">{service.cta.body}</p>
+        <a href={withBase('/contact')} class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-cta-gradient text-white font-semibold shadow-glow-sm hover:shadow-glow-md transition-all duration-300 hover:scale-105">
+          {service.cta.label}
+        </a>
+      </div>
+    </div>
+  </div>
+  <Footer />
+</Layout>

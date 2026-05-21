@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Engagement Timeline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+
+        @keyframes todayPulse {
+            0%, 100% { opacity: 0.35; }
+            50% { opacity: 0.75; }
+        }
+        .today-line {
+            animation: todayPulse 3s ease-in-out infinite;
+        }
+
+        .gantt-bar {
+            position: absolute;
+            cursor: grab;
+            touch-action: none;
+            transition: filter 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .gantt-bar:active {
+            cursor: grabbing;
+        }
+
+        .gantt-bar.dragging {
+            z-index: 30;
+            filter: brightness(1.3);
+            box-shadow: 0 0 12px rgba(255,255,255,0.1);
+        }
+
+        .gantt-row { transition: background 0.2s ease; }
+        .gantt-row:hover { background: rgba(255,255,255,0.015); }
+
+        .milestone-marker {
+            transition: left 0.1s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-neutral-200 antialiased min-h-screen flex items-center justify-center p-8">
+
+    <div class="w-full max-w-3xl rounded-xl border border-white/[0.08] bg-[#111111] overflow-hidden shadow-2xl">
+
+        <div class="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
+            <div class="flex items-center gap-2.5">
+                <div class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]"></div>
+                <span class="text-xs text-neutral-400 font-medium">Engagement Timeline</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-[10px] text-neutral-500">Interactive Demo: Drag bars</span>
+                <span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-medium">Active</span>
+            </div>
+        </div>
+
+        <div class="px-4 pt-4 pb-2">
+
+            <div class="flex mb-1.5">
+                <div class="w-[128px] shrink-0"></div>
+                <div class="flex-1 grid grid-cols-6">
+                    <span class="text-[10px] text-neutral-500 font-medium">W1</span>
+                    <span class="text-[10px] text-neutral-500 font-medium">W2</span>
+                    <span class="text-[10px] text-neutral-500 font-medium">W3</span>
+                    <span class="text-[10px] text-neutral-500 font-medium">W4</span>
+                    <span class="text-[10px] text-neutral-500 font-medium">W5</span>
+                    <span class="text-[10px] text-neutral-500 font-medium">W6</span>
+                </div>
+            </div>
+
+            <div class="flex mb-3">
+                <div class="w-[128px] shrink-0"></div>
+                <div class="flex-1 relative h-[18px]">
+                    <div class="absolute top-0 h-full rounded-[3px] bg-slate-500/[0.07] flex items-center justify-center" style="left:0%; width:16.67%">
+                        <span class="text-[8px] text-slate-500 font-semibold tracking-wider">ASSESS</span>
+                    </div>
+                    <div class="absolute top-0 h-full rounded-[3px] bg-violet-500/[0.07] flex items-center justify-center" style="left:16.67%; width:33.33%">
+                        <span class="text-[8px] text-violet-400/60 font-semibold tracking-wider">PLAN</span>
+                    </div>
+                    <div class="absolute top-0 h-full rounded-[3px] bg-blue-500/[0.07] flex items-center justify-center" style="left:50%; width:33.33%">
+                        <span class="text-[8px] text-blue-400/60 font-semibold tracking-wider">EXECUTE</span>
+                    </div>
+                    <div class="absolute top-0 h-full rounded-[3px] bg-emerald-500/[0.07] flex items-center justify-center" style="left:83.33%; width:16.67%">
+                        <span class="text-[8px] text-emerald-400/60 font-semibold tracking-wider">DELIVER</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative" id="gantt-container">
+
+                <div class="absolute top-0 bottom-0 left-[128px] right-0 pointer-events-none z-0">
+                    <div class="absolute top-0 bottom-0 border-r border-white/[0.04]" style="left:16.67%"></div>
+                    <div class="absolute top-0 bottom-0 border-r border-white/[0.04]" style="left:33.33%"></div>
+                    <div class="absolute top-0 bottom-0 border-r border-white/[0.04]" style="left:50%"></div>
+                    <div class="absolute top-0 bottom-0 border-r border-white/[0.04]" style="left:66.67%"></div>
+                    <div class="absolute top-0 bottom-0 border-r border-white/[0.04]" style="left:83.33%"></div>
+
+                    <div class="today-line absolute top-0 bottom-0 w-px bg-[#ff6b2c]/50 z-10" style="left: 42%;">
+                        <div class="absolute -top-5 left-1/2 -translate-x-1/2 px-1.5 py-[2px] rounded-[3px] bg-[#ff6b2c] text-[7px] text-white font-bold tracking-wider whitespace-nowrap shadow-[0_0_8px_rgba(255,107,44,0.4)]">TODAY</div>
+                    </div>
+                </div>
+
+                <div class="relative z-10" id="gantt-track">
+
+                    <div class="gantt-row flex items-center h-[34px] rounded-md">
+                        <div class="w-[128px] shrink-0 pr-3">
+                            <span class="text-[11px] text-neutral-400 truncate block">Infrastructure Audit</span>
+                        </div>
+                        <div class="flex-1 relative h-full flex items-center">
+                            <div class="gantt-bar h-[20px] rounded-[4px] overflow-hidden"
+                                 data-id="1"
+                                 style="left: 0%; width: 16.67%; background: rgba(148,163,184,0.12); border-left: 2px solid #94a3b8;">
+                                <div class="bar-progress h-full rounded-[2px]" style="width: 100%; background: rgba(148,163,184,0.22);"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gantt-row flex items-center h-[34px] rounded-md">
+                        <div class="w-[128px] shrink-0 pr-3">
+                            <span class="text-[11px] text-neutral-400 truncate block">Technology Roadmap</span>
+                        </div>
+                        <div class="flex-1 relative h-full flex items-center">
+                            <div class="gantt-bar h-[20px] rounded-[4px] overflow-hidden"
+                                 data-id="2"
+                                 style="left: 4%; width: 38%; background: rgba(255,107,44,0.12); border-left: 2px solid #ff6b2c;">
+                                <div class="bar-progress h-full rounded-[2px]" style="width: 55%; background: rgba(255,107,44,0.22);"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gantt-row flex items-center h-[34px] rounded-md">
+                        <div class="w-[128px] shrink-0 pr-3">
+                            <span class="text-[11px] text-neutral-400 truncate block">Vendor Selection</span>
+                        </div>
+                        <div class="flex-1 relative h-full flex items-center">
+                            <div class="gantt-bar h-[20px] rounded-[4px] overflow-hidden"
+                                 data-id="3"
+                                 style="left: 17%; width: 25%; background: rgba(167,139,250,0.12); border-left: 2px solid #a78bfa;">
+                                <div class="bar-progress h-full rounded-[2px]" style="width: 35%; background: rgba(167,139,250,0.22);"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gantt-row flex items-center h-[34px] rounded-md">
+                        <div class="w-[128px] shrink-0 pr-3">
+                            <span class="text-[11px] text-neutral-400 truncate block">Project Management</span>
+                        </div>
+                        <div class="flex-1 relative h-full flex items-center">
+                            <div class="gantt-bar h-[20px] rounded-[4px] overflow-hidden"
+                                 data-id="4"
+                                 style="left: 25%; width: 54%; background: rgba(96,165,250,0.12); border-left: 2px solid #60a5fa;">
+                                <div class="bar-progress h-full rounded-[2px]" style="width: 12%; background: rgba(96,165,250,0.22);"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gantt-row flex items-center h-[34px] rounded-md">
+                        <div class="w-[128px] shrink-0 pr-3">
+                            <span class="text-[11px] text-neutral-400 truncate block">Team Augmentation</span>
+                        </div>
+                        <div class="flex-1 relative h-full flex items-center">
+                            <div class="gantt-bar h-[20px] rounded-[4px] overflow-hidden"
+                                 data-id="5"
+                                 style="left: 33%; width: 30%; background: rgba(34,211,238,0.12); border-left: 2px solid #22d3ee;">
+                                <div class="bar-progress h-full rounded-[2px]" style="width: 0%; background: rgba(34,211,238,0.22);"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gantt-row flex items-center h-[34px] rounded-md">
+                        <div class="w-[128px] shrink-0 pr-3">
+                            <span class="text-[11px] text-neutral-400 truncate block">Site Buildouts</span>
+                        </div>
+                        <div class="flex-1 relative h-full flex items-center">
+                            <div class="gantt-bar h-[20px] rounded-[4px] overflow-hidden"
+                                 data-id="6"
+                                 style="left: 58%; width: 38%; background: rgba(74,222,128,0.12); border-left: 2px solid #4ade80;">
+                                <div class="bar-progress h-full rounded-[2px]" style="width: 0%; background: rgba(74,222,128,0.22);"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center h-[30px] mt-2 pt-2 border-t border-white/[0.04]">
+                        <div class="w-[128px] shrink-0 pr-3">
+                            <span class="text-[9px] text-neutral-600 font-semibold tracking-wider">MILESTONES</span>
+                        </div>
+                        <div class="flex-1 relative h-full" id="milestone-track">
+                            <div id="ms-1" class="milestone-marker absolute flex flex-col items-center" style="left: 16.67%; transform: translateX(-50%); top: 2px;">
+                                <div class="w-[9px] h-[9px] bg-slate-400 rotate-45"></div>
+                                <span class="text-[8px] text-slate-500 mt-1 whitespace-nowrap">Audit</span>
+                            </div>
+                            <div id="ms-2" class="milestone-marker absolute flex flex-col items-center" style="left: 42%; transform: translateX(-50%); top: 2px;">
+                                <div class="w-[9px] h-[9px] bg-violet-400 rotate-45"></div>
+                                <span class="text-[8px] text-violet-400/60 mt-1 whitespace-nowrap">Approved</span>
+                            </div>
+                            <div id="ms-4" class="milestone-marker absolute flex flex-col items-center" style="left: 79%; transform: translateX(-50%); top: 2px;">
+                                <div class="w-[9px] h-[9px] bg-blue-400 rotate-45"></div>
+                                <span class="text-[8px] text-blue-400/60 mt-1 whitespace-nowrap">Go Live</span>
+                            </div>
+                            <div id="ms-6" class="milestone-marker absolute flex flex-col items-center" style="left: 96%; transform: translateX(-50%); top: 2px;">
+                                <div class="w-[9px] h-[9px] bg-emerald-400 rotate-45"></div>
+                                <span class="text-[8px] text-emerald-400/60 mt-1 whitespace-nowrap">Close</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="px-4 py-2.5 border-t border-white/[0.06] flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1">
+                    <div class="w-[10px] h-[4px] rounded-full bg-slate-400/40"></div>
+                    <div class="w-[10px] h-[4px] rounded-full bg-[#ff6b2c]/40"></div>
+                    <div class="w-[10px] h-[4px] rounded-full bg-violet-400/40"></div>
+                    <div class="w-[10px] h-[4px] rounded-full bg-blue-400/40"></div>
+                    <div class="w-[10px] h-[4px] rounded-full bg-cyan-400/40"></div>
+                    <div class="w-[10px] h-[4px] rounded-full bg-emerald-400/40"></div>
+                </div>
+                <span class="text-[9px] text-neutral-600">│</span>
+                <div class="w-[9px] h-[9px] bg-neutral-500/40 rotate-45"></div>
+                <span class="text-[9px] text-neutral-600">Milestone</span>
+            </div>
+            <span class="text-[10px] text-neutral-500">Typical engagement: 2–6 weeks</span>
+        </div>
+
+    </div>
+
+    <script>
+        const track = document.getElementById('gantt-track');
+        const bars = [...document.querySelectorAll('.gantt-bar')];
+        const rowTrack = track.querySelector('.gantt-row .flex-1');
+
+        const dependentsMap = {
+            1: [2, 3],
+            2: [4],
+            3: [4, 5],
+            4: [5, 6],
+            5: [6],
+            6: []
+        };
+
+        let dragId = null;
+        let mode = null;
+        let startX = 0;
+        let startState = {};
+
+        function getState() {
+            const state = {};
+            bars.forEach(bar => {
+                state[bar.dataset.id] = {
+                    left: parseFloat(bar.style.left),
+                    width: parseFloat(bar.style.width)
+                };
+            });
+            return state;
+        }
+
+        function applyState(state) {
+            for (const id in state) {
+                const item = state[id];
+                const bar = track.querySelector(`.gantt-bar[data-id="${id}"]`);
+                if (bar) {
+                    bar.style.left = item.left + '%';
+                    bar.style.width = item.width + '%';
+                    const progress = bar.querySelector('.bar-progress');
+                    if (progress) progress.style.width = '100%';
+                }
+
+                const ms = document.getElementById(`ms-${id}`);
+                if (ms) ms.style.left = (item.left + item.width) + '%';
+            }
+        }
+
+        function cascade(parentId, state, visited = new Set()) {
+            if (visited.has(parentId)) return;
+            visited.add(parentId);
+
+            const children = dependentsMap[parentId] || [];
+            const parentEnd = state[parentId].left + state[parentId].width;
+            const baseParentEnd = startState[parentId].left + startState[parentId].width;
+            const parentShift = state[parentId].left - startState[parentId].left;
+            const parentEndShift = parentEnd - baseParentEnd;
+
+            children.forEach(childId => {
+                const child = state[childId];
+                const baseChild = startState[childId];
+
+                if (mode === 'move') {
+                    child.left = baseChild.left + parentShift;
+                } else {
+                    child.left = baseChild.left + parentEndShift;
+                }
+
+                if (child.left < 0) child.left = 0;
+                if (child.left + child.width > 100) child.left = 100 - child.width;
+
+                cascade(childId, state, visited);
+            });
+        }
+
+        function onMouseDown(e) {
+            const bar = e.target.closest('.gantt-bar');
+            if (!bar) return;
+
+            e.preventDefault();
+            dragId = bar.dataset.id;
+            bar.classList.add('dragging');
+
+            const rect = bar.getBoundingClientRect();
+            const isNearRightEdge = (e.clientX - rect.left) > (rect.width - 12);
+            mode = isNearRightEdge ? 'resize' : 'move';
+
+            startX = e.clientX;
+            startState = getState();
+        }
+
+        function onMouseMove(e) {
+            if (!dragId) return;
+
+            const deltaX = e.clientX - startX;
+            const trackWidth = rowTrack.offsetWidth;
+            const deltaPercent = (deltaX / trackWidth) * 100;
+
+            const newState = JSON.parse(JSON.stringify(startState));
+
+            if (mode === 'move') {
+                newState[dragId].left = startState[dragId].left + deltaPercent;
+            } else {
+                newState[dragId].width = startState[dragId].width + deltaPercent;
+            }
+
+            if (newState[dragId].left < 0) newState[dragId].left = 0;
+            if (newState[dragId].width < 2) newState[dragId].width = 2;
+
+            if (newState[dragId].left + newState[dragId].width > 100) {
+                if (mode === 'move') newState[dragId].left = 100 - newState[dragId].width;
+                else newState[dragId].width = 100 - newState[dragId].left;
+            }
+
+            cascade(dragId, newState);
+            applyState(newState);
+        }
+
+        function onMouseUp() {
+            if (dragId) {
+                const bar = track.querySelector(`.gantt-bar[data-id="${dragId}"]`);
+                if (bar) bar.classList.remove('dragging');
+            }
+            dragId = null;
+            mode = null;
+        }
+
+        track.addEventListener('mousedown', onMouseDown);
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+
+        track.addEventListener('touchstart', e => {
+            const touch = e.touches[0];
+            onMouseDown({
+                target: document.elementFromPoint(touch.clientX, touch.clientY),
+                clientX: touch.clientX,
+                preventDefault: () => e.preventDefault()
+            });
+        }, { passive: false });
+
+        document.addEventListener('touchmove', e => {
+            if (!dragId) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            onMouseMove({ clientX: touch.clientX });
+        }, { passive: false });
+
+        document.addEventListener('touchend', onMouseUp);
+    </script>
+</body>
+</html>

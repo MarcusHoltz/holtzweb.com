@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Auditing Android Network Traffic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="css/theme-cyber.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class="title-slide" data-background-gradient="radial-gradient(ellipse at 40% 50%, rgba(57,255,20,0.06) 0%, transparent 55%), radial-gradient(ellipse at 70% 60%, rgba(192,132,252,0.06) 0%, transparent 55%)">
+        <h1 class="r-fit-text">Auditing Android Network Traffic</h1>
+    <h3>What Is Your Phone Actually Sending?</h3>
+    <p class="meta"><em>From TrackerControl on F-Droid to Magisk root, LSPosed, and Inspeckage</em></p>
+    <p class="meta">Tools · Techniques · The Full Spectrum</p>
+      </section>
+      <section>
+        <h2>Why Audit Your Phone?</h2>
+        <ul>
+  <li><strong>Your phone phones home constantly</strong> — even queued while in airplane mode
+    <ul>
+      <li>Telemetry, crash reports, and analytics are baked into almost every app</li>
+    </ul>
+  </li>
+  <li><strong>Tracker SDKs are embedded without your knowledge</strong>
+    <ul>
+      <li>Meta, Google, Adjust, AppsFlyer, Unity Ads ship inside apps you trust</li>
+    </ul>
+  </li>
+  <li><strong>HTTPS doesn't hide metadata</strong>
+    <ul>
+      <li>ISPs and carriers log destination IPs, timing, and data volume</li>
+    </ul>
+  </li>
+  <li><strong>Your OS vendor is also a data collector</strong>
+    <ul>
+      <li>Google Play Services sends device health and usage stats as a system process</li>
+    </ul>
+  </li>
+  <li><strong>Device firewalls only catch what runs through them</strong>
+    <ul>
+      <li>Apps that connect before the VPN loads, or use hardcoded IPs, slip through</li>
+    </ul>
+  </li>
+  <li><strong>You can't opt out of what you can't see</strong>
+    <ul>
+      <li>Visibility is the prerequisite to control — auditing is step one</li>
+    </ul>
+  </li>
+  <li><strong>Threat model: everyone has one</strong>
+    <ul>
+      <li>Targeted ads → employer monitoring → state-level surveillance — pick your concern</li>
+    </ul>
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>The Auditing Spectrum</h2>
+                <div class="cols-3">
+          <div class="panel">
+            <h3>EASY — No Root Required</h3>
+            <p><em>Install from F-Droid</em></p>
+<ul>
+  <li>TrackerControl (TC)
+  </li>
+  <li>Warden
+  </li>
+  <li>NetGuard
+  </li>
+  <li>Blokada 5
+  </li>
+  <li>PCAPdroid
+  </li>
+  <li>Exodus Privacy scanner
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>MEDIUM — ADB + Desktop</h3>
+            <p><em>Android Debug Bridge</em></p>
+<ul>
+  <li>HTTP Toolkit
+  </li>
+  <li>mitmproxy / Charles
+  </li>
+  <li>Wireshark (desktop)
+  </li>
+  <li>tcpdump over ADB
+  </li>
+  <li>Frida (partial root)
+  </li>
+  <li>Network profiler
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>ADVANCED — Rooted Device</h3>
+            <p><em>Magisk + LSPosed</em></p>
+<ul>
+  <li>Inspeckage module
+  </li>
+  <li>JustTrustMe / TrustMeAlready
+  </li>
+  <li>XPrivacyLua
+  </li>
+  <li>AdAway (system hosts)
+  </li>
+  <li>Zygisk hooks
+  </li>
+  <li>eBPF socket tracing
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>TrackerControl — Your First Tool</h2>
+        <ul>
+  <li><strong>Local VPN intercepts all DNS and outbound connections</strong> — no root, no server, no account
+    <ul>
+      <li>Every DNS query is matched against Exodus Privacy + Yale Privacy Lab tracker lists</li>
+    </ul>
+  </li>
+  <li><strong>Live traffic log</strong> shows which app called which domain, in real time
+    <ul>
+      <li>Sort by tracker count to instantly find your worst offenders</li>
+    </ul>
+  </li>
+  <li><strong>Per-app blocking</strong> — allow an app's own servers, block only embedded tracker SDKs
+    <ul>
+      <li>Fine-grained enough to keep Netflix working while blocking its analytics calls</li>
+    </ul>
+  </li>
+  <li><strong>Export to PCAP</strong> for deeper analysis in Wireshark on a desktop
+    <ul>
+      <li>Full packet captures from a device with zero root required</li>
+    </ul>
+  </li>
+  <li><strong>Notification badges</strong> show tracker activity on your home screen per app
+    <ul>
+      <li>Your alarm clock app showing 12 tracker calls will make you reconsider your app choices</li>
+    </ul>
+  </li>
+  <li><strong>Install path:</strong> F-Droid → search TrackerControl → install the <strong>fdroid</strong> variant (not Play Store)
+    <ul>
+      <li>The fdroid build has all features unlocked; the Play Store build is restricted</li>
+    </ul>
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>Warden + NetGuard — App Audit & Firewall</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>Warden — App Intelligence</h3>
+            <ul>
+  <li>Audits what trackers are <strong>compiled into</strong> an app, not just what it calls at runtime
+  </li>
+  <li>Cross-references Exodus Privacy database — shows SDK names and categories
+  </li>
+  <li>Works in <strong>Shizuku mode</strong> — freeze/disable tracker components without root
+  </li>
+  <li>Audits permissions, services, receivers, and broadcast listeners too
+  </li>
+  <li>Flags apps with aggressive background wakelock and network activity
+  </li>
+  <li>Install via <strong>IzzyOnDroid repo</strong> in F-Droid settings
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>NetGuard — Per-App Firewall</h3>
+            <ul>
+  <li>Uses Android local VPN to block any app from WiFi, mobile data, or both
+  </li>
+  <li><strong>Default-deny model</strong> — start with everything blocked, whitelist what you trust
+  </li>
+  <li>Background connections blocked separately from foreground — powerful for idle audits
+  </li>
+  <li>Traffic log and PCAP export are <strong>free on the F-Droid build</strong> (paid on Play Store)
+  </li>
+  <li>Rules survive reboots; no account or internet required to operate
+  </li>
+  <li>Works perfectly alongside TrackerControl when run in sequence
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Medium Tier — Capture & Decrypt Traffic</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>PCAPdroid — No-Root Packet Capture</h3>
+            <ul>
+  <li>Saves full <strong>.pcap files</strong> you open in Wireshark on your desktop
+  </li>
+  <li>Shows connection metadata without decryption: destination IP, port, bytes, app
+  </li>
+  <li>With system CA install (medium effort): full HTTPS decryption for non-pinned apps
+  </li>
+  <li>Detects apps bypassing system DNS — highlights hardcoded resolver connections
+  </li>
+  <li>Available on <strong>F-Droid and Play Store</strong> — F-Droid build has no restrictions
+  </li>
+  <li>Export and share captures for collaboration or documentation
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>HTTP Toolkit — ADB HTTPS Interception</h3>
+            <ul>
+  <li>Connects via ADB and installs a CA cert <strong>automatically</strong> — no manual certificate setup
+  </li>
+  <li>Full HTTP/HTTPS request + response viewer with search and filtering
+  </li>
+  <li>Bypasses pinning automatically on <strong>apps with targetSdk < 24</strong> (many older apps)
+  </li>
+  <li>Rewrites and blocks individual requests in real time — useful for testing
+  </li>
+  <li>Free tier at <strong>httptoolkit.com</strong> covers everything needed for a personal audit
+  </li>
+  <li>Ideal for a focused one-session audit on a dedicated test device
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Medium Tier — Proxy & Raw Capture</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>mitmproxy — Scriptable HTTPS Proxy</h3>
+            <ul>
+  <li>Run on desktop, point phone's WiFi proxy setting at your machine's IP
+  </li>
+  <li>Free, open source, Python-scriptable — write addons to auto-flag tracker endpoints
+  </li>
+  <li><strong>Charles Proxy</strong> is the paid GUI alternative — same concept, better UX for beginners
+  </li>
+  <li>Install mitmproxy CA on device to see HTTPS plaintext content
+  </li>
+  <li>Certificate pinning blocks this on hardened apps — see the pinning slide for bypasses
+  </li>
+  <li>mitmproxy addons can log, modify, or replay any captured request automatically
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>ADB + tcpdump — Kernel-Level Capture</h3>
+            <ul>
+  <li>Captures at the <strong>kernel network stack</strong> — bypasses VPN blind spots entirely
+  </li>
+  <li>Push a statically compiled tcpdump binary or use one pre-installed on rooted devices
+  </li>
+  <li>Pipe live to Wireshark on your desktop with no intermediate file:
+  </li>
+</ul>
+<pre><code class="language-bash" data-trim data-noescape data-line-numbers>adb exec-out tcpdump -i any -w - | wireshark -k -S -i -</code></pre>
+<ul>
+  <li>Requires <strong>USB Debugging</strong> enabled in Developer Options — no root needed for basic capture
+  </li>
+  <li>Sees traffic from all apps simultaneously, including system processes
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>The Certificate Pinning Problem</h2>
+        <table>
+<thead><tr>
+  <th>Scenario</th>
+  <th>Detail</th>
+</tr></thead><tbody>
+<tr>
+  <td><strong>What is cert pinning?</strong></td>
+  <td>App ships a hardcoded list of trusted keys. Your installed CA is rejected entirely.</td>
+</tr>
+<tr>
+  <td><strong>Who uses it?</strong></td>
+  <td>Banking, payment, social media (Instagram, WhatsApp, TikTok), all Google apps</td>
+</tr>
+<tr>
+  <td><strong>No-root option</strong></td>
+  <td>HTTP Toolkit auto-bypasses apps with targetSdk < 24. Older apps often unprotected.</td>
+</tr>
+<tr>
+  <td><strong>MagiskTrustUserCerts</strong></td>
+  <td>Promotes user-installed CAs to system store. Bypasses apps that check user trust.</td>
+</tr>
+<tr>
+  <td><strong>Frida (nuclear)</strong></td>
+  <td>Hooks the SSL library at runtime and returns true for any cert. Root or patched APK.</td>
+</tr>
+<tr>
+  <td><strong>JustTrustMe (LSPosed)</strong></td>
+  <td>Xposed module that strips SSL checks in the target app process. Point-and-click.</td>
+</tr>
+<tr>
+  <td><strong>TrustMeAlready</strong></td>
+  <td>Updated fork of JustTrustMe — better compatibility with modern Android versions</td>
+</tr>
+<tr>
+  <td><strong>objection (Frida wrapper)</strong></td>
+  <td>CLI tool that automates Frida-based pinning bypass — one command, any app</td>
+</tr>
+</tbody></table>
+      </section>
+      <section>
+        <h2>Advanced Tier — Rooting & Magisk</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>Why Root for Network Auditing?</h3>
+            <ul>
+  <li>Access <code>/proc/net/</code> — raw kernel socket tables showing every active connection
+  </li>
+  <li>Run <code>tcpdump</code>, <code>strace</code>, <code>bpftrace</code> natively without ADB tunneling overhead
+  </li>
+  <li>Mount system CA store — make your cert trusted system-wide, bypassing user trust checks
+  </li>
+  <li>Use eBPF programs to trace socket syscalls at the kernel level
+  </li>
+  <li>Block connections at <code>iptables</code>/<code>nftables</code> level, below the app and VPN layers
+  </li>
+  <li>Install Magisk modules that hook into apps before they even start
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Bootloader + Magisk Setup</h3>
+            <ul>
+  <li>Settings → Developer Options → <strong>OEM Unlock</strong> → <code>fastboot flashing unlock</code> (wipes device)
+  </li>
+  <li>Pixel phones easiest; OnePlus, Fairphone good; Verizon/Samsung carrier locks vary
+  </li>
+  <li>Patch <code>boot.img</code> using the Magisk app → <code>fastboot flash boot magisk_patched.img</code>
+  </li>
+  <li>Magisk operates <strong>systemlessly</strong> — does not modify <code>/system</code>, survives some OTAs
+  </li>
+  <li><strong>Zygisk DenyList</strong> hides root from banking apps and Play Integrity checks
+  </li>
+  <li>Install from <strong>github.com/topjohnwu/Magisk</strong> — always use the official Releases page
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>LSPosed & Xposed — Hook Into Any Process</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>The Framework Stack</h3>
+            <ul>
+  <li><strong>Xposed (classic)</strong> — original ART hook framework by rovo89; mostly replaced now
+  </li>
+  <li><strong>LSPosed</strong> — modern replacement via Zygisk; per-app scope, active Android 8–14 support
+  </li>
+  <li>Install LSPosed as a <strong>Magisk module</strong> — flash the zip from the LSPosed GitHub releases
+  </li>
+  <li>Manage modules via the LSPosed app (use the hidden icon for stealth from root detectors)
+  </li>
+  <li><strong>EdXposed</strong> — Riru-based alternative for older devices (Android 8–11), less maintained
+  </li>
+  <li>Each module declares which apps it hooks — zero performance cost on unscoped apps
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Key Modules for Network Auditing</h3>
+            <ul>
+  <li><strong>JustTrustMe</strong> — strips certificate pinning from any scoped app
+  </li>
+  <li><strong>TrustMeAlready</strong> — updated fork with better modern Android support
+  </li>
+  <li><strong>Inspeckage</strong> — full runtime audit: network, crypto, file I/O, reflection, all logged
+  </li>
+  <li><strong>XPrivacyLua</strong> — feed fake GPS, IMEI, contacts, and sensor data to any app
+  </li>
+  <li><strong>AppSystemizer</strong> — elevate user-installed apps to system privilege level
+  </li>
+  <li>Access Inspeckage audit UI at <code>http://127.0.0.1:8008</code> while target app is running
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>What You Will Actually Find</h2>
+        <ul>
+  <li><strong>Advertising SDKs firing on every app open</strong>
+    <ul>
+      <li>Adjust, AppsFlyer, MoPub, ironSource — sending device fingerprint, app events, location</li>
+    </ul>
+  </li>
+  <li><strong>Google Play Services telemetry running as a system process</strong>
+    <ul>
+      <li>Crash reports, device health, usage metrics — cannot be blocked without root</li>
+    </ul>
+  </li>
+  <li><strong>Analytics frameworks in nearly every commercial app</strong>
+    <ul>
+      <li>Firebase Analytics, Mixpanel, Amplitude, Segment — behavioral tracking baked deep</li>
+    </ul>
+  </li>
+  <li><strong>Crash reporters holding device snapshots</strong>
+    <ul>
+      <li>Sentry, Crashlytics, Bugsnag — stack traces plus device state sent to third-party servers</li>
+    </ul>
+  </li>
+  <li><strong>Silent background syncs on a timer</strong>
+    <ul>
+      <li>Contacts, calendar metadata, photo hashes synced even when apps are "closed"</li>
+    </ul>
+  </li>
+  <li><strong>DNS exfiltration and DoH bypasses</strong>
+    <ul>
+      <li>Apps hardcoding <code>8.8.8.8</code> or using DNS-over-HTTPS to circumvent your resolver blocks</li>
+    </ul>
+  </li>
+  <li><strong>Undocumented API calls revealed by bypassing pinning</strong>
+    <ul>
+      <li>Once cert pinning is stripped, banking and social apps often show calls you never expected</li>
+    </ul>
+  </li>
+  <li><strong>Your alarm clock talking to twelve advertising servers</strong>
+    <ul>
+      <li>The first time you audit a free app will permanently change how you evaluate app stores</li>
+    </ul>
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>Choosing Your Tool — Quick Reference</h2>
+        <table>
+<thead><tr>
+  <th>Goal</th>
+  <th>No Root</th>
+  <th>Root Required</th>
+</tr></thead><tbody>
+<tr>
+  <td>Block trackers system-wide</td>
+  <td>TrackerControl + NetGuard</td>
+  <td>AdAway system hosts</td>
+</tr>
+<tr>
+  <td>See which domains an app calls</td>
+  <td>TrackerControl live log</td>
+  <td>Inspeckage Network tab</td>
+</tr>
+<tr>
+  <td>Capture full PCAP</td>
+  <td>PCAPdroid</td>
+  <td>tcpdump direct on device</td>
+</tr>
+<tr>
+  <td>Decrypt HTTPS (no pinning)</td>
+  <td>HTTP Toolkit</td>
+  <td>mitmproxy + JustTrustMe</td>
+</tr>
+<tr>
+  <td>Decrypt HTTPS (pinned apps)</td>
+  <td>Frida + patched APK</td>
+  <td>LSPosed JustTrustMe</td>
+</tr>
+<tr>
+  <td>Audit a specific app deeply</td>
+  <td>Warden + Exodus</td>
+  <td>Inspeckage full audit</td>
+</tr>
+<tr>
+  <td>Block at DNS level</td>
+  <td>TrackerControl / Blokada</td>
+  <td>AdAway hosts file</td>
+</tr>
+<tr>
+  <td>Real-time packet view</td>
+  <td>PCAPdroid → Wireshark desktop</td>
+  <td>tcpdump piped via ADB</td>
+</tr>
+<tr>
+  <td>Fake data sent to apps</td>
+  <td>—</td>
+  <td>XPrivacyLua (LSPosed)</td>
+</tr>
+</tbody></table>
+      </section>
+      <section>
+        <h2>Hands-On Lab — No-Root + ADB Setup</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>No-Root Setup (~30 Minutes)</h3>
+            <ul>
+  <li>Install <strong>F-Droid</strong> from f-droid.org — add IzzyOnDroid repo in settings
+  </li>
+  <li>Install TrackerControl, PCAPdroid, Warden from F-Droid
+  </li>
+  <li>Enable TrackerControl VPN — it never leaves your device
+  </li>
+  <li>Use apps normally for 10 minutes; check the live log sorted by tracker count
+  </li>
+  <li>Export a PCAP from PCAPdroid and open it in Wireshark on desktop
+  </li>
+  <li>In Warden: scan your top 5 most-used apps and read the Exodus tracker list
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>ADB + HTTP Toolkit Setup</h3>
+            <ul>
+  <li>Enable <strong>Developer Options</strong>: tap Build Number 7 times in Settings → About Phone
+  </li>
+  <li>Enable <strong>USB Debugging</strong> and connect USB cable; run <code>adb devices</code> to confirm
+  </li>
+  <li>Install HTTP Toolkit on your desktop from httptoolkit.com
+  </li>
+  <li>HTTP Toolkit → Android Device → follow the wizard (installs CA automatically)
+  </li>
+  <li>Open the target app — watch requests populate in real time in HTTP Toolkit
+  </li>
+  <li>If HTTPS shows blank: cert pinning is active — this app needs the advanced approach
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Hands-On Lab — Rooted Device Setup</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>Magisk + LSPosed Install</h3>
+            <ul>
+  <li>Flash Magisk: patch <code>boot.img</code> with Magisk app → <code>fastboot flash boot magisk_patched.img</code>
+  </li>
+  <li>Verify root: open terminal app → type <code>su</code> → prompt should change to <code>#</code>
+  </li>
+  <li>In Magisk → Modules → install <strong>LSPosed</strong> zip from github.com/LSPosed/LSPosed
+  </li>
+  <li>In LSPosed → install <strong>JustTrustMe</strong> and <strong>Inspeckage</strong> from the modules repo
+  </li>
+  <li>Scope both modules to your target app in LSPosed; reboot to apply
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Using Inspeckage</h3>
+            <ul>
+  <li>Open target app — Inspeckage intercepts all calls in that process
+  </li>
+  <li>Open browser on device or desktop: navigate to <code>http://127.0.0.1:8008</code>
+  </li>
+  <li>Check the <strong>Network</strong> tab: all HTTP/HTTPS requests with full headers and bodies
+  </li>
+  <li>Check <strong>Crypto</strong> tab: see what encryption keys are being generated or used
+  </li>
+  <li>Export the full <strong>JSON audit log</strong> for documentation or sharing
+  </li>
+  <li>If HTTPS is blank with JustTrustMe scoped: try TrustMeAlready as a replacement
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Resources</h2>
+        <table>
+<thead><tr>
+  <th>Tool</th>
+  <th>Where to Get It</th>
+</tr></thead><tbody>
+<tr>
+  <td><strong>F-Droid</strong></td>
+  <td>f-droid.org — FOSS Android app store, no account</td>
+</tr>
+<tr>
+  <td><strong>TrackerControl</strong></td>
+  <td>F-Droid: search TrackerControl (fdroid variant)</td>
+</tr>
+<tr>
+  <td><strong>PCAPdroid</strong></td>
+  <td>F-Droid: search PCAPdroid</td>
+</tr>
+<tr>
+  <td><strong>Warden</strong></td>
+  <td>F-Droid via IzzyOnDroid repo</td>
+</tr>
+<tr>
+  <td><strong>NetGuard</strong></td>
+  <td>F-Droid: search NetGuard</td>
+</tr>
+<tr>
+  <td><strong>HTTP Toolkit</strong></td>
+  <td>httptoolkit.com</td>
+</tr>
+<tr>
+  <td><strong>mitmproxy</strong></td>
+  <td>mitmproxy.org</td>
+</tr>
+<tr>
+  <td><strong>Magisk</strong></td>
+  <td>github.com/topjohnwu/Magisk</td>
+</tr>
+<tr>
+  <td><strong>LSPosed</strong></td>
+  <td>github.com/LSPosed/LSPosed</td>
+</tr>
+<tr>
+  <td><strong>Inspeckage</strong></td>
+  <td>github.com/ac-pm/Inspeckage</td>
+</tr>
+<tr>
+  <td><strong>JustTrustMe</strong></td>
+  <td>github.com/Fuzion24/JustTrustMe</td>
+</tr>
+<tr>
+  <td><strong>TrustMeAlready</strong></td>
+  <td>github.com/ViRb3/TrustMeAlready</td>
+</tr>
+<tr>
+  <td><strong>XPrivacyLua</strong></td>
+  <td>github.com/M66B/XPrivacyLua</td>
+</tr>
+<tr>
+  <td><strong>Exodus Privacy</strong></td>
+  <td>exodus-privacy.eu.org — scan any APK online</td>
+</tr>
+<tr>
+  <td><strong>AdAway</strong></td>
+  <td>adaway.org or F-Droid</td>
+</tr>
+</tbody></table>
+      </section>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      transition: 'fade',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      fragments: false,
+      progress: true,
+      slideNumber: 'c/t',
+      autoAnimateEasing: 'ease-out',
+      autoAnimateDuration: 0.65,
+      plugins: [ RevealHighlight, RevealNotes ]
+    });
+  </script>
+</body>
+</html>

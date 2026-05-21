@@ -1,0 +1,430 @@
+---
+import { withBase } from '@/lib/assetPath';
+---
+
+<style>
+  .wave-bridge {
+    position: relative;
+    width: 100%;
+    height: 25vh;
+    min-height: 120px;
+    overflow: hidden;
+    background: var(--bg-deep);
+    margin: 0;
+    padding: 0;
+    display: block;
+  }
+
+  .wave-bridge__canvas-wrap {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* :global so Astro doesn't scope the canvas selector —
+     the canvas is created by JS and won't have the Astro data attribute */
+  .wave-bridge__canvas-wrap :global(canvas) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ==========================================
+     OPTION 1: STATIC 2D CHEVRONS STYLES
+     ========================================== */
+  .wave-bridge__hint {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+  }
+
+  .wave-bridge__hint--hidden {
+    opacity: 0;
+  }
+
+  .wave-bridge__hint--start {
+    top: 1rem;
+    flex-direction: column-reverse;
+  }
+
+  .wave-bridge__hint--end {
+    bottom: 1rem;
+  }
+
+  .wave-bridge__hint span:not(.wave-bridge__chevron) {
+    font-family: var(--font-oswald), Impact, sans-serif;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .wave-bridge__chevron {
+    width: 14px;
+    height: 14px;
+    border-right: 2px solid rgb(var(--color-text-ch) / 0.4);
+    border-bottom: 2px solid rgb(var(--color-text-ch) / 0.4);
+    transform: rotate(45deg);
+    animation: wave-chevron-drift 2.4s ease-in-out infinite;
+  }
+
+  .wave-bridge__chevron:nth-child(2) {
+    animation-delay: 0.2s;
+    opacity: 0.5;
+  }
+
+  @keyframes wave-chevron-drift {
+    0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.3; }
+    50% { transform: rotate(45deg) translateY(6px); opacity: 0.85; }
+  }
+
+  /* ==========================================
+     OPTION 2: 3D GLOW TEXT STYLES (Original)
+     ========================================== */
+  .wave-bridge__text-3d {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-oswald), Impact, sans-serif;
+    text-transform: uppercase;
+    margin: 0;
+    font-size: clamp(0.9rem, 2vw, 40px);
+    letter-spacing: 6px;
+    color: var(--color-text);
+    text-shadow: 0 0 10px rgb(var(--color-text-ch) / 0.5);
+    z-index: 3;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+  }
+
+  .wave-bridge__text-3d--start {
+    top: 10%;
+  }
+
+  .wave-bridge__text-3d--end {
+    bottom: 10%;
+  }
+
+  .wave-bridge__text-3d--hidden {
+    opacity: 0;
+  }
+
+  /* ==========================================
+     SHARED STYLES
+     ========================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .wave-bridge__chevron {
+      animation: none;
+      opacity: 0.45;
+    }
+    .wave-bridge__hint,
+    .wave-bridge__text-3d {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .wave-bridge {
+      min-height: 100px;
+    }
+  }
+
+  @media (max-width: 689px) {
+    .wave-bridge {
+       display: none;
+    }
+  }
+
+</style>
+
+
+<section class="wave-bridge" aria-label="Visual transition">
+  <div class="wave-bridge__canvas-wrap" id="wave-canvas-wrap"></div>
+
+  <!-- ==========================================
+       OPTION 1: STATIC 2D VERSION (Currently OFF)
+       ==========================================
+  <div class="wave-bridge__hint wave-bridge__hint--start" id="wave-hint-start" aria-hidden="true">
+    <span class="wave-bridge__chevron"></span>
+    <span class="wave-bridge__chevron"></span>
+    <span>Scroll down</span>
+  </div>
+  <div class="wave-bridge__hint wave-bridge__hint--end" id="wave-hint-end" aria-hidden="true">
+    <span>Keep going</span>
+    <span class="wave-bridge__chevron"></span>
+    <span class="wave-bridge__chevron"></span>
+  </div>
+  END OPTION 1 -->
+
+  <!-- ==========================================
+       OPTION 2: 3D GLOW TEXT VERSION (Currently OFF)
+       ==========================================
+  <div class="wave-bridge__text-3d wave-bridge__text-3d--start" id="wave-hint-start-3d" aria-hidden="true">
+    Scroll down
+  </div>
+  <div class="wave-bridge__text-3d wave-bridge__text-3d--end" id="wave-hint-end-3d" aria-hidden="true">
+    Keep going
+  </div>
+  END OPTION 2 -->
+</section>
+
+<script is:inline define:vars={{ threeSrc: withBase('/scripts/three.min.js') }} data-astro-rerun>
+  (function () {
+    var wrap = document.getElementById('wave-canvas-wrap');
+    if (!wrap) return;
+
+    function init() {
+      if (typeof THREE === 'undefined') return;
+
+      if (window.__waveBridgeRAF) {
+        cancelAnimationFrame(window.__waveBridgeRAF);
+        window.__waveBridgeRAF = null;
+      }
+      var oldCanvas = wrap.querySelector('canvas');
+      if (oldCanvas) oldCanvas.remove();
+
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var isMobile = window.innerWidth < 768;
+      var isSmall = window.innerWidth < 480;
+
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(
+        75,
+        wrap.clientWidth / wrap.clientHeight,
+        0.1,
+        1000
+      );
+
+      var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // Explicitly set CSS so the canvas fills its container regardless of
+      // Astro's CSS scoping (dynamically-created elements don't get the scope attribute)
+      var domCanvas = renderer.domElement;
+      domCanvas.style.display = 'block';
+      domCanvas.style.width = '100%';
+      domCanvas.style.height = '100%';
+      wrap.appendChild(domCanvas);
+
+      var waveW = isSmall ? 160 : isMobile ? 240 : 400;
+      var waveD = isSmall ? 70 : isMobile ? 90 : 150;
+      var sp = isSmall ? 6 : 5;
+      var cntX = Math.floor(waveW / sp);
+      var cntZ = Math.floor(waveD / sp);
+      var total = cntX * cntZ;
+
+      var geo = new THREE.BufferGeometry();
+      var pos = new Float32Array(total * 3);
+      var col = new Float32Array(total * 3);
+      var vi = 0;
+
+      for (var xi = 0; xi < cntX; xi++) {
+        for (var zi = 0; zi < cntZ; zi++) {
+          var x = (xi - cntX / 2) * sp;
+          var z = (zi - cntZ / 2) * sp;
+          pos[vi * 3] = x;
+          pos[vi * 3 + 1] = 0;
+          pos[vi * 3 + 2] = z;
+
+          var dist = Math.sqrt(x * x + z * z) / (waveW / 2);
+          var intensity = 1 - Math.min(dist, 1) * 0.8;
+          col[vi * 3] = intensity * 0.8;
+          col[vi * 3 + 1] = intensity * 0.9;
+          col[vi * 3 + 2] = intensity;
+          vi++;
+        }
+      }
+
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+
+      scene.add(new THREE.Points(geo, new THREE.PointsMaterial({
+        size: isSmall ? 0.4 : isMobile ? 0.3 : 0.18,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8,
+        alphaTest: 0.1,
+        sizeAttenuation: true,
+        blending: THREE.AdditiveBlending
+      })));
+
+      var lineGeo = new THREE.BufferGeometry();
+      var lineIdx = [];
+      var faceIdx = [];
+
+      for (var li = 0; li < cntX - 1; li++) {
+        for (var lj = 0; lj < cntZ - 1; lj++) {
+          var c = li * cntZ + lj;
+          faceIdx.push(c, c + 1, c + cntZ, c + 1, c + cntZ + 1, c + cntZ);
+          lineIdx.push(c, c + 1);
+          lineIdx.push(c, c + cntZ);
+        }
+      }
+
+      lineGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      lineGeo.setIndex(lineIdx);
+
+      scene.add(new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
+        color: 0x888888,
+        transparent: true,
+        opacity: isMobile ? 0.35 : 0.55
+      })));
+
+      var meshGeo = new THREE.BufferGeometry();
+      meshGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      meshGeo.setIndex(faceIdx);
+      scene.add(new THREE.Mesh(meshGeo, new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0,
+        side: THREE.DoubleSide
+      })));
+
+      var camY = isSmall ? 10 : isMobile ? 12 : 14;
+      var camZ = isSmall ? 11 : isMobile ? 13 : 15;
+      camera.position.set(0, camY, camZ);
+      camera.lookAt(0, 0, 0);
+
+      /* ── Hides BOTH options safely ── */
+      var hinted = false;
+      function hideHints() {
+        if (hinted) return;
+        hinted = true;
+        var allHints = document.querySelectorAll('[id^="wave-hint"]');
+        for (var i = 0; i < allHints.length; i++) {
+          allHints[i].classList.add('wave-bridge__hint--hidden');
+          allHints[i].classList.add('wave-bridge__text-3d--hidden');
+        }
+      }
+      window.addEventListener('scroll', hideHints, { passive: true, once: true });
+      wrap.addEventListener('touchstart', hideHints, { passive: true, once: true });
+      wrap.addEventListener('pointerdown', hideHints, { passive: true, once: true });
+
+      function getProgress() {
+        var rect = wrap.getBoundingClientRect();
+        var entry = window.innerHeight;
+        var exit = -wrap.offsetHeight;
+        var travel = entry - exit;
+        var current = entry - rect.top;
+        return Math.max(0, Math.min(1, current / travel));
+      }
+
+      var clock = new THREE.Clock();
+      var maxDrop = isSmall ? 14 : isMobile ? 16 : 20;
+      var visible = false;
+
+      // Render one static frame when reduced-motion is preferred
+      if (prefersReduced) {
+        var p0 = geo.attributes.position.array;
+        for (var ai0 = 0; ai0 < cntX; ai0++) {
+          for (var aj0 = 0; aj0 < cntZ; aj0++) {
+            var k0 = (ai0 * cntZ + aj0) * 3;
+            p0[k0 + 1] = 0;
+          }
+        }
+        geo.attributes.position.needsUpdate = true;
+        lineGeo.attributes.position.needsUpdate = true;
+        meshGeo.attributes.position.needsUpdate = true;
+        renderer.render(scene, camera);
+      }
+
+      function animate() {
+        if (!visible) { window.__waveBridgeRAF = null; return; }
+        window.__waveBridgeRAF = requestAnimationFrame(animate);
+
+        var time = prefersReduced ? 0 : clock.getElapsedTime();
+        var p = geo.attributes.position.array;
+
+        for (var ai = 0; ai < cntX; ai++) {
+          for (var aj = 0; aj < cntZ; aj++) {
+            var k = (ai * cntZ + aj) * 3;
+            var px = p[k];
+            var pz = p[k + 2];
+            var w1 = Math.sin(px * 0.1 + time) * 2;
+            var w2 = Math.cos(pz * 0.1 + time * 0.8) * 2;
+            var w3 = Math.sin((px * 0.05 + pz * 0.05) + time * 1.2) * 1.5;
+            p[k + 1] = w1 + w2 + w3;
+          }
+        }
+
+        geo.attributes.position.needsUpdate = true;
+        lineGeo.attributes.position.needsUpdate = true;
+        meshGeo.attributes.position.needsUpdate = true;
+
+        camera.position.y = camY - maxDrop * getProgress();
+
+        renderer.render(scene, camera);
+      }
+
+      // Only run the RAF loop while the wave is on-screen
+      var visObserver = new IntersectionObserver(function(entries) {
+        visible = entries[0].isIntersecting;
+        if (visible && !window.__waveBridgeRAF && !prefersReduced) {
+          clock.start();
+          animate();
+        }
+      }, { threshold: 0.05 });
+      visObserver.observe(wrap);
+
+      // ResizeObserver covers both window resize and sidebar collapse/expand
+      var resizeTimer;
+      var ro = new ResizeObserver(function(entries) {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+          var e = entries[0];
+          if (!e) return;
+          var w = Math.round(e.contentRect.width);
+          var h = Math.round(e.contentRect.height);
+          if (w === 0 || h === 0) return;
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+          renderer.setSize(w, h, false);
+        }, 80);
+      });
+      ro.observe(wrap);
+
+      function cleanup() {
+        if (window.__waveBridgeRAF) {
+          cancelAnimationFrame(window.__waveBridgeRAF);
+          window.__waveBridgeRAF = null;
+        }
+        ro.disconnect();
+        visObserver.disconnect();
+        renderer.dispose();
+        geo.dispose();
+        lineGeo.dispose();
+        meshGeo.dispose();
+      }
+      document.addEventListener('astro:before-swap', cleanup, { once: true });
+    } // end init()
+
+    if (typeof THREE !== 'undefined') {
+      init();
+      return;
+    }
+
+    // Inject Three.js async — non-blocking. On subsequent navigations THREE is
+    // already in scope so init() runs immediately above.
+    var existing = document.querySelector('script[data-three-loader]');
+    if (!existing) {
+      var s = document.createElement('script');
+      s.src = threeSrc;
+      s.setAttribute('data-three-loader', '');
+      s.addEventListener('load', init, { once: true });
+      document.head.appendChild(s);
+    } else if (typeof THREE !== 'undefined') {
+      init();
+    } else {
+      existing.addEventListener('load', init, { once: true });
+    }
+  })();
+</script>

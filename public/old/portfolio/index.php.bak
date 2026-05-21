@@ -1,0 +1,1323 @@
+<html>
+<head>
+<title>marcusholtz.com - Development Site</title>
+
+
+<link rel="icon" type="image/ico" href="/favicon.ico"/>
+<link rel="shortcut icon" href="/favicon.png" type="image/png">
+<link rel="shortcut icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" sizes="16x16" href="favicon-animated.gif" type="image/gif" /> 
+
+
+<link rel="manifest" href="site.webmanifest">
+
+<link rel="stylesheet" href="./css/bootstrap.min.css">my
+<link href="./css/my.css" rel="stylesheet" />
+
+<link href="./css/bootstrap-modal-bs3patch.css" rel="stylesheet" />
+<link href="./css/bootstrap-modal.css" rel="stylesheet" />
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<script src="./js/jquery.min.js" type="text/javascript"></script>
+<script src="./js/bootstrap.min.js" type="text/javascript"></script>
+<script src="./js/modernizr.min.js" type="text/javascript"></script>
+
+  <script src="./js/bootstrap-modalmanager.js"></script>
+  <script src="./js/bootstrap-modal.js"></script>
+<script>
+$(function () {
+    var url = "./",
+        imgArray = [url+"./lol/bgtv_(1).gif",
+                   url+"./lol/bgtv_(2).gif",
+           url+"./lol/bgtv_(3).gif",
+           url+"./lol/bgtv_(4).gif",
+           url+"./lol/bgtv_(5).gif",
+           url+"./lol/bgtv_(6).gif",
+           url+"./lol/bgtv_(7).gif",
+           url+"./lol/bgtv_(8).gif",
+           url+"./lol/bgtv_(9).gif",
+           url+"./lol/bgtv_(10).gif",
+           url+"./lol/bgtv_(11).gif",
+           url+"./lol/bgtv_(12).gif",
+           url+"./lol/bgtv_(13).gif",
+           url+"./lol/bgtv_(14).gif",
+           url+"./lol/bgtv_(15).gif",
+           url+"./lol/bgtv_(16).gif",
+           url+"./lol/bgtv_(17).gif",
+           url+"./lol/bgtv_(18).gif",
+           url+"./lol/bgtv_(19).gif",
+           url+"./lol/bgtv_(20).gif",
+           url+"./lol/bgtv_(21).gif",
+           ],
+        randomNumber = Math.floor((Math.random() * imgArray.length)),
+        baseUrl = "linear-gradient( rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85) ), url('" + imgArray[randomNumber] + "')";
+
+    $(".square").css('background-image', baseUrl);
+})();
+</script>
+
+
+
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//www.marcusholtz.com/piwik/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '1']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+
+
+<script src="./js/catify.js"></script>
+<script>
+// when .modal-wide opened, set content-body height based on browser height; 200 is appx height of modal padding, modal title and button bar
+
+$(".modal-wide").on("show.bs.modal", function() {
+  var height = $(window).height() - 200;
+  $(this).find(".modal-body").css("max-height", height);
+});
+</script>
+
+
+
+
+<style> .hide, hide{display:block!important;} </style>
+
+</head>
+<body onload="catify();">
+
+
+
+
+<img class="cat" id="cat_grey" src="./lol/mrmuffins.png" alt=""/>
+
+<noscript> <center> Please turn off no-script <img src="https://www.marcusholtz.com/piwik/matomo.php?idsite=1&amp;rec=1&amp;action_name=Marcusholtz.com+-+noscript+visitor" style="border:0" alt="" /> </center> </noscript>
+<h3 class="text-center">Welcome to the Holtzweb Development Site</h3>
+
+  <nav class="navbar navbar-inverse navbar-static-top example6">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar6">
+          <span class="sr-only">Toggle main content</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+    <a href="#replace_this_with_whatever_url_i_am_using_for_live-hashtagseo"> 
+      <div class="square">
+        <div class="glitch" data-text="HOLTZ">HOLTZ<span class="navbar-brand text-hide">WEB</span></div>
+      </div>
+    </a>
+      </div>
+      <div id="navbar6" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+ 
+<p>Hi, thanks for stopping by, but <a data-toggle="modal" onclick="_paq.push(['trackEvent', 'Portfolio', 'Portfolio-Initialize']);" href="#my_works">I am kind of busy</a>. Could you just <a data-text="leave me a message" data-address="marcus" data-domain="marcusholtz" data-tld="com" href="#click_to_mailto_my_email_address" class="botfreemail" onclick="_paq.push(['trackEvent', 'Contact', 'Email-Click']); window.location.href = 'mailto:' + this.dataset.address + '@' + this.dataset.domain + '.' + this.dataset.tld"></a>, and exit through <a data-toggle="modal" onclick="_paq.push(['trackEvent', 'Resume', 'Resume-View']);" href="#my_resume">the gift shop</a>? Thanks! </p> 
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+    <!--/.container-fluid -->
+  </nav>
+
+
+
+
+
+
+
+
+
+
+            <!-- ******************MAIN CATEGORY********************** -->
+    <div id="my_works" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">THINGS I HAVE MADE</h4>
+      </div><!-- /.modal-header -->
+      <div class="modal-body">
+      <br/><br/>
+      <div class="welcome"><div class="wtop">These are a few of the projects that keep me busy: </div><br/> 
+        <button href="#category-1-technology" onclick="_paq.push(['trackEvent', 'Portfolio', 'Technology-main']);" data-toggle="modal" class="btn btn-lg txt-white technology"> <i class="icon-hdd icon-white"></i>Technology</button>
+        <button href="#category-2-legal" onclick="_paq.push(['trackEvent', 'Portfolio', 'Legal-main']);" data-toggle="modal" class="btn btn-lg txt-white law"> <i class="icon-book  icon-white"></i>Legal</button>
+        <button href="#category-3-tourism" onclick="_paq.push(['trackEvent', 'Portfolio', 'Tourism-main']);" data-toggle="modal" class="btn btn-lg txt-white municipal">  <i class="icon-map-marker icon-white"></i>Tourism</button>
+        <button href="#category-4-municipalities" onclick="_paq.push(['trackEvent', 'Portfolio', 'Municipalities-main']);" data-toggle="modal" class="btn btn-lg txt-white tomato"><i class="icon-certificate icon-white"></i>Municipalities</button>
+        <button href="#category-5-manufaturing" onclick="_paq.push(['trackEvent', 'Portfolio', 'Manufacturing-main']);" data-toggle="modal" class="btn btn-lg txt-white manufacturing"><i class="icon-wrench icon-white"></i>Manufaturing</button>
+        <button href="#category-6-retail" onclick="_paq.push(['trackEvent', 'Portfolio', 'Retail-main']);" data-toggle="modal" class="btn btn-lg txt-white retail"><i class="icon-shopping-cart icon-white"></i>Retail Sales</button>
+        <button href="#category-7-nonprofits" onclick="_paq.push(['trackEvent', 'Portfolio', 'Nonprofit-main']);" data-toggle="modal" class="btn btn-lg txt-white nonprofit"><i class="icon-gift icon-white"></i>Non-Profits</button>
+        <button href="#category-8-seo" onclick="_paq.push(['trackEvent', 'Portfolio', 'SEO-main']);" data-toggle="modal" class="btn btn-lg txt-white seo-report"><i class="icon-info-sign icon-white"></i>SEO Reports</button>
+    
+      <div class="wagon"></div>
+      <div class="wagon"></div></div>
+    <br/>
+    <hr>
+    <br/> <!-- Begin New Category --> 
+      <div class="welcome"> <a name="category-1-technology"></a>
+        <h5>Technology</h5>
+      <div class="wagon"></div>
+        <div class="cust-info cust-clearwave"><!-- customer info, with second class being the color -->
+          <span data-text="C">C</span>
+          <span data-text="l">l</span>
+          <span data-text="e">e</span>
+          <span data-text="a">a</span>
+          <span data-text="r">r</span>
+          <span data-text="w">w</span>
+          <span data-text="a">a</span>
+          <span data-text="v">v</span>
+          <span data-text="e">e</span> 
+        </div>
+      <div class="center-button">  
+          <button href="#clearwave-ugly-frontend" data-track-content onclick="_paq.push(['trackEvent', 'Portfolio', 'Clearwave-ugly-frontend']);" data-toggle="modal" class="btn txt-white blue-2">Original Frontend</button>
+          <button href="#clearwave-revised-frontend" data-track-content onclick="_paq.push(['trackEvent', 'Portfolio', 'Clearwave-updated-frontend']);" data-toggle="modal" class="btn txt-white blue-3">Updated Frontend</button>
+          <button href="#clearwave-backend" data-track-content onclick="_paq.push(['trackEvent', 'Portfolio', 'Clearwave-backend']);" data-toggle="modal" class="btn txt-white blue-5">Backend Technology</button>
+    </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>Original Frontend</span>
+            <p> <img src="./img/clearwave-1.png" width="100%"> </p>
+        <br/>  
+          <span>Revised Frontend</span>
+            <p> <img src="./img/clearwave-2.png" width="100%"> </p>
+        <br/>   
+          <span>Backend</span>
+            <p> <img src="./img/clearwave-3.png" width="100%"> </p>
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+        <button class="btn btn-lg btn-primary" onclick="_paq.push(['trackEvent', 'Portfolio', 'page1-nextindustry-click']);" data-toggle="modal" href="#category-2-legal"><i class="icon-hand-right icon-white"></i>Next Industry</button>
+    <br/>
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+        <button type="button" data-toggle="modal" href="#category-2-legal" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+<!-- ***************     END MAIN CATEGORY   ********************** -->
+
+
+
+
+
+
+
+
+
+
+          <!-- ******************TECHNOLOGY CATEGORY********************** -->
+    <div id="category-1-technology" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">THINGS I HAVE MADE</h4>
+      </div><!-- /.modal-header -->
+      <div class="modal-body">
+      <div class="welcome"> <!-- any text to into the subject would go here --> 
+      <div class="wagon"></div>
+    <br/> <!-- Begin New Category --> 
+      <div class="welcome"> <a name="category-1-technology"></a>
+        <h5>Technology</h5>
+      <div class="wagon"></div>
+        <div class="cust-info cust-clearwave"><!-- customer info, with second class being the color -->
+          <span data-text="C">C</span>
+          <span data-text="l">l</span>
+          <span data-text="e">e</span>
+          <span data-text="a">a</span>
+          <span data-text="r">r</span>
+          <span data-text="w">w</span>
+          <span data-text="a">a</span>
+          <span data-text="v">v</span>
+          <span data-text="e">e</span> 
+        </div>
+      <div class="center-button">  
+          <button href="#clearwave-ugly-frontend" onclick="_paq.push(['trackEvent', 'Portfolio', 'Clearwave-modal']);" data-toggle="modal" class="btn txt-white blue-2">Original Frontend</button>
+          <button href="#clearwave-revised-frontend" onclick="_paq.push(['trackEvent', 'Portfolio', 'Clearwave-modal']);" data-toggle="modal" class="btn txt-white blue-3">Updated Frontend</button>
+          <button href="#clearwave-backend" onclick="_paq.push(['trackEvent', 'Portfolio', 'Clearwave-modal']);" data-toggle="modal" class="btn txt-white blue-5">Backend Technology</button>
+    </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>Original Frontend</span>
+            <p> <img src="./img/clearwave-1.png" width="100%"> </p>
+        <br/>  
+          <span>Revised Frontend</span>
+            <p> <img src="./img/clearwave-2.png" width="100%"> </p>
+        <br/>   
+          <span>Backend</span>
+            <p> <img src="./img/clearwave-3.png" width="100%"> </p>
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+        <button class="btn btn-lg btn-primary"  onclick="_paq.push(['trackEvent', 'Portfolio', 'Clearwavemodal-nextindustry-click']);" data-toggle="modal" href="#category-2-legal"><i class="icon-hand-right icon-white"></i>Next Industry</button>
+    <br/>
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-2-legal" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+   </div><!-- /.modal -->
+
+
+
+
+
+          <!-- =====================clearwave-ugly-frontend===================== -->
+    <div id="clearwave-ugly-frontend" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures">
+          <span>Original Frontend</span>
+            <p> <img src="./img/clearwave-1.png" width="100%"> </p> 
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#clearwave-revised-frontend" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================clearwave-revised-frontend===================== -->
+    <div id="clearwave-revised-frontend" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Revised Frontend</span>
+            <p> <img src="./img/clearwave-2.png" width="100%"> </p>   
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#clearwave-backend" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================clearwave-backend===================== -->
+    <div id="clearwave-backend" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures">
+          <span>Backend</span>
+            <p> <img src="./img/clearwave-3.png" width="100%"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-2-legal" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+
+
+
+
+
+          <!-- ******************LEGAL CATEGORY********************** -->
+    <div id="category-2-legal" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">THINGS I HAVE MADE</h4>
+      </div><!-- /.modal-header -->
+      <div class="modal-body">
+      <div class="welcome"> <!-- any text to into the subject would go here --> 
+      <div class="wagon"></div>
+      <div class="wagon"></div></div> <!-- Begin New Category --> 
+      <div class="welcome"> 
+        <h5>Legal</h5>
+      <div class="wagon"></div>
+        <div class="cust-info cust-roberts"><!-- customer info, with second class being the color -->
+          <span data-text="R">R</span>
+          <span data-text="o">o</span>
+          <span data-text="b">b</span>
+          <span data-text="e">e</span>
+          <span data-text="r">r</span>
+          <span data-text="t">t</span>
+          <span data-text="s">s</span>
+        </div>
+      <div class="center-button">  
+          <button href="#roberts-homepage" data-track-content onclick="_paq.push(['trackEvent', 'Portfolio', 'Roberts-homepage']);"  data-toggle="modal" class="btn txt-white blue-3">Homepage</button>
+          <button href="#roberts-seo" data-track-content onclick="_paq.push(['trackEvent', 'Portfolio', 'Roberts-seosubpage']);" data-toggle="modal" class="btn txt-white blue-4">SEO Enhanced Site</button>
+    </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>Homepage</span>
+            <p> <img src="./img/roberts-1.png" width="100%"> </p>
+        <br/>  
+          <span>SEO Enhanced Site</span>
+            <p> <img src="./img/roberts-2.png" width="100%"> </p>
+        <br/>   
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+        <button class="btn btn-lg btn-primary" onclick="_paq.push(['trackEvent', 'Portfolio', 'page2-nextindustry-click']);" data-toggle="modal" href="#category-3-tourism"><i class="icon-hand-right icon-white"></i>Next Industry</button>
+    <br/>
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-3-tourism" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+          <!-- =====================roberts-homepage===================== -->
+    <div id="roberts-homepage" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Homepage</span>
+            <p> <img src="./img/roberts-1.png" width="100%"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#roberts-seo" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================roberts-seo===================== -->
+    <div id="roberts-seo" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures">
+          <span>SEO Enhanced Site</span>
+            <p> <img src="./img/roberts-2.png" width="100%"> </p>    
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-3-tourism" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+
+
+
+
+
+          <!-- ******************TOURISM CATEGORY********************** -->
+    <div id="category-3-tourism" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">THINGS I HAVE MADE</h4>
+      </div><!-- /.modal-header -->
+      <div class="modal-body">
+      <div class="welcome"> <!-- any text to into the subject would go here --> 
+      <div class="wagon"></div>
+      <div class="wagon"></div></div> <!-- Begin New Category --> 
+      <div class="welcome"> 
+        <h5>Tourism</h5>
+      <div class="wagon"></div>
+        <div class="cust-info cust-clipse"><!-- customer info, with second class being the color -->
+          <span data-text="E">E</span>
+          <span data-text="c">c</span>
+          <span data-text="l">l</span>
+          <span data-text="i">i</span>
+          <span data-text="p">p</span>
+          <span data-text="s">s</span>
+          <span data-text="e">e</span>
+        </div>
+      <div class="center-button">
+          <button href="#eclipse-homepage" data-toggle="modal" class="btn txt-white purple-3">Homepage</button>
+          <button href="#eclipse-map" data-toggle="modal" class="btn txt-white purple-4">Interactive Event Map</button>
+      </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>Homepage</span>
+            <p> <img src="./img/eclipse-1.png" width="100%"> </p>
+        <br/>  
+          <span>Event Interactive Map</span>
+            <p> <img src="./img/eclipse-2a.png" width="100%">
+                    <img src="./img/eclipse-2b.gif" width="100%">
+                <img src="./img/eclipse-2c.png" width="100%">
+            </p>
+        <br/>   
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+
+      <div class="welcome"> <!-- any text to into the subject would go here --> 
+    <br/><hr/><br/><br/>        
+      <div class="wagon"></div>
+      <div class="wagon"></div></div> <!-- Begin New Category --> 
+      <div class="welcome"> 
+      <div class="wagon"></div>
+        <div class="cust-info cust-giantcity"><!-- customer info, with second class being the color -->
+          <span data-text="G">G</span>
+          <span data-text="i">i</span>
+          <span data-text="a">a</span>
+          <span data-text="n">n</span>
+          <span data-text="t">t</span>
+          <span data-text="C">C</span>
+          <span data-text="i">i</span>
+          <span data-text="t">t</span>
+          <span data-text="y">y</span>
+        </div>
+      <div class="center-button">
+          <button href="#giantcity-homepage" data-toggle="modal" class="btn txt-white blue-1">Homepage</button>
+          <button href="#giantcity-menu" data-toggle="modal" class="btn txt-white blue-2">Menu</button>
+      </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>Homepage</span>
+            <p> <img src="./img/giantcity-1.png" width="100%"> </p>
+        <br/>  
+          <span>Menu</span>
+            <p> <img src="./img/giantcity-2.png" width="100%"> </p>
+        <br/>   
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+        <button class="btn btn-lg btn-primary" onclick="_paq.push(['trackEvent', 'Portfolio', 'page3-nextindustry-click']);" data-toggle="modal" href="#category-4-municipalities"><i class="icon-hand-right icon-white"></i>Next Industry</button>
+    <br/>
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-4-municipalities" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+          <!-- =====================eclipse-homepage===================== -->
+    <div id="eclipse-homepage" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Homepage</span>
+            <p> <img src="./img/eclipse-1.png" width="100%"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#eclipse-map" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================eclipse-map===================== -->
+    <div id="eclipse-map" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures">
+          <span>Event Interactive Map</span>
+            <p> <img src="./img/eclipse-2a.png" width="100%">
+                    <img src="./img/eclipse-2b.gif" width="100%">
+                <img src="./img/eclipse-2c.png" width="100%">
+            </p>
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#giantcity-homepage" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+          <!-- =====================giantcity-homepage===================== -->
+    <div id="giantcity-homepage" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Homepage</span>
+            <p> <img src="./img/giantcity-1.png" width="100%"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#giantcity-menu" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================giantcity-menu===================== -->
+    <div id="giantcity-menu" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures">
+          <span>Menu</span>
+            <p> <img src="./img/giantcity-2.png" width="100%"> </p>
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-4-municipalities" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+
+
+
+
+
+          <!-- ******************MUNICIPAL CATEGORY********************** -->
+    <div id="category-4-municipalities" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">THINGS I HAVE MADE</h4>
+      </div><!-- /.modal-header -->
+      <div class="modal-body">
+      <div class="welcome"> <!-- any text to into the subject would go here --> 
+      <div class="wagon"></div>
+      <div class="wagon"></div></div> <!-- Begin New Category --> 
+      <div class="welcome"> 
+        <h5>Municipalities</h5>
+      <div class="wagon"></div>
+        <div class="cust-info cust-carterville"><!-- customer info, with second class being the color -->
+            <span data-text="C">C</span>
+            <span data-text="a">a</span>
+            <span data-text="r">r</span>
+            <span data-text="t">t</span>
+            <span data-text="e">e</span>
+            <span data-text="r">r</span>
+            <span data-text="v">v</span>
+            <span data-text="i">i</span>
+            <span data-text="l">l</span>
+            <span data-text="l">l</span>
+            <span data-text="e">e</span>
+        </div>
+      <div class="center-button">
+          <button href="#carterville-homepage" data-toggle="modal" class="btn txt-white orange-1">Homepage</button>
+          <button href="#carterville-subpage" data-toggle="modal" class="btn txt-white orange-3">Subpage</button>
+      </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>Homepage</span>
+            <p> <img src="./img/carterville-1.png" width="100%"> </p>
+        <br/>  
+          <span>Subpage</span>
+            <p> <img src="./img/carterville-2.png" width="100%"> </p>
+        <br/>   
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+
+      <div class="welcome"> <!-- any text to into the subject would go here --> 
+    <br/><hr/><br/><br/>        
+      <div class="wagon"></div>
+      <div class="wagon"></div></div> <!-- Begin New Category --> 
+      <div class="welcome"> 
+      <div class="wagon"></div>
+        <div class="cust-info cust-parks"><!-- customer info, with second class being the color -->
+          <span data-text="P">P</span>
+          <span data-text="a">a</span>
+          <span data-text="r">r</span>
+          <span data-text="k">k</span>
+          <span data-text="s">s</span>
+        </div>
+      <div class="center-button">
+          <button href="#parks-homepage" data-toggle="modal" class="btn txt-white green-1">Homepage</button>
+          <button href="#parks-aquatics" data-toggle="modal" class="btn txt-white green-4">Aquatics</button>
+          <button href="#parks-adultrec" data-toggle="modal" class="btn txt-white green-5">Adult Recreation</button>
+      </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>Homepage</span>
+            <p> <img src="./img/parks-1.png" width="100%"> </p>
+        <br/>  
+          <span>Aquatics</span>
+            <p> <img src="./img/parks-2.png" width="100%"> </p>
+        <br/>
+          <span>Adult Recreation</span>
+            <p> <img src="./img/parks-3.png" width="100%"> </p>
+        <br/>   
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+        <button class="btn btn-lg btn-primary" onclick="_paq.push(['trackEvent', 'Portfolio', 'page4-nextindustry-click']);" data-toggle="modal" href="#category-5-manufaturing"><i class="icon-hand-right icon-white"></i>Next Industry</button>
+    <br/>
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-5-manufaturing" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+          <!-- =====================carterville-homepage===================== -->
+    <div id="carterville-homepage" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Homepage</span>
+            <p> <img src="./img/carterville-1.png" width="100%"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#carterville-subpage" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================carterville-subpage===================== -->
+    <div id="carterville-subpage" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures">
+          <span>Subpage</span>
+            <p> <img src="./img/carterville-2.png" width="100%"> </p>
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#parks-homepage" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+          <!-- =====================parks-homepage===================== -->
+    <div id="parks-homepage" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Homepage</span>
+            <p> <img src="./img/parks-1.png" width="100%"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#parks-aquatics" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================parks-aquatics===================== -->
+    <div id="parks-aquatics" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures">
+          <span>Aquatics</span>
+            <p> <img src="./img/parks-2.png" width="100%"> </p>
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#parks-adultrec" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================parks-adultrec===================== -->
+    <div id="parks-adultrec" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Adult Recreation</span>
+            <p> <img src="./img/parks-1.png" width="100%"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-5-manufaturing" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+
+
+
+
+
+          <!-- ******************MANUFACTURING CATEGORY********************** -->
+    <div id="category-5-manufaturing" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">THINGS I HAVE MADE</h4>
+      </div><!-- /.modal-header -->
+      <div class="modal-body">
+      <div class="welcome"> <!-- any text to into the subject would go here --> 
+      <div class="wagon"></div>
+      <div class="wagon"></div></div> <!-- Begin New Category --> 
+      <div class="welcome"> 
+        <h5>Manufacturing</h5>
+      <div class="wagon"></div>
+        <div class="cust-info cust-warpath"><!-- customer info, with second class being the color -->
+            <span data-text="W">W</span>
+            <span data-text="a">a</span>
+            <span data-text="r">r</span>
+            <span data-text="p">p</span>
+            <span data-text="a">a</span>
+            <span data-text="t">t</span>
+            <span data-text="h">h</span>
+        </div>
+      <div class="center-button">
+          <button href="#warpath-homepage" data-toggle="modal" class="btn txt-white green-2">Homepage</button>
+          <button href="#warpath-subpage" data-toggle="modal" class="btn txt-white green-3">Capabilities</button>
+      </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>Homepage</span>
+            <p> <img src="./img/warpath-1a.gif" width="90%">
+                <img src="./img/warpath-1b.png" width="90%"> </p>
+        <br/>  
+          <span>Capabilities</span>
+            <p> <img src="./img/warpath-2.png" width="100%"> </p>
+        <br/>   
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+
+      <div class="welcome"> <!-- any text to into the subject would go here --> 
+    <br/><hr/><br/><br/>        
+      <div class="wagon"></div>
+      <div class="wagon"></div></div> <!-- Begin New Category --> 
+      <div class="welcome"> 
+      <div class="wagon"></div>
+        <div class="cust-info cust-motorsports"><!-- customer info, with second class being the color -->
+            <span data-text="L">L</span>
+            <span data-text="e">e</span>
+            <span data-text="v">v</span>
+            <span data-text="e">e</span>
+            <span data-text="l">l</span>
+            <span data-text="7">7</span>
+        </div>
+      <div class="center-button">
+          <button href="#motorsports-homepage" data-toggle="modal" class="btn txt-white red-1">Homepage</button>
+          <button href="#motorsports-loop" data-toggle="modal" class="btn txt-white red-2">Lifestyle</button>
+          <button href="#motorsports-single" data-toggle="modal" class="btn txt-white red-3">Single Lifestyle Post</button>
+      </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>Homepage</span>
+            <p> <img src="./img/motorsports-1.png" width="100%"> </p>
+        <br/>  
+          <span>Lifestyle</span>
+            <p> <img src="./img/motorsports-2.png" width="100%"> </p>
+        <br/>
+          <span>Single Lifestyle Post</span>
+            <p> <img src="./img/motorsports-3.png" width="100%"> </p>
+        <br/>   
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+        <button class="btn btn-lg btn-primary" onclick="_paq.push(['trackEvent', 'Portfolio', 'page5-nextindustry-click']);" data-toggle="modal" href="#category-6-retail"><i class="icon-hand-right icon-white"></i>Next Industry</button>
+    <br/>
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-6-retail" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+          <!-- =====================warpath-homepage===================== -->
+    <div id="warpath-homepage" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Homepage</span>
+            <p> <img src="./img/warpath-1a.gif" width="90%">
+                <img src="./img/warpath-1b.png" width="90%">
+            </p>
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#warpath-subpage" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================warpath-subpage===================== -->
+    <div id="warpath-subpage" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures">
+          <span>Subpage</span>
+            <p> <img src="./img/warpath-2.png" width="100%"> </p>
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#motorsports-homepage" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+          <!-- =====================motorsports-homepage===================== -->
+    <div id="motorsports-homepage" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Homepage</span>
+            <p> <img src="./img/motorsports-1.png" width="100%"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#motorsports-loop" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================motorsports-loop===================== -->
+    <div id="motorsports-loop" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures">
+          <span>Lifestyle</span>
+            <p> <img src="./img/motorsports-2.png" width="100%"> </p>
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#motorsports-single" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================motorsports-single===================== -->
+    <div id="motorsports-single" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Single Lifestyle Post</span>
+            <p> <img src="./img/motorsports-3.png" width="100%"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-6-retail" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+
+
+
+
+
+
+          <!-- ******************RETAIL CATEGORY********************** -->
+    <div id="category-6-retail" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">THINGS I HAVE MADE</h4>
+      </div><!-- /.modal-header -->
+      <div class="modal-body">
+      <div class="welcome"> <!-- any text to into the subject would go here --> 
+      <div class="wagon"></div>
+      <div class="wagon"></div></div> <!-- Begin New Category --> 
+      <div class="welcome"> 
+        <h5>Retail</h5>
+      <div class="wagon"></div>
+        <div class="cust-info cust-imagesframing"><!-- customer info, with second class being the color -->
+            <span data-text="F">F</span>
+            <span data-text="r">r</span>
+            <span data-text="a">a</span>
+            <span data-text="m">m</span>
+            <span data-text="i">i</span>
+            <span data-text="n">n</span>
+            <span data-text="g">g</span>
+        </div>
+      <div class="center-button">  
+          <button href="#framing-homepage" data-toggle="modal" class="btn txt-white retail">Homepage</button>
+          <button href="#framing-services" data-toggle="modal" class="btn txt-white red-1">Services</button>
+    </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>Homepage</span>
+            <p> <img src="./img/imagesframing-1.png" width="100%"> </p>
+        <br/>  
+          <span>Services</span>
+            <p> <img src="./img/imagesframing-2.png" width="100%"> </p>
+        <br/>   
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+        <button class="btn btn-lg btn-primary" onclick="_paq.push(['trackEvent', 'Portfolio', 'page6-nextindustry-click']);" data-toggle="modal" href="#category-7-nonprofits"><i class="icon-hand-right icon-white"></i>Next Industry</button>
+    <br/>
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-7-nonprofits" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+          <!-- =====================framing-homepage===================== -->
+    <div id="framing-homepage" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Homepage</span>
+            <p> <img src="./img/imagesframing-1.png" width="100%"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#framing-services" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================framing-services===================== -->
+    <div id="framing-services" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures">
+          <span>Services</span>
+            <p> <img src="./img/imagesframing-2.png" width="100%"> </p>    
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-7-nonprofits" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+
+
+
+
+
+          <!-- ******************NON-PROFITS CATEGORY********************** -->
+    <div id="category-7-nonprofits" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">THINGS I HAVE MADE</h4>
+      </div><!-- /.modal-header -->
+      <div class="modal-body">
+      <div class="welcome"> <!-- any text to into the subject would go here --> 
+      <div class="wagon"></div>
+      <div class="wagon"></div></div> <!-- Begin New Category --> 
+      <div class="welcome"> 
+        <h5>Non-Profits</h5>
+      <div class="wagon"></div>
+        <div class="cust-info cust-chefclash"><!-- customer info, with second class being the color -->
+            <span data-text="C">C</span>
+            <span data-text="h">h</span>
+            <span data-text="e">e</span>
+            <span data-text="f">f</span>
+            <span data-text="C">C</span>
+            <span data-text="l">l</span>
+            <span data-text="a">a</span>
+            <span data-text="s">s</span>
+            <span data-text="h">h</span>
+        </div>
+      <div class="center-button">
+          <button href="#chefclash-homepage" data-toggle="modal" class="btn txt-white orange-2">Homepage</button>
+          <button href="#chefclash-recipient" data-toggle="modal" class="btn txt-white orange-3">Donor Recipient</button>
+      </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>Homepage</span>
+            <p> <img src="./img/chefclash-1.png" width="100%"> </p>
+        <br/>  
+          <span>Donor Recipient</span>
+            <p> <img src="./img/chefclash-2.png" width="100%"> </p>
+        <br/>   
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+
+      <div class="welcome"> <!-- any text to into the subject would go here --> 
+    <br/><hr/><br/><br/>        
+      <div class="wagon"></div>
+      <div class="wagon"></div></div> <!-- Begin New Category --> 
+      <div class="welcome"> 
+      <div class="wagon"></div>
+        <div class="cust-info cust-boysgirls"><!-- customer info, with second class being the color -->
+          <span data-text="B">B</span>
+          <span data-text="o">o</span>
+          <span data-text="y">y</span>
+          <span data-text="s">s</span>
+          <span data-text="&">&</span>
+          <span data-text="G">G</span>
+          <span data-text="i">i</span>
+          <span data-text="r">r</span>
+          <span data-text="l">l</span>
+          <span data-text="s">s</span>
+        </div>
+      <div class="center-button">
+          <button href="#boysgirls-homepage" data-toggle="modal" class="btn txt-white blue-2">Homepage</button>
+          <button href="#boysgirls-membership" data-toggle="modal" class="btn txt-white teal-3">Membership</button>
+      </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>Homepage</span>
+            <p> <img src="./img/boysgirls-1.png" width="100%"> </p>
+        <br/>  
+          <span>Membership</span>
+            <p> <img src="./img/boysgirls-2.png" width="100%"> </p>
+        <br/>   
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+        <button class="btn btn-lg btn-primary" onclick="_paq.push(['trackEvent', 'Portfolio', 'page7-nextindustry-click']);" data-toggle="modal" href="#category-8-seo"><i class="icon-hand-right icon-white"></i>Next Industry</button>
+    <br/>
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-8-seo" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+          <!-- =====================chefclash-homepage===================== -->
+    <div id="chefclash-homepage" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Homepage</span>
+            <p> <img src="./img/chefclash-1.png" width="100%"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#chefclash-recipient" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================chefclash-recipient===================== -->
+    <div id="chefclash-recipient" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures">
+          <span>Donor Recipient</span>
+            <p> <img src="./img/chefclash-2.png" width="100%"> </p>
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#boysgirls-homepage" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+          <!-- =====================boysgirls-homepage===================== -->
+    <div id="boysgirls-homepage" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>Homepage</span>
+            <p> <img src="./img/boysgirls-1.png" width="100%"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#boysgirls-membership" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+          <!-- =====================boysgirls-membership===================== -->
+    <div id="boysgirls-membership" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures">
+          <span>Membership</span>
+            <p> <img src="./img/boysgirls-2.png" width="100%"> </p>
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+        <button type="button" data-toggle="modal" href="#category-8-seo" class="btn btn-primary">Next</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+
+
+
+
+
+
+          <!-- ******************SEO CATEGORY********************** -->
+    <div id="category-8-seo" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">THINGS I HAVE MADE</h4>
+      </div><!-- /.modal-header -->
+      <div class="modal-body">
+      <div class="welcome"> <!-- any text to into the subject would go here --> 
+      <div class="wagon"></div>
+      <div class="wagon"></div></div> <!-- Begin New Category --> 
+      <div class="welcome"> 
+        <h5>SEO Reports</h5>
+      <div class="wagon"></div>
+        <div class="cust-info cust-seo"><!-- customer info, with second class being the color -->
+            <span data-text="S">S</span>
+            <span data-text="E">E</span>
+            <span data-text="O">O</span>
+            <span data-text=" "> </span>
+            <span data-text="R">R</span>
+            <span data-text="e">e</span>
+            <span data-text="p">p</span>
+            <span data-text="o">o</span>
+            <span data-text="r">r</span>
+            <span data-text="t">t</span>
+        </div>
+      <div class="center-button">  
+          <button href="#seo-report" data-toggle="modal" class="btn txt-white red-2">SEO Report</button>
+    </div>
+      <div class="wagon"></div>
+      </div><!-- /.welcome -->
+    <br/><br/><br/>
+      <div class="portfolio-pictures">
+        <br/> 
+          <span>SEO Report</span>
+            <p> <img src="./img/website-1.png" width="100%" style="margin-top: 23px;"> </p>
+        <br/>  
+      </div><!-- /.portfolio-pictures -->
+    <br/><br/>
+       </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+          <!-- =====================seo-report===================== -->
+    <div id="seo-report" class="modal container fade" tabindex="-1" style="display: none;">
+      <div class="modal-body">
+<!-- Begin New Category --> 
+      <div class="portfolio-pictures"> 
+          <span>SEO Report</span>
+            <p> <img src="./img/website-1.png" width="100%" style="margin-top: 23px;"> </p>  
+      </div><!-- /.portfolio-pictures -->
+      </div><!-- /.modal-body -->
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Previous</button>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="my_resume" class="modal fade container"  tabindex="-1" style="display: none;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Portal to My Resume</h4>
+      </div>
+      <div class="modal-body">
+    <?php
+
+    echo "<iframe src=\"security.php\" width=\"100%\" style=\"height:75vh\"></iframe>";
+
+  ?>
+	</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div><!-- /.modal-footer -->
+</div><!-- /.modal -->
+
+
+
+</body>
+</html>

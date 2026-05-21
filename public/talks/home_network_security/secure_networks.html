@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Secure Networks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="css/theme-cyber.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class="title-slide" data-background-gradient="radial-gradient(ellipse at 40% 50%, rgba(57,255,20,0.06) 0%, transparent 55%), radial-gradient(ellipse at 70% 60%, rgba(192,132,252,0.06) 0%, transparent 55%)">
+        <h1 class="r-fit-text">When Data Leaves Your Network</h1>
+    <h3>How Do You Protect It Out There?</h3>
+    <p class="meta"><em>You've firewalled your apps. You've monitored your router.</em></p>
+    <p class="meta"><em>Now your packets are leaving the building.</em></p>
+      </section>
+      <section>
+        <h2>What Happens When a Packet Leaves Your House</h2>
+        <ul>
+  <li><strong>Your ISP sees everything unencrypted and all metadata for everything else</strong>
+    <ul>
+      <li>DNS queries unless you're using DoH/DoT — which ISP DNS resolvers log by design</li>
+      <li>Which IPs you connect to, when, how much data, how often — retained by law in many countries</li>
+      <li>In the USA: ISPs legally sell this to data brokers — your browsing history is a product</li>
+    </ul>
+  </li>
+  <li><strong>The destination sees your real IP address</strong>
+    <ul>
+      <li>Geolocation to city level is trivial — any IP lookup service does it in milliseconds</li>
+      <li>Correlating your activity across multiple sites using the same IP is standard ad-tech practice</li>
+    </ul>
+  </li>
+  <li><strong>Every router hop between you and the destination sees packet headers</strong>
+    <ul>
+      <li>Source IP, destination IP, port, timing — all visible even with full HTTPS encryption</li>
+      <li>Traffic analysis attacks are real: volume plus timing alone can fingerprint what you're doing</li>
+    </ul>
+  </li>
+  <li><strong>Nation-state and large carrier surveillance</strong>
+    <ul>
+      <li>Deep packet inspection at backbone level — not hypothetical, documented in Snowden disclosures</li>
+      <li>Bulk metadata collection correlates millions of users — you don't need to be a target to be in the data</li>
+    </ul>
+  </li>
+  <li><strong>Your browser and apps leak identity by fingerprint</strong>
+    <ul>
+      <li>Font rendering, WebGL, screen size, extension list, timezone — unique without any cookie</li>
+      <li>JavaScript fingerprinting identifies you across sessions even with a VPN and fresh cookies</li>
+    </ul>
+  </li>
+  <li><strong>The core insight: HTTPS encrypts content, not identity</strong>
+    <ul>
+      <li>HTTPS hides what you're reading — it does not hide who you are or who you're talking to</li>
+      <li>Everything above happens to HTTPS traffic — encryption is necessary but not sufficient</li>
+    </ul>
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>The Fundamental Truth About All of This</h2>
+        <blockquote><strong>Every privacy tool moves trust somewhere. None of them eliminate it.</strong></blockquote>
+<ul>
+  <li><strong>When you use a VPN</strong>
+    <ul>
+      <li>You stop trusting your ISP with your traffic — you start trusting your VPN provider instead</li>
+      <li>The VPN provider sees everything your ISP used to see, plus your real identity from payment</li>
+      <li>If the VPN logs and cooperates with authorities, you have less protection than you thought</li>
+      <li>If the VPN is operated by an intelligence agency — some are — you have none at all</li>
+    </ul>
+  </li>
+  <li><strong>When you use Tor</strong>
+    <ul>
+      <li>You distribute trust across three relays — no single relay sees both who you are and your destination</li>
+      <li>You trust that your adversary does not control enough of the Tor network to correlate</li>
+      <li>Exit node operators see your unencrypted traffic if you're not using HTTPS at the destination</li>
+    </ul>
+  </li>
+  <li><strong>When you use I2P or a mesh network</strong>
+    <ul>
+      <li>You trust the peers in your network — fine if it's your own infrastructure</li>
+      <li>A fully decentralized network means your traffic routes through strangers you can't vet</li>
+    </ul>
+  </li>
+  <li><strong>When you self-host</strong>
+    <ul>
+      <li>You trust your own infrastructure, your operational security, and your VPS provider's honesty</li>
+      <li>The strongest model for specific use cases — and the most work to maintain</li>
+    </ul>
+  </li>
+  <li><strong>The question is never "does this give me perfect privacy?"</strong>
+    <ul>
+      <li>It doesn't. Nothing does. The question is: <strong>who do I trust, and with what specifically?</strong></li>
+      <li>Define your adversary before choosing your tool — the right answer depends entirely on your threat model</li>
+    </ul>
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>VPNs — Moving Your Trust to the Tunnel</h2>
+        <p><strong>Source: windscribe.com · riseup.net/en/vpn · mullvad.net</strong></p>
+        <div class="cols-2">
+          <div class="panel">
+            <h3>What VPNs Do and What They Don't</h3>
+            <ul>
+  <li>Encrypts all your traffic and routes it through a server you choose — ISP sees only the VPN connection
+  </li>
+  <li>The destination sees the VPN server's IP, not yours — effective for geo-unblocking and IP hiding
+  </li>
+  <li>The VPN provider sees everything your ISP used to see, plus your real IP and payment identity
+  </li>
+  <li>Every provider claims no-log policy — court orders and government requests reveal the actual truth
+  </li>
+  <li>Jurisdiction matters: Iceland has different legal obligations for data disclosure than the USA
+  </li>
+  <li>Kill switch: blocks all traffic if VPN drops — prevents accidental exposure of your real IP
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Recommended Providers</h3>
+            <ul>
+  <li><strong>Windscribe</strong> — free 10GB/month, no credit card, open source clients, Canadian company
+    <ul>
+      <li>Built-in ROBERT blocker (ads/trackers at VPN level), published warrant canary, windscribe.com</li>
+    </ul>
+  </li>
+  <li><strong>Riseup VPN</strong> — free, no account required, run by a radical tech collective since 1999
+    <ul>
+      <li>Funded by donations, not VC money — operated by people with genuine skin in the privacy game</li>
+      <li>Slow but authentic — riseup.net/en/vpn</li>
+    </ul>
+  </li>
+  <li><strong>Mullvad</strong> — accepts cash and Monero, no-account model (just a number), mullvad.net
+    <ul>
+      <li>Audited no-log policy, RAM-only servers, regularly deletes payment records</li>
+    </ul>
+  </li>
+  <li><strong>VPNs are ISP privacy, not anonymity</strong> — if you need stronger guarantees than "my ISP can't see this"
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Tor — The Onion Router</h2>
+        <p><strong>Source: torproject.org/download</strong></p>
+        <div class="cols-2">
+          <div class="panel">
+            <h3>How the Three-Layer Model Works</h3>
+            <ul>
+  <li>Routes your traffic through three relays: Guard → Middle → Exit — each knows only adjacent hops
+  </li>
+  <li>Guard node: knows your IP, does not know the destination you're visiting
+  </li>
+  <li>Middle node: knows neither end — a pure relay with no information about source or destination
+  </li>
+  <li>Exit node: knows the destination, does not know your IP — sees unencrypted traffic if no HTTPS
+  </li>
+  <li>Traffic is encrypted three times — one layer peeled at each hop — onion routing
+  </li>
+  <li>Your ISP sees: "this device is talking to a Tor guard node" and nothing else
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Strengths, Limits, and Practical Use</h3>
+            <ul>
+  <li>Strong for: whistleblowers, journalists, activists under genuine threat — designed for this use case
+  </li>
+  <li>Strong for: .onion hidden services — no exit node involved, both ends fully anonymous
+  </li>
+  <li>Limitation: slow — three volunteer hops with unpredictable bandwidth, not suitable for streaming
+  </li>
+  <li>Limitation: some sites block known Tor exit IPs — .onion versions exist for major services (SecureDrop)
+  </li>
+  <li>Limitation: Tor Browser is required — using Tor as a proxy in a regular browser creates fingerprint leaks
+  </li>
+  <li>Limitation: traffic analysis attacks at nation-state scale are a documented research concern
+  </li>
+  <li><strong>Tor Browser</strong>: torproject.org — the correct way to use Tor casually, do not customize it
+  </li>
+  <li><strong>Tails OS</strong>: tails.boum.org — routes all traffic through Tor, amnesiac (leaves no trace on disk)
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>I2P and Lokinet — Deeper Anonymity Networks</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>I2P — The Invisible Internet Project</h3>
+            <ul>
+  <li>A fully internal overlay network — not a way to reach the regular internet anonymously
+  </li>
+  <li>Every participant is a router, relaying traffic for others — garlic routing bundles multiple messages
+  </li>
+  <li>Garlic routing vs onion routing: messages bundled into one delivery, harder to traffic-correlate
+  </li>
+  <li>Designed for services <em>within</em> I2P: eepsites (.i2p domains), I2P-Bote email, I2P-native torrents
+  </li>
+  <li>No exit to clearnet by default — for clearnet privacy, use Tor or a VPN instead
+  </li>
+  <li>Install: i2pd (C++ implementation, lighter) from i2pd.website — Linux, Windows, macOS, Docker
+  </li>
+  <li>When to use: hosting or accessing services with strong metadata protection inside the network
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Lokinet — Tor With Economic Incentives</h3>
+            <ul>
+  <li>Built on LLARP (Low Latency Anonymous Routing Protocol) — part of the Oxen Privacy ecosystem
+  </li>
+  <li><strong>Staked nodes</strong>: relay operators lock up Oxen cryptocurrency — economic skin in the game
+  </li>
+  <li><strong>SNApps</strong>: Lokinet's .onion equivalent — .loki addresses accessible only inside Lokinet
+  </li>
+  <li><strong>Lower latency</strong> than Tor: designed for real-time use (VoIP, gaming) — routes all IP traffic, not TCP only
+  </li>
+  <li><strong>Exit nodes are also staked</strong> — accountability mechanism that Tor's volunteer model lacks
+  </li>
+  <li>Honest assessment: architecturally innovative, but much smaller network than Tor
+  </li>
+  <li>Tor's scale provides protection Lokinet cannot match yet — interesting to watch, not first choice today
+  </li>
+  <li>Download: lokinet.org — Linux, Windows, macOS, Android — combine with Session messenger
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>XRAY — Your VPN Is a Website</h2>
+        <p><strong>Source: github.com/MarcusHoltz/hidden-vpn-that-looks-like-a-website</strong></p>
+        <div class="cols-2">
+          <div class="panel">
+            <h3>Why Standard VPNs Get Blocked</h3>
+            <ul>
+  <li>DPI recognizes every major VPN: WireGuard handshake, OpenVPN cert exchange, Tor guard connection — all fingerprinted
+  </li>
+  <li>China's Great Firewall terminates them in real time — the same techniques spread to corporate and hotel networks
+  </li>
+  <li><strong>Shadowsocks</strong>: the original answer — SOCKS5 proxy with obfuscation, traffic looks like noise, designed in China
+  </li>
+  <li>Next level needed: traffic must look exactly like HTTPS to a domain a real company would own
+  </li>
+  <li>The goal: an ISP watching your traffic sees TLS to a hostname — and nothing more unusual than that
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>XRAY Trojan + Decoy Website</h3>
+            <ul>
+  <li>VLESS protocol with Trojan transport: your VPN connection IS HTTPS to a domain you own
+  </li>
+  <li><strong>Decoy website auto-generated</strong> — six industry presets: cloud platform, API gateway, security firm, analytics, dev tools, CDN
+  </li>
+  <li>ISP sees a valid TLS handshake to your domain and encrypted HTTPS — identical to any legitimate SaaS site
+  </li>
+  <li>Docker deployment: port 80 (Nginx + ACME cert), port 443 (HTTPS/VLESS), port 7681 (ttyd terminal in browser)
+  </li>
+  <li>All config stored in <code>./data/</code> — persistent across container restarts, easy to back up
+  </li>
+  <li>Cloudflare CDN optional: traffic appears to route through a major CDN — another layer of cover
+  </li>
+  <li>Self-host on any $5/month VPS (Hetzner, Vultr, DigitalOcean) — you trust yourself, not a provider
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>VPN over Port 53 — When Every Port Is Blocked</h2>
+        <p><strong>Source: github.com/MarcusHoltz/vpn-over-port-53</strong></p>
+        <div class="cols-2">
+          <div class="panel">
+            <h3>The Layered Evasion Stack</h3>
+            <ul>
+  <li><strong>The problem</strong>: corporate firewalls and hotel networks block every common VPN port — 51820, 1194, 500
+  </li>
+  <li><strong>Layer 1 — WireGuard normally</strong>: fastest path, use <code>easy-wg-quick</code> to deploy — works on open networks
+  </li>
+  <li><strong>Layer 2 — WireGuard over port 53</strong>: nftables redirects port 53 → 51820 on the server — most firewalls pass DNS
+    <ul>
+      <li>DNS port is almost always open outbound — if UDP/53 works, WireGuard works through it</li>
+      <li>No tunnel overhead: it's still WireGuard, just arriving on port 53</li>
+    </ul>
+  </li>
+  <li><strong>Layer 3 — DNS tunnel fallback</strong>: <code>iodined</code> + CoreDNS in Docker — actual data encoded in DNS queries
+    <ul>
+      <li>For networks with transparent DNS proxies that block direct port-53 connections to outside servers</li>
+      <li>Slower than Layer 2 but works when the network actively intercepts DNS traffic</li>
+    </ul>
+  </li>
+  <li><strong>CrowdSec monitoring</strong> built into the stack — logs and blocks abuse of your server while it's exposed
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>When Even DNS is Inspected</h3>
+            <ul>
+  <li>Some networks run deep inspection on DNS traffic — they see iodine's encoding pattern and block it
+  </li>
+  <li><strong>Layer 4 — XRAY VLESS on port 443</strong>: final fallback, inside a TLS HTTPS session to a real domain
+    <ul>
+      <li>Combines with the decoy website approach — traffic is indistinguishable from normal HTTPS</li>
+    </ul>
+  </li>
+  <li>The full progression: WireGuard → WireGuard/53 → DNS tunnel → XRAY/443
+  </li>
+  <li>Each layer is a fallback — the stack automatically routes through the least-restricted available path
+  </li>
+  <li>Deploy server once, clients try each method in order — works on airplane WiFi, corporate NAT, hotel captive portals
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Private Mesh Networks — Build Your Own Internet</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>Yggdrasil and Tailscale</h3>
+            <ul>
+  <li><strong>Yggdrasil</strong> — end-to-end encrypted IPv6 overlay network, fully decentralized
+    <ul>
+      <li>Every node gets a permanent IPv6 address derived from its public key — no central registry</li>
+      <li>Routes through other Yggdrasil peers (everyone routes for everyone, like I2P)</li>
+      <li>Connect to the public Yggdrasil network or run your own private subnet</li>
+      <li>yggdrasil-network.github.io — Linux, Windows, macOS, Android, iOS</li>
+    </ul>
+  </li>
+  <li><strong>Tailscale</strong> — WireGuard-based mesh VPN, dead simple, free for personal use up to 100 devices
+    <ul>
+      <li>Install on all your devices — they auto-discover each other and connect directly (P2P when possible)</li>
+      <li>Control plane runs on Tailscale's servers — this is the trust you're accepting with convenience</li>
+      <li>Ideal for connecting your own devices: phone, laptop, home server, VPS — one mesh</li>
+      <li>tailscale.com — free tier covers most personal use cases with no configuration required</li>
+    </ul>
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>NetBird and Nebula — Self-Hostable Alternatives</h3>
+            <ul>
+  <li><strong>NetBird</strong> — open source Tailscale alternative with self-hostable control plane
+    <ul>
+      <li>Same WireGuard mesh, but you run the management dashboard — no Tailscale trust required</li>
+      <li>netbird.io — cloud or self-hosted, GUI dashboard, access control policies</li>
+    </ul>
+  </li>
+  <li><strong>Nebula</strong> — originally built by Slack, now open source (github.com/slackhq/nebula)
+    <ul>
+      <li>Requires a "lighthouse" server for peer discovery — run your own, no external dependency</li>
+      <li>More complex to configure but fully self-contained and suitable for larger deployments</li>
+      <li>Good for: infrastructure-grade mesh between servers, remote offices, security-critical environments</li>
+    </ul>
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Choosing Your Tool — The Honest Comparison</h2>
+        <table>
+<thead><tr>
+  <th>Tool</th>
+  <th>Clearnet?</th>
+  <th>Anonymity</th>
+  <th>Speed</th>
+  <th>Complexity</th>
+  <th>Best For</th>
+</tr></thead><tbody>
+<tr>
+  <td><strong>Windscribe VPN</strong></td>
+  <td>Yes</td>
+  <td>Low — trust VPN</td>
+  <td>Fast</td>
+  <td>Very Low</td>
+  <td>ISP privacy, geo-unblocking</td>
+</tr>
+<tr>
+  <td><strong>Riseup VPN</strong></td>
+  <td>Yes</td>
+  <td>Low — trust Riseup</td>
+  <td>Medium</td>
+  <td>Very Low</td>
+  <td>Activist / political use</td>
+</tr>
+<tr>
+  <td><strong>Mullvad</strong></td>
+  <td>Yes</td>
+  <td>Low-Med — audited</td>
+  <td>Fast</td>
+  <td>Low</td>
+  <td>Serious daily ISP privacy</td>
+</tr>
+<tr>
+  <td><strong>Tor Browser</strong></td>
+  <td>Yes (exit)</td>
+  <td>High</td>
+  <td>Slow</td>
+  <td>Low</td>
+  <td>Sensitive browsing, .onion</td>
+</tr>
+<tr>
+  <td><strong>Tails OS</strong></td>
+  <td>Yes (via Tor)</td>
+  <td>Very High</td>
+  <td>Slow</td>
+  <td>Medium</td>
+  <td>High-stakes, amnesiac sessions</td>
+</tr>
+<tr>
+  <td><strong>I2P</strong></td>
+  <td>No (internal)</td>
+  <td>High</td>
+  <td>Slow</td>
+  <td>Medium</td>
+  <td>Internal services, communities</td>
+</tr>
+<tr>
+  <td><strong>Lokinet</strong></td>
+  <td>Yes (exit)</td>
+  <td>Medium</td>
+  <td>Medium</td>
+  <td>Medium</td>
+  <td>.loki services, real-time</td>
+</tr>
+<tr>
+  <td><strong>Shadowsocks</strong></td>
+  <td>Yes</td>
+  <td>Low — trust server</td>
+  <td>Fast</td>
+  <td>Medium</td>
+  <td>Bypassing DPI / censorship</td>
+</tr>
+<tr>
+  <td><strong>XRAY Trojan</strong></td>
+  <td>Yes</td>
+  <td>Low — trust server</td>
+  <td>Fast</td>
+  <td>High</td>
+  <td>Evading DPI, indistinguishable HTTPS</td>
+</tr>
+<tr>
+  <td><strong>VPN over port 53</strong></td>
+  <td>Yes</td>
+  <td>Low — trust server</td>
+  <td>Fast→Slow</td>
+  <td>Medium</td>
+  <td>Restricted networks, every port blocked</td>
+</tr>
+<tr>
+  <td><strong>Tailscale</strong></td>
+  <td>No (mesh)</td>
+  <td>Trust Tailscale</td>
+  <td>Fast</td>
+  <td>Very Low</td>
+  <td>Connecting your own devices</td>
+</tr>
+<tr>
+  <td><strong>NetBird/Nebula</strong></td>
+  <td>No (mesh)</td>
+  <td>Self-hosted</td>
+  <td>Fast</td>
+  <td>High</td>
+  <td>Self-hosted mesh, no trust</td>
+</tr>
+</tbody></table>
+<ul>
+  <li><strong>Daily ISP privacy:</strong> Windscribe or Mullvad VPN — simple, effective, specific guarantee
+  </li>
+  <li><strong>Sensitive browsing:</strong> Tor Browser, always with HTTPS at the destination
+  </li>
+  <li><strong>Bypassing national censorship/DPI:</strong> XRAY Trojan self-hosted on a VPS you control
+  </li>
+  <li><strong>Your own infrastructure:</strong> Tailscale (easy) or NetBird/Nebula (self-hosted control plane)
+  </li>
+  <li><strong>Maximum metadata protection:</strong> I2P or Tor hidden services — never touch clearnet for sensitive activity
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>Tor Hidden Services — Put Yourself on the Onion Network</h2>
+        <p><strong>Source: github.com/MarcusHoltz/tor-hidden-service</strong></p>
+        <div class="cols-2">
+          <div class="panel">
+            <h3>What a Hidden Service Is and Why</h3>
+            <ul>
+  <li>A server accessible only via Tor — a .onion address, no real IP ever revealed to anyone
+  </li>
+  <li>Tor relays rendezvous in the middle: visitor is anonymous, server is anonymous, no exit node involved
+  </li>
+  <li>End-to-end encryption both directions always — no HTTPS certificate needed, Tor provides it
+  </li>
+  <li><strong>No port forwarding required</strong> — Tor hidden services don't accept direct inbound connections at all
+  </li>
+  <li>Host anything that can't be taken down by IP blocking — the IP simply doesn't exist publicly
+  </li>
+  <li>Your own .onion: reach your home server from anywhere in the world with no exposed IP or open ports
+  </li>
+  <li>Automated Docker setup: one script handles directories, permissions, key generation, and tor config
+  </li>
+  <li>Supports <strong>unattended/CI-CD mode</strong> via environment variables — deploy without interactive prompts
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Vanity Addresses and Client Authentication</h3>
+            <ul>
+  <li>Standard .onion: 56-character random string derived from an Ed25519 public key — not memorable
+  </li>
+  <li>Vanity address: brute-force key generation until your chosen prefix matches — same cryptographic strength
+  </li>
+  <li>Tool: <code>mkp224o</code> — github.com/cathugger/mkp224o — generates v3 vanity .onion addresses
+  </li>
+  <li><strong>Real timing on Raspberry Pi 2B</strong>: 6-char prefix ≈ 8.5 hours · 8-char prefix ≈ 1 year — plan accordingly
+  </li>
+  <li>On modern x86 hardware: 6 chars in minutes, 8 chars in days — use a fast machine for longer prefixes
+  </li>
+  <li><strong>Client authentication</strong>: X25519 cryptography — generate an <code>authorized_clients</code> file on the server
+    <ul>
+      <li>Only clients with the matching private key can even connect to the hidden service — invisible to everyone else</li>
+    </ul>
+  </li>
+  <li>Key material protected with strict permissions (600) and <code>.gitignore</code> — safe to manage in version control
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Opsec — The Part the Tools Can't Fix</h2>
+        <ul>
+  <li><strong>The weakest link is almost never the cryptography</strong>
+    <ul>
+      <li>Tor is secure. Logging into your real Gmail over Tor is not. The cryptography held; you didn't.</li>
+    </ul>
+  </li>
+  <li><strong>Compartmentalization — keep identities strictly separate</strong>
+    <ul>
+      <li>Never mix real-name accounts with anonymous ones — not in the same browser, not on the same device</li>
+      <li>Tor Browser handles session separation automatically: fresh identity on every restart</li>
+      <li>For strong separation: create accounts only over Tor, never reuse usernames across contexts</li>
+    </ul>
+  </li>
+  <li><strong>Metadata is content — take it as seriously as the data itself</strong>
+    <ul>
+      <li>"I only care about the metadata" — former NSA Director Michael Hayden, on why metadata is enough</li>
+      <li>Who you talk to, when, for how long, how often — tells a complete story without reading content</li>
+      <li>Timing attacks: you send a message, a suspicious person receives one seconds later — correlation possible</li>
+    </ul>
+  </li>
+  <li><strong>The browser fingerprinting trap</strong>
+    <ul>
+      <li>Tor Browser standardizes fingerprint across all users — that's the protection, not the Tor circuit</li>
+      <li>Installing extensions, changing settings, or maximizing the window breaks the uniformity</li>
+      <li>Use Tor Browser exactly as it ships — resist every urge to customize it</li>
+    </ul>
+  </li>
+  <li><strong>The account problem — the most common failure mode</strong>
+    <ul>
+      <li>Any service requiring account creation links your activity to that account permanently</li>
+      <li>Anonymous Tor traffic provides zero protection if you then sign into a Google account</li>
+    </ul>
+  </li>
+  <li><strong>Physical layer — often overlooked entirely</strong>
+    <ul>
+      <li>Where are you when you connect? Coffee shop cameras. WiFi MAC address visible to the AP.</li>
+      <li>Randomize your MAC address — most modern OS support this — especially on untrusted networks</li>
+      <li>Burner devices and SIM cards exist for situations where the physical layer matters</li>
+    </ul>
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>The Full Stack — Device to Network to Beyond</h2>
+        <pre><code class="language-text" data-trim data-noescape data-line-numbers>YOUR DATA
+    |
+    ▼  ← TrackerControl / WFC / OpenSnitch / Little Snitch
+[ Device firewall ]  — blocks apps from calling home on your device
+    |
+    ▼  ← OPNsense: ntopng, Suricata, DNS blocklists, IP blocklists
+[ Your router ]  — network-level visibility and blocking for all devices
+    |
+    ▼  ← VPN / Tor / XRAY / Tailscale
+[ Encrypted tunnel ]  — hides traffic from ISP, obscures destination IP
+    |
+    ▼
+[ Exit point / Relay network ]
+    |
+    ▼
+[ Destination ]</code></pre>
+<ul>
+  <li><strong>Just ISP privacy + ad blocking</strong>: OPNsense + DNS blocklists + Windscribe or Riseup VPN
+  </li>
+  <li><strong>Sensitive browsing</strong>: Tor Browser for sensitive sessions; VPN + device firewall for everything else
+  </li>
+  <li><strong>Self-hosting without IP exposure</strong>: Tailscale for device mesh + Tor hidden service for public access
+  </li>
+  <li><strong>Bypassing censorship/DPI</strong>: XRAY Trojan on a self-hosted VPS with a decoy website on the same IP
+  </li>
+  <li><strong>Every port blocked (hotel/corporate NAT)</strong>: VPN-over-53 stack — WireGuard → DNS tunnel → XRAY/443
+  </li>
+  <li><strong>Maximum separation, high threat model</strong>: Tails OS + dedicated hardware + MAC randomization
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>Resources</h2>
+        <table>
+<thead><tr>
+  <th>Tool</th>
+  <th>Where</th>
+</tr></thead><tbody>
+<tr>
+  <td><strong>Windscribe VPN</strong></td>
+  <td>windscribe.com — free 10GB/month, open source clients</td>
+</tr>
+<tr>
+  <td><strong>Riseup VPN</strong></td>
+  <td>riseup.net/en/vpn — free, activist-run, no account needed</td>
+</tr>
+<tr>
+  <td><strong>Mullvad</strong></td>
+  <td>mullvad.net — cash/Monero, no-account model, audited</td>
+</tr>
+<tr>
+  <td><strong>Tor Browser</strong></td>
+  <td>torproject.org</td>
+</tr>
+<tr>
+  <td><strong>Tails OS</strong></td>
+  <td>tails.boum.org — amnesiac OS, all traffic through Tor</td>
+</tr>
+<tr>
+  <td><strong>I2P / i2pd</strong></td>
+  <td>i2pd.website — lightweight C++ I2P router</td>
+</tr>
+<tr>
+  <td><strong>Lokinet</strong></td>
+  <td>lokinet.org — Linux, Windows, macOS, Android</td>
+</tr>
+<tr>
+  <td><strong>XRAY hidden VPN</strong></td>
+  <td>github.com/MarcusHoltz/hidden-vpn-that-looks-like-a-website</td>
+</tr>
+<tr>
+  <td><strong>VPN over port 53</strong></td>
+  <td>github.com/MarcusHoltz/vpn-over-port-53</td>
+</tr>
+<tr>
+  <td><strong>Free V2Ray/XRAY list</strong></td>
+  <td>github.com/ebrasha/free-v2ray-public-list</td>
+</tr>
+<tr>
+  <td><strong>Yggdrasil</strong></td>
+  <td>yggdrasil-network.github.io</td>
+</tr>
+<tr>
+  <td><strong>Tailscale</strong></td>
+  <td>tailscale.com — free personal tier, up to 100 devices</td>
+</tr>
+<tr>
+  <td><strong>NetBird</strong></td>
+  <td>netbird.io — self-hostable Tailscale alternative</td>
+</tr>
+<tr>
+  <td><strong>Nebula</strong></td>
+  <td>github.com/slackhq/nebula — infrastructure-grade mesh</td>
+</tr>
+<tr>
+  <td><strong>mkp224o</strong> (vanity .onion)</td>
+  <td>github.com/cathugger/mkp224o</td>
+</tr>
+<tr>
+  <td><strong>Tor hidden service (Docker)</strong></td>
+  <td>github.com/MarcusHoltz/tor-hidden-service</td>
+</tr>
+<tr>
+  <td><strong>Tor hidden service guide</strong></td>
+  <td>blog.holtzweb.com — Docker + OPNsense + vanity address</td>
+</tr>
+</tbody></table>
+      </section>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      transition: 'fade',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      fragments: false,
+      progress: true,
+      slideNumber: 'c/t',
+      autoAnimateEasing: 'ease-out',
+      autoAnimateDuration: 0.65,
+      plugins: [ RevealHighlight, RevealNotes ]
+    });
+  </script>
+</body>
+</html>

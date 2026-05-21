@@ -28,13 +28,13 @@ const fullTitle = title === siteData.name ? title : `${title} | ${siteData.name}
 
 const siteOrigin = Astro.site?.origin ?? siteData.url;
 const resolvedOgImage = ogImage ?? `${siteOrigin}/images/favicons/android-chrome-512x512.png`;
-const ogImageAlt = `${siteData.name} — Private Holding Company`;
+const ogImageAlt = `${siteData.name} — IT Services`;
 
 const defaultSchema = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Organization",
+      "@type": "LocalBusiness",
       "@id": `${siteData.url}/#business`,
       name: siteData.name,
       legalName: siteData.legalName,
@@ -85,10 +85,15 @@ function safeJsonLd(obj: Record<string, unknown>): string {
 
 <!doctype html>
 <!--!
+  Hey, I see you there...
 
-  This is the Apex Capital Group holding company site.
-  We are a real and real serious financial firm. :-D
+  Welcome! We're Holtzweb, a full-service IT company based in Colorado.
+  If you're curious about what we do, how this site was built,
+  or think we might be a good fit for your team —
+  contact us below, nice job!
 
+  contact@holtzweb.com
+  holtzweb.com
 -->
 <html lang="en" class="scroll-smooth">
   <head>
@@ -171,22 +176,20 @@ function safeJsonLd(obj: Record<string, unknown>): string {
     </script>
 
     <script is:inline>
-      if (!window.__apexBannerShown) {
-        window.__apexBannerShown = true;
+      if (!window.__holtzBannerShown) {
+        window.__holtzBannerShown = true;
         var art = [
-      '    #    ',
-      '  #####  ',
-      ' #  #  # ',
-      ' #  #    ',
-      '  #####  ',
-      '    #  # ',
-      ' #  #  # ',
-      '  #####  ',
-      '    #    ',
+          '#     # ####### #       ####### ####### #     # ####### ######  ',
+          '#     # #     # #          #         #  #  #  # #       #     # ',
+          '#     # #     # #          #        #   #  #  # #       #     # ',
+          '####### #     # #          #       #    #  #  # #####   ######  ',
+          '#     # #     # #          #      #     #  #  # #       #     # ',
+          '#     # #     # #          #     #      #  #  # #       #     # ',
+          '#     # ####### #######    #    #######  ## ##  ####### ######  ',
         ].join('\n');
-        console.log('%c' + art, 'color:#C5A840;font-family:monospace;font-size:11px;line-height:1.4;');
-        console.log('%c Greetings.', 'color:#ffffff;font-weight:bold;font-size:14px;');
-        console.log('%cApex Capital Group — Private Holding Company\nInvestor relations: ir@apexcap.example', 'color:#94a3b8;font-size:12px;');
+        console.log('%c' + art, 'color:#39d98a;font-family:monospace;font-size:11px;line-height:1.4;');
+        console.log('%c👋 Hey there!', 'color:#ffffff;font-weight:bold;font-size:14px;');
+        console.log('%cWelcome to Holtzweb — full-service IT out of Colorado.\nYou can contact us at: contact@holtzweb.com', 'color:#94a3b8;font-size:12px;');
       }
     </script>
 

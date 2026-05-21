@@ -39,7 +39,7 @@ update-deps:
     - git remote set-url origin "https://oauth2:${UPDATE_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
   script:
     - |
-      PKGS="astro tailwindcss @tailwindcss/vite @astrojs/sitemap @astrojs/check \
+      PKGS="astro tailwindcss @tailwindcss/postcss @astrojs/sitemap @astrojs/check \
             typescript eslint @typescript-eslint/parser eslint-plugin-astro \
             @types/node rss-parser prettier prettier-plugin-astro \
             prettier-plugin-tailwindcss"
@@ -50,7 +50,7 @@ update-deps:
       case "$VITE_VER" in
         6.*) echo "PASS: standard Vite 6 in use (not rolldown-vite)" ;;
         *)
-          echo "FAIL: vite@${VITE_VER} — expected 6.x from pnpm-workspace.yaml override"
+          echo "FAIL: vite@${VITE_VER} — expected 6.x (astro transitive dep)"
           exit 1
           ;;
       esac

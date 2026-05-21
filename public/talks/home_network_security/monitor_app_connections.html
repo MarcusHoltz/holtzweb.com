@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Monitor App Connections</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="css/theme-cyber.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class="title-slide" data-background-gradient="radial-gradient(ellipse at 40% 50%, rgba(57,255,20,0.06) 0%, transparent 55%), radial-gradient(ellipse at 70% 60%, rgba(192,132,252,0.06) 0%, transparent 55%)">
+        <h1 class="r-fit-text">Monitor App Connections</h1>
+    <h3>You Are a Hose Spewing Data</h3>
+    <p class="meta"><em>Not gross at all.</em></p>
+    <p class="meta">Every app you install assumes it has unlimited outbound network access.</p>
+      </section>
+      <section>
+        <h2>Your Computer Talks. A Lot. Without Asking.</h2>
+        <ul>
+  <li><strong>Every app you install phones home by default</strong>
+    <ul>
+      <li>Telemetry, usage stats, update checks, license pings — none of it disclosed clearly</li>
+    </ul>
+  </li>
+  <li><strong>Your OS is the worst offender of all</strong>
+    <ul>
+      <li>Windows 11 calls Microsoft telemetry endpoints even on a fresh install with no apps</li>
+      <li>macOS has a dozen background daemons making network calls you never see</li>
+      <li>Ubuntu phones Canonical with package popularity data by default</li>
+    </ul>
+  </li>
+  <li><strong>The firewall that shipped with your OS doesn't help</strong>
+    <ul>
+      <li>Windows Defender Firewall: blocks inbound by default, outbound is wide open</li>
+      <li>macOS Application Firewall: inbound only — same story</li>
+      <li>Linux iptables/nftables: powerful, but not per-app without extra configuration</li>
+    </ul>
+  </li>
+  <li><strong>App update services run 24/7 even when the app is closed</strong>
+    <ul>
+      <li>Google Update, Microsoft AutoUpdate, Adobe ARM — always running, always checking</li>
+      <li>Many spawn separate helper processes that never appear in your task manager</li>
+    </ul>
+  </li>
+  <li><strong>Electron apps are particularly bad</strong>
+    <ul>
+      <li>Slack, VS Code, Discord, Notion — each ships its own Chromium and phones home on launch</li>
+      <li>You can't see which part of the app is making which call without a process-level firewall</li>
+    </ul>
+  </li>
+  <li><strong>What you need is an application-layer outbound firewall</strong>
+    <ul>
+      <li>Intercepts connections per process, asks you to allow or deny, logs everything</li>
+      <li>Shows you what's connecting, to where, on which port, and how often</li>
+    </ul>
+  </li>
+  <li><strong>This talk covers one tool per platform — free where possible</strong>
+    <ul>
+      <li>Android: TrackerControl · Windows: WFC · Linux: OpenSnitch · macOS: Little Snitch / Radio Silence</li>
+    </ul>
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>One Tool Per Platform</h2>
+        <table>
+<thead><tr>
+  <th>Platform</th>
+  <th>Tool</th>
+  <th>Cost</th>
+  <th>Mechanism</th>
+</tr></thead><tbody>
+<tr>
+  <td><strong>Android</strong></td>
+  <td>TrackerControl</td>
+  <td>Free / F-Droid</td>
+  <td>Local VPN intercepts all DNS + connections</td>
+</tr>
+<tr>
+  <td><strong>Windows</strong></td>
+  <td>Windows Firewall Control</td>
+  <td>Free (BiniSoft)</td>
+  <td>GUI + outbound rules over Windows Filtering Platform</td>
+</tr>
+<tr>
+  <td><strong>Linux</strong></td>
+  <td>OpenSnitch</td>
+  <td>Free / open source</td>
+  <td>Daemon intercepts via netfilter/nfqueue, prompts per process</td>
+</tr>
+<tr>
+  <td><strong>macOS</strong></td>
+  <td>Little Snitch</td>
+  <td>~$45 one-time</td>
+  <td>Kernel extension, intercepts all outbound before it leaves</td>
+</tr>
+<tr>
+  <td><strong>macOS alt</strong></td>
+  <td>Radio Silence</td>
+  <td>~$9 one-time</td>
+  <td>No-prompt block list — add apps to silence, done</td>
+</tr>
+<tr>
+  <td><strong>macOS free</strong></td>
+  <td>LuLu</td>
+  <td>Free / open source</td>
+  <td>objective-see.com — same model as Little Snitch, no cost</td>
+</tr>
+<tr>
+  <td><strong>All platforms</strong></td>
+  <td>Pi-hole / NextDNS</td>
+  <td>Free / freemium</td>
+  <td>DNS-level blocking — catches domains, not process-specific</td>
+</tr>
+</tbody></table>
+<p><em>Same goal across all platforms: see what's connecting and cut off what shouldn't be.</em></p>
+      </section>
+      <section>
+        <h2>Android — TrackerControl</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>What It Shows You</h3>
+            <ul>
+  <li>Local VPN intercepts every DNS query and outbound connection — no root, no server needed
+  </li>
+  <li>Live log tagged by app: which process called which domain, right now, in real time
+  </li>
+  <li>Tracker library cross-reference: shows which SDKs are embedded via Exodus Privacy database
+  </li>
+  <li>Sort by tracker count — the apps at the top of that list will change your opinion of free software
+  </li>
+  <li>Connection counts per app accumulate — background activity during doze mode is visible
+  </li>
+  <li>Export logs or PCAP for Wireshark analysis on your desktop, with zero root required
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Setup and Workflow</h3>
+            <ul>
+  <li>F-Droid → search TrackerControl → install the <strong>fdroid</strong> variant (Play Store build is restricted)
+  </li>
+  <li>Enable the VPN when prompted — it runs entirely on-device, nothing leaves to a server
+  </li>
+  <li>Use your apps normally for 30 minutes, then sort the live log by tracker count
+  </li>
+  <li>Per-app blocking: allow the app's own servers, block only the embedded tracker SDK domains
+  </li>
+  <li>Block an entire app from the network entirely with one toggle if needed
+  </li>
+  <li>First finding: free games and utility apps routinely make 20–40 tracker calls per session
+  </li>
+  <li>Second finding: apps you haven't opened in days connect in the background during doze
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Windows — Windows Firewall Control</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>What It Is and Why</h3>
+            <ul>
+  <li>Frontend for the Windows Filtering Platform — the same engine underneath Windows Defender Firewall
+  </li>
+  <li>Adds the outbound connection prompting that Windows never exposed in its built-in UI
+  </li>
+  <li>Made by BiniSoft, acquired by Malwarebytes — still free, no account required
+  </li>
+  <li>System tray icon, notification popups, connection log, rule editor — everything the built-in UI hides
+  </li>
+  <li>Does not replace Windows Firewall: it <em>controls</em> it, so no third-party kernel driver needed
+  </li>
+  <li>Security profiles: High (block all unallowed), Medium (prompt on new), Low (allow most), Off
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Recommended Workflow</h3>
+            <ul>
+  <li>Install WFC, set to Medium filtering — existing Windows rules stay, new outbound gets prompted
+  </li>
+  <li>Use your computer normally for 1–2 days, responding to each popup as it appears
+  </li>
+  <li>Allow: your browser, email client, work apps, OS update endpoints (you want patches)
+  </li>
+  <li>Deny: telemetry endpoints, update services for apps you update manually, background agents
+  </li>
+  <li>After your allow-list is built out, switch to High filtering — default-deny for new connections
+  </li>
+  <li>What you'll catch: Adobe checking license servers every session, every Electron app on launch, game launchers
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Linux — OpenSnitch</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>How It Works</h3>
+            <ul>
+  <li>Application-level outbound firewall inspired by Little Snitch — same prompt-on-new-connection model
+  </li>
+  <li><code>opensnitchd</code> daemon sits in the network stack via netfilter/nfqueue — intercepts every new connection
+  </li>
+  <li>New outbound from any process → popup appears with: process name, PID, destination, port
+  </li>
+  <li>You allow or deny, with scope: this session only / permanent / by port / by destination IP
+  </li>
+  <li>Rules stored as JSON in <code>/etc/opensnitchd/rules/</code> — shareable, exportable, version-controllable
+  </li>
+  <li>GUI frontend shows live connection table, process tree, rules, statistics
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Install and What You'll Find</h3>
+            <ul>
+  <li>Packages for Debian/Ubuntu, Fedora, Arch (AUR) — or build from github.com/evilsocket/opensnitch
+  </li>
+  <li>Start daemon: <code>sudo systemctl enable --now opensnitchd</code> — GUI launches from app menu
+  </li>
+  <li>Rule granularity: allow/deny by process path, destination hostname, destination IP, port, or user
+  </li>
+  <li>Fresh Linux install findings: <code>packagekitd</code> checking repos constantly, Flatpak phoning its store
+  </li>
+  <li>GNOME and KDE desktop components sending usage telemetry — you'll be surprised what's in there
+  </li>
+  <li>Your browser's update service runs as a separate process from the browser itself
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>macOS — Little Snitch and Radio Silence</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>Little Snitch — The Full Solution (~$45)</h3>
+            <ul>
+  <li>Intercepts every outbound connection before it leaves — kernel extension, nothing escapes
+  </li>
+  <li>Alert on new connection: "App X wants to connect to hostname on port Y — allow or deny?"
+  </li>
+  <li><strong>Network Monitor</strong> — live map of all active connections with real-time data rates
+  </li>
+  <li><strong>Profiles</strong> — different rule sets for home, work, travel — auto-switches on WiFi network change
+  </li>
+  <li><strong>Research Assistant</strong> — looks up the owner and purpose of every IP before you decide to allow it
+  </li>
+  <li>What it catches: <code>trustd</code>, <code>rapportd</code>, <code>com.apple.geod</code>
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Radio Silence — The Simple Solution (~$9)</h3>
+            <ul>
+  <li>Different philosophy: no prompts, no rules engine — just a block list
+  </li>
+  <li>Add apps to the block list → they get zero network access, permanently, no exceptions
+  </li>
+  <li>No logging — you can't see what it blocked, but you don't need to if you know what to silence
+  </li>
+  <li>Best candidates: Adobe Creative Cloud helpers, Microsoft AutoUpdate, crash reporters, game launchers
+  </li>
+  <li>Takes 30 seconds to set up — add the apps, close it, done
+  </li>
+  <li>radiosilenceapp.com — the decision framework: if you want to <em>understand</em>, use Little Snitch first
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>What You Will Actually Find</h2>
+        <ul>
+  <li><strong>OS telemetry from the vendor you paid for the device</strong>
+    <ul>
+      <li>Windows 11: <code>vortex.data.microsoft.com</code>, <code>settings-win.data.microsoft.com</code>, <code>watson.telemetry.microsoft.com</code></li>
+      <li>macOS: <code>xp.apple.com</code>, <code>metrics.apple.com</code>, <code>feedbackws.icloud.com</code>, <code>swscan.apple.com</code></li>
+      <li>Ubuntu/Canonical: <code>metrics.ubuntu.com</code>, <code>popcon.ubuntu.com</code> — opt-out exists but isn't default</li>
+    </ul>
+  </li>
+  <li><strong>Update services running 24/7 for apps you open once a month</strong>
+    <ul>
+      <li>Google Update, Microsoft AutoUpdate, Adobe ARM — all running even when the app is closed</li>
+      <li>Many add themselves to system startup and run as background services without visible UI</li>
+    </ul>
+  </li>
+  <li><strong>License and activation pings on a timer</strong>
+    <ul>
+      <li>Software checks its license server on launch and periodically — identifiable by vendor-name hostnames</li>
+      <li>Some products phone home every time you open a file, not just on app launch</li>
+    </ul>
+  </li>
+  <li><strong>Crash reporters holding device snapshots ready to send</strong>
+    <ul>
+      <li>Crashlytics, Sentry, Breakpad — stack traces plus device state sitting queued to third-party servers</li>
+    </ul>
+  </li>
+  <li><strong>"Analytics" that are behavioral tracking with a polite name</strong>
+    <ul>
+      <li>Segment, Mixpanel, Amplitude, PostHog — in freemium apps, Electron apps, many open source tools</li>
+    </ul>
+  </li>
+  <li><strong>Cloud sync running on a schedule you didn't set</strong>
+    <ul>
+      <li>Dropbox, OneDrive, iCloud syncing even when you've "paused" them — check the actual network log</li>
+    </ul>
+  </li>
+  <li><strong>Background agents for apps you uninstalled months ago</strong>
+    <ul>
+      <li>Residual helper processes surviving uninstall — LaunchAgents on macOS, Services on Windows</li>
+    </ul>
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>Practical Workflow — Four Phases</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>Phase 1 — Observe (First 1-2 Days)</h3>
+            <ul>
+  <li>Install your platform's tool, set to log/prompt but do not block aggressively yet
+  </li>
+  <li>Use your computer exactly as normal — let a full day of activity accumulate
+  </li>
+  <li>Build a picture: what connects, when, to where, on what schedule
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Phase 2 — Allow Your Legitimate Traffic</h3>
+            <ul>
+  <li>Create allow rules: browser, email, work apps, package managers, your actual tools
+  </li>
+  <li>Allow OS update endpoints — you want security patches, block telemetry separately
+  </li>
+  <li>Allow anything you consciously chose and actively use on a regular basis
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Phase 3 — Deny the Noise</h3>
+            <ul>
+  <li>Telemetry and analytics endpoints: deny permanently, no exceptions
+  </li>
+  <li>Update services for apps you update manually or rarely use: deny or allow only on demand
+  </li>
+  <li>Background agents for apps you rarely open: deny until you actively launch the app
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Phase 4 — Go Strict</h3>
+            <ul>
+  <li>Switch to default-deny for all new outbound connections
+  </li>
+  <li>Each new app install generates a prompt — make the allow/deny decision at install time
+  </li>
+  <li>Watch for apps that switch to hardcoded IPs to bypass hostname-based block rules
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>What These Tools Cannot Catch</h2>
+        <ul>
+  <li><strong>Traffic inside your browser process</strong>
+    <ul>
+      <li>The browser is one connection from the OS's view — you can't see which tab or extension</li>
+      <li>Use uBlock Origin + browser DevTools Network tab for in-browser auditing</li>
+    </ul>
+  </li>
+  <li><strong>Hardcoded IP addresses that skip DNS entirely</strong>
+    <ul>
+      <li>Some apps connect straight to an IP — hostname-based rules miss these completely</li>
+      <li>Watch the raw connection log for connections with no associated hostname</li>
+    </ul>
+  </li>
+  <li><strong>Encrypted DNS (DoH/DoT) used by the app itself</strong>
+    <ul>
+      <li>Apps using their own DNS-over-HTTPS bypass your system resolver and your DNS blocklists</li>
+      <li>The connection shows as HTTPS to a Google or Cloudflare IP — easy to miss without IP rules</li>
+    </ul>
+  </li>
+  <li><strong>Traffic from VMs, containers, and WSL</strong>
+    <ul>
+      <li>Docker containers have their own network namespace — OpenSnitch and WFC see the Docker daemon</li>
+      <li>WSL2 on Windows routes through a virtual adapter — per-app rules don't apply inside it</li>
+      <li>Requires per-container rules or a network-layer monitor at the bridge interface</li>
+    </ul>
+  </li>
+  <li><strong>Your ISP and carrier layer</strong>
+    <ul>
+      <li>These tools control what leaves your device — not what your ISP logs after that</li>
+      <li>For ISP-level privacy: DNS-over-HTTPS/TLS to a trusted resolver, plus a VPN</li>
+    </ul>
+  </li>
+  <li><strong>Supply chain and compromised app servers</strong>
+    <ul>
+      <li>If an app's own server is compromised, you've allowed those connections — the firewall helped that traffic through</li>
+      <li>These tools answer "is the app calling home?" not "is the app's home trustworthy?"</li>
+    </ul>
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>Layering These Tools for Maximum Coverage</h2>
+                <div class="cols-3">
+          <div class="panel">
+            <h3>On the Device</h3>
+            <ul>
+  <li>Run your platform firewall (WFC / OpenSnitch / Little Snitch) — per-process, per-destination visibility
+  </li>
+  <li>Add a DNS blocker on top: NextDNS or Pi-hole — catches tracker domains before the firewall sees them
+  </li>
+  <li>Use uBlock Origin in your browser — handles the in-browser traffic the firewall can't see
+  </li>
+  <li>Keep a dedicated test device or VM for auditing new apps before allowing them on your main machine
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>At the Network Level</h3>
+            <ul>
+  <li>OPNsense with Unbound DNS blocklists: every device filtered, including things you can't install software on
+  </li>
+  <li>ntopng: visibility into everything — smart TVs, IoT, guests, all at once
+  </li>
+  <li>IP blocklists via firewall aliases: hardcoded IPs caught even when DNS blocking fails
+  </li>
+  <li>Guest and IoT VLANs: isolated at the network layer regardless of what's on the device
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>The Combined Picture</h3>
+            <ul>
+  <li>Device firewall: shows you which process made which call on your main machines
+  </li>
+  <li>DNS blocklists: catch tracker domains for every device without any per-device config
+  </li>
+  <li>IP blocklists: catch hardcoded IPs and known infrastructure that bypasses DNS
+  </li>
+  <li>Network monitor: shows you what slipped through all of the above
+  </li>
+  <li>No single layer catches everything — each catches what the others miss
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Resources</h2>
+        <table>
+<thead><tr>
+  <th>Tool</th>
+  <th>Platform</th>
+  <th>Where</th>
+</tr></thead><tbody>
+</tbody></table>
+<table>
+<thead><tr>
+  <th><strong>TrackerControl</strong></th>
+  <th>Android</th>
+  <th>F-Droid — search TrackerControl, use fdroid variant</th>
+</tr></thead><tbody>
+<tr>
+  <td><strong>Windows Firewall Control</strong></td>
+  <td>Windows</td>
+  <td>binisoft.org/wfc.php — free</td>
+</tr>
+<tr>
+  <td><strong>OpenSnitch</strong></td>
+  <td>Linux</td>
+  <td>github.com/evilsocket/opensnitch</td>
+</tr>
+<tr>
+  <td><strong>Little Snitch</strong></td>
+  <td>macOS</td>
+  <td>obdev.at/products/littlesnitch — ~$45</td>
+</tr>
+<tr>
+  <td><strong>LuLu</strong></td>
+  <td>macOS</td>
+  <td>objective-see.com/products/lulu.html — free</td>
+</tr>
+<tr>
+  <td><strong>Radio Silence</strong></td>
+  <td>macOS</td>
+  <td>radiosilenceapp.com — ~$9</td>
+</tr>
+<tr>
+  <td><strong>Exodus Privacy</strong></td>
+  <td>Android APK scanner</td>
+  <td>exodus-privacy.eu.org</td>
+</tr>
+<tr>
+  <td><strong>Pi-hole</strong></td>
+  <td>Network-wide DNS</td>
+  <td>pi-hole.net — self-hosted</td>
+</tr>
+<tr>
+  <td><strong>NextDNS</strong></td>
+  <td>Network-wide DNS</td>
+  <td>nextdns.io — cloud, per-device logs, free tier</td>
+</tr>
+<tr>
+  <td><strong>WindowsSpyBlocker</strong></td>
+  <td>Windows blocklist</td>
+  <td>github.com/crazy-max/WindowsSpyBlocker</td>
+</tr>
+<tr>
+  <td><strong>privacytests.org</strong></td>
+  <td>Browser comparison</td>
+  <td>What each browser phones home with</td>
+</tr>
+<tr>
+  <td><strong>uBlock Origin</strong></td>
+  <td>Browser extension</td>
+  <td>In-browser connection control</td>
+</tr>
+</tbody></table>
+      </section>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      transition: 'fade',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      fragments: false,
+      progress: true,
+      slideNumber: 'c/t',
+      autoAnimateEasing: 'ease-out',
+      autoAnimateDuration: 0.65,
+      plugins: [ RevealHighlight, RevealNotes ]
+    });
+  </script>
+</body>
+</html>

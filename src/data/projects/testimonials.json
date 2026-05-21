@@ -1,23 +1,23 @@
 [
   {
-    "quote": "The diligence process was thorough without being adversarial. They found real problems, priced them fairly, and closed on time. Rare combination.",
+    "quote": "Before Holtzweb, our servers were a mystery box. Now I get a monthly report that actually makes sense. They speak human.",
     "name": "Sarah K.",
-    "role": "Founder",
-    "company": "Manufacturing Company",
+    "role": "Operations Director",
+    "company": "Regional Law Firm",
     "initials": "SK"
   },
   {
-    "quote": "They took board seats and actually showed up. Strategy, accountability, and a network that opened doors we couldn't open ourselves.",
-    "name": "James T.",
-    "role": "CEO",
-    "company": "Regional Services Group",
-    "initials": "JT"
+    "quote": "They built our WordPress site AND set up the hosting environment. One call, one team, no finger-pointing between contractors.",
+    "name": "Marcus T.",
+    "role": "Founder",
+    "company": "Boutique E-commerce Brand",
+    "initials": "MT"
   },
   {
-    "quote": "We thought selling meant losing control. They structured it so the management team stayed intact and upside was preserved. Exactly what we needed.",
-    "name": "David L.",
-    "role": "Managing Partner",
-    "company": "Specialty Distribution Co.",
-    "initials": "DL"
+    "quote": "Network assessment found three misconfigurations our previous vendor had missed for two years. Honest, thorough, no upsell.",
+    "name": "James L.",
+    "role": "CEO",
+    "company": "Manufacturing Company",
+    "initials": "JL"
   }
 ]

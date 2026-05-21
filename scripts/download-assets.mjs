@@ -168,7 +168,7 @@ async function ensureProjectImages() {
   } catch {}
 
   const authHeaders = {
-    'User-Agent': 'apex-capgroup-astro-build',
+    'User-Agent': 'holtzweb-astro-build',
     ...(githubToken ? { Authorization: `Bearer ${githubToken}` } : {}),
   };
 

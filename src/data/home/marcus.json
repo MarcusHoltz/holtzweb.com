@@ -1,0 +1,28 @@
+{
+  "sectionLabel": "Lead Engineer",
+  "heading": "The Engineer",
+  "headingAccent": "Behind the Work",
+  "personalSiteCard": {
+    "label": "Personal Site",
+    "displayName": "marcusholtz.com",
+    "description": "Portfolio, CV, personal projects, and the full story behind the engineer.",
+    "visitLabel": "Visit site"
+  },
+  "quickStats": {
+    "label": "Quick Stats",
+    "items": [
+      { "key": "Experience", "valueKey": "yearsExperience", "suffix": " yrs" },
+      { "key": "LinkedIn", "valueKey": "linkedin", "prefix": "/in/", "linkBase": "https://linkedin.com/in/" },
+      { "key": "GitHub",   "valueKey": "github",   "prefix": "/",    "linkBase": "https://github.com/" }
+    ]
+  },
+  "infoLabels": {
+    "role": "Role",
+    "location": "Location",
+    "experience": "Experience",
+    "experienceSuffix": " years in Systems & Web",
+    "education": "Education",
+    "blog": "Blog",
+    "openSource": "Open Source"
+  }
+}

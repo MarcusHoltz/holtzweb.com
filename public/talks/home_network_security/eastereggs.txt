@@ -1,0 +1,4 @@
+  Easter eggs:
+  - Console art — open DevTools and there's ASCII HOLTZWEB banner with links
+  - Konami code (↑↑↓↓←→←→BA) — flashes the page and drops // MAXIMUM OVERDRIVE ACTIVATED in the center
+  - Click the title 5× within 2 seconds — triggers a glitch storm (rapid color cycling through all palette colors for 2 seconds)

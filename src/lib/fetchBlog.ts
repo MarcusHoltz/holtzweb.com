@@ -202,6 +202,7 @@ function feedItemToPost(item: FeedItem, atomTags?: string[]): BlogPost {
   const catKey   = getBestCategory(tags, slug);
   const category = getCategoryLabel(catKey);
   const styles   = getCategoryStyles(catKey);
+
   const excerptSource = item.summary || item.contentSnippet || '';
 
   return {

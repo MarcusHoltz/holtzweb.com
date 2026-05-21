@@ -1,0 +1,577 @@
+/* ============================================================
+   CYBER THEME — Dark Purple + Neon Green
+   For reveal.js presentations + landing page
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ── Design Tokens ─────────────────────────────────────────── */
+:root {
+  --bg:           #0d0a1a;
+  --bg-panel:     #140f24;
+  --bg-panel-alt: #1a1232;
+  --accent:       #39ff14;
+  --accent-2:     #c084fc;
+  --text:         #e2e8f0;
+  --text-muted:   #6b618a;
+  --green:        #50fa7b;
+  --amber:        #fbbf24;
+  --red:          #ff5555;
+  --purple:       #bd93f9;
+  --blue:         #8be9fd;
+  --code-bg:      #1a1228;
+  --code-text:    #39ff14;
+  --border:       rgba(189, 147, 249, 0.2);
+  --glow:         rgba(57, 255, 20, 0.35);
+  --glow-soft:    rgba(57, 255, 20, 0.12);
+}
+
+/* ── reveal.js Core Overrides ──────────────────────────────── */
+.reveal-viewport { background: var(--bg); }
+
+.reveal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 26px;
+  color: var(--text);
+}
+
+/* ── Headings ──────────────────────────────────────────────── */
+.reveal h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  color: var(--accent);
+  text-shadow: 0 0 30px var(--glow), 0 0 60px rgba(57,255,20,0.15);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-transform: none;
+}
+
+.reveal h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  color: var(--accent);
+  border-left: 3px solid var(--accent);
+  padding-left: 0.45em;
+  margin-bottom: 0.4em;
+  text-shadow: 0 0 18px var(--glow-soft);
+  text-transform: none;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.reveal h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  color: var(--accent-2);
+  margin-bottom: 0.2em;
+  margin-top: 0.1em;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.reveal h4 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  color: var(--purple);
+  text-transform: none;
+}
+
+/* ── Body Text ─────────────────────────────────────────────── */
+.reveal p {
+  line-height: 1.35;
+  margin: 0.2em 0;
+}
+
+.reveal strong { color: var(--accent); font-weight: 600; }
+.reveal em { color: var(--accent-2); font-style: italic; }
+
+.reveal a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.reveal a:hover {
+  color: var(--green);
+  text-shadow: 0 0 12px var(--glow);
+}
+
+/* ── Lists ─────────────────────────────────────────────────── */
+.reveal ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.reveal ul > li {
+  position: relative;
+  padding-left: 1.1em;
+  margin-bottom: 0.28em;
+  line-height: 1.32;
+}
+
+.reveal ul > li::before {
+  content: '▸';
+  color: var(--accent);
+  position: absolute;
+  left: 0;
+  font-size: 0.75em;
+  top: 0.15em;
+}
+
+.reveal ul ul { margin-top: 0.15em; margin-left: 0.4em; }
+.reveal ul ul > li { margin-bottom: 0.12em; font-size: 0.84em; color: var(--text-muted); }
+.reveal ul ul > li::before { content: '◦'; color: var(--accent-2); }
+
+.reveal ol {
+  padding-left: 1.5em;
+}
+.reveal ol > li {
+  margin-bottom: 0.25em;
+  line-height: 1.32;
+}
+.reveal ol > li::marker { color: var(--accent); font-weight: 600; }
+
+/* ── Code ──────────────────────────────────────────────────── */
+.reveal code {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.82em;
+  border: 1px solid rgba(57,255,20,0.15);
+}
+
+.reveal pre {
+  background: var(--code-bg);
+  border: 1px solid rgba(57,255,20,0.25);
+  border-radius: 8px;
+  box-shadow: 0 0 25px rgba(57,255,20,0.06), inset 0 0 20px rgba(0,0,0,0.4);
+  padding: 0 !important;
+  margin: 0.6em 0;
+  width: 100%;
+  position: relative;
+}
+
+/* Terminal header bar */
+.reveal pre::before {
+  content: '● ● ●';
+  display: block;
+  padding: 0.4em 0.8em;
+  background: rgba(57,255,20,0.08);
+  border-bottom: 1px solid rgba(57,255,20,0.15);
+  color: var(--text-muted);
+  font-size: 0.6em;
+  letter-spacing: 0.3em;
+  border-radius: 8px 8px 0 0;
+}
+
+.reveal pre code {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--code-text) !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0.5em 0.8em !important;
+  font-size: 0.65em;
+  line-height: 1.5;
+  text-shadow: 0 0 8px rgba(57,255,20,0.25);
+  display: block;
+}
+
+/* highlight.js line numbers */
+.hljs-ln-numbers { color: rgba(57,255,20,0.3) !important; border-right: 1px solid rgba(57,255,20,0.15) !important; padding-right: 0.8em !important; }
+
+/* ── Tables ────────────────────────────────────────────────── */
+.reveal table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.62em;
+  margin: 0.2em 0;
+}
+
+.reveal table th {
+  background: rgba(57,255,20,0.08);
+  color: var(--accent);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  padding: 0.35em 0.6em;
+  border-bottom: 2px solid rgba(57,255,20,0.4);
+  text-align: left;
+  letter-spacing: 0.03em;
+  font-size: 0.95em;
+}
+
+.reveal table td {
+  padding: 0.28em 0.6em;
+  border-bottom: 1px solid rgba(189,147,249,0.12);
+  color: var(--text);
+  vertical-align: top;
+  line-height: 1.3;
+}
+
+.reveal table tr:nth-child(even) td {
+  background: rgba(20,15,36,0.6);
+}
+
+.reveal table tr:hover td {
+  background: rgba(57,255,20,0.04);
+}
+
+/* ── Blockquote ────────────────────────────────────────────── */
+.reveal blockquote {
+  background: rgba(57,255,20,0.04);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 0.7em 1.1em;
+  font-style: italic;
+  color: var(--accent-2);
+  font-size: 1.05em;
+  margin: 0.5em 0;
+  width: auto;
+  box-shadow: none;
+}
+
+/* ── Progress & Controls ───────────────────────────────────── */
+.reveal .progress { height: 3px; color: var(--accent); }
+.reveal .progress span {
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent), 0 0 25px var(--glow-soft);
+}
+
+.reveal .controls { color: var(--accent); }
+
+.reveal .slide-number {
+  background: rgba(57,255,20,0.08);
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55em;
+  padding: 0.3em 0.7em;
+  border-radius: 4px;
+  border: 1px solid rgba(57,255,20,0.2);
+}
+
+/* ── Layout Grid ───────────────────────────────────────────── */
+.cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; align-items: start; }
+.cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1em; align-items: start; }
+.cols-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.8em; align-items: start; }
+
+/* ── Panels ────────────────────────────────────────────────── */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.55em 0.7em;
+}
+.panel-green  { border-color: rgba(80, 250,123,0.45); background: rgba(80,250,123,0.04); }
+.panel-amber  { border-color: rgba(251,191, 36,0.45); background: rgba(251,191,36,0.04); }
+.panel-red    { border-color: rgba(255, 85, 85,0.45); background: rgba(255,85,85,0.04); }
+.panel-purple { border-color: rgba(189,147,249,0.45); background: rgba(189,147,249,0.04); }
+.panel-blue   { border-color: rgba(139,233,253,0.45); background: rgba(139,233,253,0.04); }
+.panel-glow   { border-color: rgba(57,255,20,0.4); box-shadow: 0 0 20px rgba(57,255,20,0.06); }
+
+/* ── Badges / Tags ─────────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.6em;
+  padding: 0.25em 0.8em;
+  border-radius: 20px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5em;
+}
+.tag-green  { background: rgba(80,250,123,0.12); color: var(--green);  border: 1px solid var(--green); }
+.tag-amber  { background: rgba(251,191,36,0.12); color: var(--amber);  border: 1px solid var(--amber); }
+.tag-red    { background: rgba(255,85,85,0.12);  color: var(--red);    border: 1px solid var(--red); }
+.tag-purple { background: rgba(189,147,249,0.12);color: var(--purple); border: 1px solid var(--purple); }
+.tag-blue   { background: rgba(139,233,253,0.12);color: var(--blue);   border: 1px solid var(--blue); }
+.tag-accent { background: rgba(57,255,20,0.12);  color: var(--accent); border: 1px solid var(--accent); }
+
+/* ── Inline Highlight Colors ───────────────────────────────── */
+.hl-green  { color: var(--green); }
+.hl-amber  { color: var(--amber); }
+.hl-red    { color: var(--red); }
+.hl-purple { color: var(--purple); }
+.hl-blue   { color: var(--blue); }
+.hl-accent { color: var(--accent); font-weight: 600; }
+.hl-muted  { color: var(--text-muted); }
+
+/* ── Detail / Subtitle Text ────────────────────────────────── */
+.detail {
+  display: block;
+  font-size: 0.78em;
+  color: var(--text-muted);
+  margin-top: 0.2em;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65em;
+  color: var(--accent-2);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  display: block;
+  margin-bottom: 0.4em;
+}
+
+.meta {
+  font-size: 0.65em;
+  color: var(--text-muted);
+  margin-top: 0.8em;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+/* ── Title Slide ───────────────────────────────────────────── */
+.title-slide { text-align: center; }
+.title-slide h1 { margin-bottom: 0.3em; }
+.title-slide h3 { color: var(--accent-2); margin-bottom: 0.5em; font-weight: 400; font-size: 1em; }
+
+/* ── Section Divider ───────────────────────────────────────── */
+.section-divider { text-align: center; }
+.section-divider h1 { border: none !important; padding: 0 !important; }
+
+/* ── Diagram Components ────────────────────────────────────── */
+.diagram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15em;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65em;
+}
+
+.diagram-row {
+  display: flex;
+  gap: 0.6em;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.diagram-box {
+  background: var(--bg-panel);
+  border: 1px solid rgba(57,255,20,0.3);
+  border-radius: 6px;
+  padding: 0.4em 1.2em;
+  text-align: center;
+  color: var(--accent);
+  min-width: 200px;
+  line-height: 1.5;
+}
+.diagram-box small { display: block; color: var(--text-muted); font-size: 0.85em; }
+.diagram-box.box-hl { border-color: var(--accent); box-shadow: 0 0 12px var(--glow-soft); }
+.diagram-box.box-openwrt { border-color: var(--blue); color: var(--blue); }
+.diagram-box.box-opnsense { border-color: var(--purple); color: var(--purple); }
+.diagram-box.box-device  { border-color: var(--accent-2); color: var(--accent-2); min-width: 100px; padding: 0.3em 0.6em; }
+.diagram-box.box-internet { border-color: var(--text-muted); color: var(--text-muted); }
+
+.diagram-arrow {
+  color: var(--accent-2);
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+.diagram-label {
+  font-size: 0.75em;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── Bare List (no bullets, for panels) ────────────────────── */
+.bare-list { list-style: none !important; padding-left: 0 !important; }
+.bare-list li::before { display: none !important; }
+.bare-list li { padding: 0.2em 0; font-size: 0.85em; color: var(--text-muted); padding-left: 0 !important; }
+.bare-list li strong { color: var(--text); }
+
+/* ── Utility ───────────────────────────────────────────────── */
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+.full-width  { width: 100%; }
+.no-margin   { margin: 0 !important; }
+.small-text  { font-size: 0.75em; }
+.mono        { font-family: 'JetBrains Mono', monospace; }
+.spacer      { height: 0.5em; }
+
+/* ── Auto-Animate List Items on Slide Enter ────────────────── */
+/* Items cascade in automatically; click always advances to next slide */
+@keyframes fadeUpIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal .slides section.present li {
+  animation: fadeUpIn 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* Staggered delays — covers up to 12 items per list */
+.reveal .slides section.present li:nth-child(1)  { animation-delay: 0.04s; }
+.reveal .slides section.present li:nth-child(2)  { animation-delay: 0.12s; }
+.reveal .slides section.present li:nth-child(3)  { animation-delay: 0.20s; }
+.reveal .slides section.present li:nth-child(4)  { animation-delay: 0.28s; }
+.reveal .slides section.present li:nth-child(5)  { animation-delay: 0.36s; }
+.reveal .slides section.present li:nth-child(6)  { animation-delay: 0.44s; }
+.reveal .slides section.present li:nth-child(7)  { animation-delay: 0.52s; }
+.reveal .slides section.present li:nth-child(8)  { animation-delay: 0.60s; }
+.reveal .slides section.present li:nth-child(9)  { animation-delay: 0.68s; }
+.reveal .slides section.present li:nth-child(10) { animation-delay: 0.76s; }
+.reveal .slides section.present li:nth-child(11) { animation-delay: 0.84s; }
+.reveal .slides section.present li:nth-child(12) { animation-delay: 0.92s; }
+
+/* Sub-items animate in sync with their parent — no extra delay */
+.reveal .slides section.present ul ul > li {
+  animation-duration: 0.28s;
+  animation-delay: inherit;
+}
+
+/* ── Source Attribution ────────────────────────────────────── */
+.source-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.5em;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 0.4em;
+  margin-top: auto;
+  display: block;
+}
+.source-link a { color: var(--accent-2); }
+
+/* ── Landing Page (index.html) ─────────────────────────────── */
+body.landing {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+.landing-header {
+  padding: 3rem 2rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.landing-header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-shadow: 0 0 30px var(--glow), 0 0 60px rgba(57,255,20,0.1);
+  margin: 0 0 0.3em;
+  letter-spacing: -0.02em;
+}
+
+.landing-header p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  padding: 2.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  border-color: rgba(57,255,20,0.4);
+  box-shadow: 0 0 30px rgba(57,255,20,0.08);
+  transform: translateY(-2px);
+}
+
+.card:hover::before { transform: scaleX(1); }
+
+.card-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.card h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 0 0 0.5rem;
+}
+
+.card p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0 0 1rem;
+  flex-grow: 1;
+}
+
+.card-meta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.card-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  padding: 0.2em 0.6em;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.card-arrow {
+  position: absolute;
+  bottom: 1.2rem;
+  right: 1.2rem;
+  color: var(--accent);
+  font-size: 1.1rem;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  transform: translateX(-4px);
+}
+.card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+
+.landing-footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  border-top: 1px solid var(--border);
+}

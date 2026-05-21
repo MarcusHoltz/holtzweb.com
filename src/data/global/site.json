@@ -1,24 +1,27 @@
 {
-  "name": "Apex Capital Group",
-  "legalName": "Apex Capital Group, LLC",
-  "url": "https://www.apexcap.example",
-  "email": "ir@apexcap.example",
-  "phone": "+10000000000",
-  "phoneDisplay": "(000) 000-0000",
-  "description": "Apex Capital Group is a private holding company that acquires, optimizes, and strategically divests portfolio companies across multiple sectors. We deploy capital with conviction and manage operations to peak performance.",
+  "name": "Holtzweb",
+  "legalName": "Holtzweb, LLC",
+  "url": "https://www.holtzweb.com",
+  "email": "contact@holtzweb.com",
+  "phone": "+17204455887",
+  "phoneDisplay": "(720) 445-5887",
+  "description": "Holtzweb provides expert IT services including WordPress & web development, Linux server administration, networking & infrastructure, and consulting. Serving businesses with enjoyable, reliable, IT support.",
   "web3formsKey": "1b19867d-e976-4774-bf0d-b983b230d87f",
+  "logoText": "HOLTZ",
+  "logoShort": "H",
   "twitter": "",
-  "founderName": "Apex Capital Group",
-  "addressLocality": "New York",
-  "addressRegion": "NY",
-  "logoText": "APEX",
-  "logoShort": "A",
-  "sameAs": [],
+  "founderName": "Marcus Holtz",
+  "addressLocality": "Denver",
+  "addressRegion": "CO",
+  "sameAs": [
+    "https://github.com/holtzweb",
+    "https://linkedin.com/company/holtzweb"
+  ],
   "serviceTypes": [
-    "Business Acquisition",
-    "Operational Optimization",
-    "Portfolio Management",
-    "Strategic Divestiture",
-    "Executive Transition Management"
+    "WordPress Development",
+    "Linux Server Administration",
+    "Network Infrastructure",
+    "IT Consulting",
+    "Managed IT Services"
   ]
 }

@@ -1,86 +1,86 @@
 {
-  "pageTitle": "About Apex Capital Group",
-  "pageDescription": "Apex Capital Group is a private holding company that acquires, operates, and strategically exits businesses across multiple sectors. We deploy capital with discipline and manage operations with intention.",
+  "pageTitle": "About Holtzweb",
+  "pageDescription": "Holtzweb is an IT services company built on the belief that IT support should be responsive, honest, and actually useful. Human-first IT.",
 
   "contactBar": {
     "items": [
-      { "label": "IR Email",    "value": "ir@apexcap.example",   "href": "mailto:ir@apexcap.example" },
-      { "label": "Phone",       "value": "(000) 000-0000",         "href": "tel:+10000000000" },
-      { "label": "Location",    "value": "New York, New York",     "href": null }
+      { "label": "Email",    "value": "contact@holtzweb.com",  "href": "mailto:contact@holtzweb.com" },
+      { "label": "Phone",    "value": "(720) 445-5887",         "href": "tel:+17204455887" },
+      { "label": "Location", "value": "Denver, Colorado",       "href": null }
     ]
   },
 
   "paragraphs": [
-    "Apex Capital Group was formed to do one thing well: identify businesses with strong fundamentals and underutilized potential, acquire them, and make them perform. We are not a turnaround shop. We are not a strip-and-flip operation. We are operators who happen to own companies.",
-    "Our portfolio spans manufacturing, services, technology, media, and real estate. What these companies have in common is not their sector — it is the situation we found them in: ready for the next chapter, waiting for the right partner to write it.",
-    "We take board seats, we hire and replace leadership when necessary, we optimize costs without destroying culture, and we plan for exits from the day we close. This is not complicated. It is simply disciplined capital allocation paired with operational seriousness. Most people find that combination more rare than it should be."
+    "Holtzweb was founded to provide modern technical solutions to customer problems - to give individuals and small businesses access to real solutions.",
+    "I'm Marcus Holtz — a systems engineer with 11+ years across the full stack. Web development, Linux servers, network infrastructure, cybersecurity, cloud environments, managed IT.",
+    "We are here to make your ideas work: you reach out with a question, something that's been sitting in the back of your head, something your last IT guy couldnt do, something that broke last Tuesday. I look at it, tell you what I think, and we figure out a path forward together. Sometimes it's a quick fix. Sometimes it turns into a longer project. Either way, reach out."
   ],
 
-  "pillarsHeading": "What Apex Capital Does",
+  "pillarsHeading": "What Holtzweb Does",
   "pillars": [
     {
-      "title": "Acquisition & Intake",
-      "desc": "Sourcing, diligence, deal structuring, and portfolio integration across sectors and transaction sizes.",
-      "icon": "building-office"
+      "title": "Web Development",
+      "desc": "Custom WordPress, WooCommerce, headless CMS, Astro, Next.js — fast, secure websites built for real traffic.",
+      "icon": "code-bracket"
     },
     {
-      "title": "Operational Efficiency",
-      "desc": "Post-close operational assessment, cost structure optimization, and KPI-driven performance management.",
-      "icon": "chart-bar-square"
+      "title": "Linux Servers",
+      "desc": "Server provisioning, CI/CD pipelines, security hardening, Kubernetes, and full observability stacks.",
+      "icon": "server-rack"
     },
     {
-      "title": "Portfolio Disposition",
-      "desc": "Exit strategy development, M&A advisory, buyer identification, and transaction management.",
-      "icon": "arrow-trending-up"
+      "title": "Networking",
+      "desc": "LAN/WAN design, firewall configuration, VPN, VLAN segmentation — vendor-agnostic and fully documented.",
+      "icon": "network-grid"
     },
     {
-      "title": "Leadership Transition",
-      "desc": "Executive assessment, onboarding, board governance, and stakeholder communication management.",
-      "icon": "user-plus"
+      "title": "IT Consulting",
+      "desc": "Infrastructure audits, staff training, vendor evaluation, project management, and team augmentation.",
+      "icon": "light-bulb"
     }
   ],
 
   "stats": [
-    { "value": "20+", "label": "Years Experience" },
-    { "value": "12+", "label": "Portfolio Companies" },
-    { "value": "5",   "label": "Active Sectors" },
-    { "value": "LLC", "label": "Apex Capital Group, LLC" }
+    { "value": "11+", "label": "Years Experience" },
+    { "value": "30+", "label": "Open-Source Projects" },
+    { "value": "5+",  "label": "Industries Served" },
+    { "value": "LLC", "label": "Holtzweb, LLC" }
   ],
 
   "clientTypes": {
     "eyebrow": "Who We Work With",
-    "heading": "Built for businesses at an inflection point.",
-    "body": "Our portfolio companies come to us through various paths — founder succession, corporate divestitures, distressed situations, and competitive acquisitions. What they share is a need for the right owner at the right time.",
+    "heading": "Built for the businesses that rely on IT to work.",
+    "body": "Our clients include municipalities, technology companies, tourism organizations, and non-profits — anyone who needs great pricing, reliable support, and the occasional custom project.",
     "items": [
-      { "label": "Family-Owned Businesses" },
-      { "label": "Corporate Divestitures" },
-      { "label": "Management Buyouts" },
-      { "label": "Distressed & Turnaround" },
-      { "label": "Founder Succession" },
-      { "label": "Secondary Buyouts" }
+      { "label": "Small & Medium Businesses" },
+      { "label": "Municipal & Government Offices" },
+      { "label": "Non-Profit Organizations" },
+      { "label": "Technology Startups" },
+      { "label": "Tourism & Hospitality" },
+      { "label": "Freelancers & Consultants" }
     ]
   },
 
   "capabilitiesShowcase": {
     "eyebrow": "Full Capabilities",
     "heading": "What We Do.",
-    "subheading": "A cross-section of the disciplines we apply across every company in our portfolio. Click any card to read more."
+    "subheading": "A cross-section of the work Holtzweb delivers. Click any card to read more about that service."
   },
 
-  "techStackHeading": "Sectors we know well",
+  "techStackHeading": "Technologies we know well",
   "techStackGroups": [
-    { "cat": "Manufacturing",   "items": ["Industrial Supply", "Food Processing", "Contract Manufacturing", "Light Assembly", "Co-Manufacturing", "Specialty Chemicals", "Metal Fabrication", "Plastics & Composites"] },
-    { "cat": "Services",        "items": ["Healthcare Staffing", "IT Services", "Field Services", "Business Process Outsourcing", "Environmental Services", "Facilities Management", "Professional Services"] },
-    { "cat": "Technology",      "items": ["SaaS", "Managed Services", "Enterprise Software", "IoT & Connected Devices", "Data & Analytics", "Digital Transformation", "Platform Businesses"] },
-    { "cat": "Distribution",    "items": ["Industrial Distribution", "Food & Beverage", "Last-Mile Logistics", "Third-Party Logistics", "Cold Chain", "E-commerce Fulfillment"] },
-    { "cat": "Real Estate",     "items": ["Light Industrial", "Flex Commercial", "Net Lease", "Sale-Leaseback", "Owner-User", "Development Land"] },
-    { "cat": "Media",           "items": ["Regional Publishing", "Digital Media", "Events & Conferences", "Trade Publications", "Newsletters", "Broadcast"] }
+    { "cat": "Web",        "items": ["WordPress", "Astro", "WooCommerce", "Nginx", "Caddy", "Apache", "Traefik", "Next.js", "Laravel", "Node.js"] },
+    { "cat": "Servers",    "items": ["Ubuntu", "Debian", "RHEL", "Rocky Linux", "Proxmox", "AlmaLinux", "VMware ESXi", "Windows Server", "KVM", "OpenSUSE"] },
+    { "cat": "Networking", "items": ["Ubiquiti UniFi", "pfSense", "Cisco", "WireGuard", "Fortinet", "OPNsense", "OpenVPN", "Juniper", "VLANs", "BGP"] },
+    { "cat": "Automation", "items": ["Ansible", "Docker", "Bash scripting", "Cron/systemd", "GitHub Actions", "Terraform", "Kubernetes", "Python", "GitLab CI", "Jenkins"] },
+    { "cat": "Cloud",      "items": ["DigitalOcean", "Hetzner", "AWS", "Cloudflare", "Linode", "Azure", "Google Cloud", "Vultr", "Backblaze B2", "Oracle Cloud"] },
+    { "cat": "Monitoring", "items": ["Zabbix", "Netdata", "Grafana", "Uptime Kuma", "Prometheus", "Datadog", "ELK Stack", "Loki", "OpenTelemetry", "New Relic"] }
   ],
 
   "cta": {
-    "heading": "Ready to discuss your company or investment thesis?",
-    "body": "We review all serious inquiries and respond to those that fit our mandate. If it fits, we move quickly.",
-    "label": "Contact Investor Relations →",
+    "heading": "Have a question? That's how most things start.",
+    "body": "Reach out with whatever's on your mind. I'll read it and respond with something useful.",
+    "label": "Talk to Marcus →",
     "href": "/contact"
   }
 }

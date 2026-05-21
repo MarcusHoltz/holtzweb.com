@@ -96,19 +96,19 @@
   --bg-high-ch:     37 43 56;
 
   /* ── Brand / Primary ── */
-  --color-primary:      #C5A840;
-  --color-primary-dark: #A8902D;
-  --color-primary-light:#D4BC60;
-  --primary-ch:         197 168 64;
-  --primary-dark-ch:    168 144 45;
-  --primary-light-ch:   212 188 96;
+  --color-primary:      #8DC63F;
+  --color-primary-dark: #6fa830;
+  --color-primary-light:#a8d85f;
+  --primary-ch:         141 198 63;
+  --primary-dark-ch:    111 168 48;
+  --primary-light-ch:   168 216 95;
 
   /* ── Text ── */
   --color-text:        #f0f4f8;
   --color-text-muted:  #9aa3ae;
   --color-text-subtle: #6e7d8a;
-  --color-text-dim:    #718096;
-  --color-text-ui:     #8b949e;
+  --color-text-dim:    #4a5568;
+  --color-text-ui:     #6b7280;
   --text-ch:           240 244 248;
   --text-muted-ch:     154 163 174;
   --text-subtle-ch:    110 125 138;
@@ -176,17 +176,17 @@ html.light-mode {
   --bg-raised-ch:   232 237 242;
   --bg-high-ch:     226 232 240;
 
-  --color-primary:       #A8902D;
-  --color-primary-dark:  #8C7620;
-  --color-primary-light: #C5A840;
-  --primary-ch:          168 144 45;
-  --primary-dark-ch:     140 118 32;
-  --primary-light-ch:    197 168 64;
+  --color-primary:       #6fa830;
+  --color-primary-dark:  #5a8f25;
+  --color-primary-light: #8DC63F;
+  --primary-ch:          111 168 48;
+  --primary-dark-ch:     90 143 37;
+  --primary-light-ch:    141 198 63;
 
   --color-text:        #1a1d24;
   --color-text-muted:  #374151;
   --color-text-subtle: #4b5563;
-  --color-text-dim:    #6b7280;
+  --color-text-dim:    #9ca3af;
   --color-text-ui:     #6b7280;
   --text-ch:           26 29 36;
   --text-muted-ch:     55 65 81;

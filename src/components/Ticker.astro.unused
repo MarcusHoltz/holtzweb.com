@@ -1,0 +1,123 @@
+---
+// Ticker.astro
+---
+
+<style>
+.ticker-section {
+  padding: 80px 0;
+  overflow: hidden;
+  background: var(--bg-deep);
+}
+
+.ticker-container {
+  max-width: 64rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  overflow: hidden;
+}
+
+.t-row {
+  overflow: hidden;
+  white-space: nowrap;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.t-row:last-child { margin-bottom: 0; }
+
+.t-track {
+  display: inline-block;
+  white-space: nowrap;
+}
+.t-track.go-left  { animation: goLeft  28s linear infinite; }
+.t-track.go-right { animation: goRight 22s linear infinite; }
+.t-track.go-slow  { animation: goLeft  38s linear infinite; }
+
+@keyframes goLeft  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+@keyframes goRight { from { transform: translateX(-50%); } to { transform: translateX(0); }    }
+
+.tw {
+  font-family: var(--font-oswald), Impact, system-ui, sans-serif;
+  font-size: clamp(64px, 8vw, 120px);
+  line-height: 1;
+  display: inline-block;
+  padding-right: 48px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+.tw:nth-child(5n+1) { color: var(--color-text); }
+.tw:nth-child(5n+2) { color: var(--color-primary); }
+.tw:nth-child(5n+3) { color: var(--color-text-dim); }
+.tw:nth-child(5n+4) { color: var(--color-text-subtle); }
+.tw:nth-child(5n+5) { color: var(--color-primary-dark); }
+
+.tsep {
+  font-family: var(--font-oswald), Impact, system-ui, sans-serif;
+  font-size: clamp(40px, 5vw, 80px);
+  display: inline-block;
+  padding-right: 48px;
+  color: var(--color-border);
+}
+</style>
+
+<section class="ticker-section" aria-label="Scrolling keywords">
+  <div class="ticker-container">
+
+    <div class="t-row">
+      <div class="t-track go-left">
+        <span class="tw">SECURE</span><span class="tsep">·</span>
+        <span class="tw">RELIABLE</span><span class="tsep">·</span>
+        <span class="tw">SCALABLE</span><span class="tsep">·</span>
+        <span class="tw">EXPERT</span><span class="tsep">·</span>
+        <span class="tw">PROACTIVE</span><span class="tsep">·</span>
+        <span class="tw">TRUSTED</span><span class="tsep">·</span>
+        <span class="tw">SECURE</span><span class="tsep">·</span>
+        <span class="tw">RELIABLE</span><span class="tsep">·</span>
+        <span class="tw">SCALABLE</span><span class="tsep">·</span>
+        <span class="tw">EXPERT</span><span class="tsep">·</span>
+        <span class="tw">PROACTIVE</span><span class="tsep">·</span>
+        <span class="tw">TRUSTED</span><span class="tsep">·</span>
+      </div>
+    </div>
+
+    <div class="t-row">
+      <div class="t-track go-right">
+        <span class="tw">MANAGED</span><span class="tsep">·</span>
+        <span class="tw">FAST</span><span class="tsep">·</span>
+        <span class="tw">RESPONSIVE</span><span class="tsep">·</span>
+        <span class="tw">STRATEGIC</span><span class="tsep">·</span>
+        <span class="tw">EFFICIENT</span><span class="tsep">·</span>
+        <span class="tw">ROBUST</span><span class="tsep">·</span>
+        <span class="tw">MANAGED</span><span class="tsep">·</span>
+        <span class="tw">FAST</span><span class="tsep">·</span>
+        <span class="tw">RESPONSIVE</span><span class="tsep">·</span>
+        <span class="tw">STRATEGIC</span><span class="tsep">·</span>
+        <span class="tw">EFFICIENT</span><span class="tsep">·</span>
+        <span class="tw">ROBUST</span><span class="tsep">·</span>
+      </div>
+    </div>
+
+    <div class="t-row">
+      <div class="t-track go-slow">
+        <span class="tw">UPTIME</span><span class="tsep">·</span>
+        <span class="tw">SECURE</span><span class="tsep">·</span>
+        <span class="tw">OPTIMIZED</span><span class="tsep">·</span>
+        <span class="tw">MONITORED</span><span class="tsep">·</span>
+        <span class="tw">HARDENED</span><span class="tsep">·</span>
+        <span class="tw">DELIVERED</span><span class="tsep">·</span>
+        <span class="tw">UPTIME</span><span class="tsep">·</span>
+        <span class="tw">SECURE</span><span class="tsep">·</span>
+        <span class="tw">OPTIMIZED</span><span class="tsep">·</span>
+        <span class="tw">MONITORED</span><span class="tsep">·</span>
+        <span class="tw">HARDENED</span><span class="tsep">·</span>
+        <span class="tw">DELIVERED</span><span class="tsep">·</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Gray band -->
+<div class="site-band"></div>

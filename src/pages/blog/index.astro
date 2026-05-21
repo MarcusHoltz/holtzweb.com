@@ -29,7 +29,7 @@ const POSTS_PER_PAGE = 10;
 
 <Layout
   title={`Blog — ${siteData.name}`}
-  description={`Insights, perspectives, and updates from ${siteData.name}.`}
+  description="IT insights, technical guides, and honest opinions from the Holtzweb team. Linux, WordPress, networking, and managed IT topics."
 >
   <div class="px-6 lg:px-12 py-16">
     <div class="max-w-5xl mx-auto">
@@ -44,7 +44,7 @@ const POSTS_PER_PAGE = 10;
       <div class="mb-10">
         <h1 class="font-display font-bold text-4xl sm:text-5xl text-site-text mb-4">Blog</h1>
         <p class="text-site-text-muted text-xl">
-          Perspectives on private equity, operations, and business building from the Apex Capital team.
+          Practical IT insights. No fluff. No vendor-speak. Just things that actually help.
         </p>
       </div>
 
@@ -124,7 +124,7 @@ const POSTS_PER_PAGE = 10;
         <p class="text-site-muted font-mono text-sm">
           Posts unavailable right now — check back soon or visit{" "}
           <a href={personalData.blog_url} class="text-electric-cyan hover:underline" target="_blank" rel="noopener noreferrer">
-            {siteData.name} Blog
+            blog.holtzweb.com
           </a>{" "}
           directly.
         </p>
@@ -141,7 +141,7 @@ const POSTS_PER_PAGE = 10;
         <p class="text-site-muted font-mono text-sm mb-6">
           External posts unavailable right now — visit{" "}
           <a href={personalData.blog_url} class="text-electric-cyan hover:underline" target="_blank" rel="noopener noreferrer">
-            {siteData.name} Blog
+            blog.holtzweb.com
           </a>{" "}
           directly.
         </p>
@@ -403,3 +403,4 @@ const POSTS_PER_PAGE = 10;
     if (initialPage > 0) showPage(initialPage);
   });
 </script>
+

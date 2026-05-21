@@ -1,10 +1,10 @@
 {
-  "pageTitle": "Our Disciplines",
-  "pageDescription": "Apex Capital Group operating disciplines: acquisition & intake, operational efficiency, portfolio disposition, and leadership transition.",
-  "heading": "Our Disciplines",
-  "subHeading": "Four things we do, done well, across every company in our portfolio. Not glamorous. Effective.",
+  "pageTitle": "IT Services",
+  "pageDescription": "Holtzweb IT services: WordPress & web development, Linux server administration, networking & infrastructure, and consulting.",
+  "heading": "Services",
+  "subHeading": "From the network up to the application layer — we handle the full stack of IT your business runs on.",
   "learnMoreLabel": "Learn more →",
-  "componentEyebrow": "Our Disciplines",
-  "componentHeading": "How We Operate",
-  "componentBlurb": "Four disciplines applied across every portfolio company. Click any to learn more — or <a href=\"#quick-help\">contact us</a> if you have a more immediate situation."
+  "componentEyebrow": "What We Do",
+  "componentHeading": "Services",
+  "componentBlurb": "Let us know your problem → <a href=\"#quick-help\">contact us below</a> ← or click on a service."
 }

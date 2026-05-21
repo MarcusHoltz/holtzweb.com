@@ -1,0 +1,282 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Footer from "@/components/Footer.astro";
+import siteData from "@/data/global/site.json";
+import servicesData from "@/data/services/services.json";
+import { withBase } from "@/lib/assetPath";
+
+const service = servicesData.find((s) => s.slug === "networking-infrastructure")!;
+---
+
+<Layout
+  title={service.pageMeta.title}
+  description={`${service.pageMeta.description} by ${siteData.name}.`}
+>
+  <div class="px-6 lg:px-12 py-16">
+    <div class="max-w-5xl mx-auto">
+      <nav aria-label="Breadcrumb" class="mb-8">
+        <ol class="flex items-center gap-2 text-sm text-site-muted font-mono">
+          <li><a href={withBase('/')} data-astro-reload class="hover:text-white transition-colors">Home</a></li>
+          <li class="text-site-border">/</li>
+          <li><a href={withBase('/services')} class="hover:text-white transition-colors">Services</a></li>
+          <li class="text-site-border">/</li>
+          <li class={service.theme.accent}>Networking & Infrastructure</li>
+        </ol>
+      </nav>
+
+      <div class="mb-12">
+        <div class={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border ${service.theme.badgeBorder} ${service.theme.badgeBg} mb-5`}>
+          <span class={`text-xs font-mono font-medium ${service.theme.accent} uppercase tracking-wider`}>{service.intro.badge}</span>
+        </div>
+        <h1 class="font-display font-bold text-4xl sm:text-5xl text-white mb-4">{service.intro.heading}</h1>
+        <p class="text-site-text-muted text-xl leading-relaxed max-w-3xl">
+          {service.intro.subHeading}
+        </p>
+      </div>
+
+      <!-- Network topology visual -->
+      <div class="mb-12 rounded-2xl border border-site-border bg-navy-800/80 overflow-hidden">
+
+        <!-- Window chrome -->
+        <div class="flex items-center justify-between px-4 py-3 bg-navy-950/60 border-b border-site-border">
+          <div class="flex items-center gap-1.5">
+            <span class="inline-flex items-center justify-center w-4 h-3 text-[9px] leading-none text-site-muted/50 border border-site-muted/20 rounded-[2px] font-mono select-none">─</span>
+            <span class="inline-flex items-center justify-center w-4 h-3 text-[9px] leading-none text-site-muted/50 border border-site-muted/20 rounded-[2px] font-mono select-none">□</span>
+            <span class="inline-flex items-center justify-center w-4 h-3 text-[9px] leading-none text-site-muted/50 border border-site-muted/20 rounded-[2px] font-mono select-none">×</span>
+          </div>
+          <div class="text-[10px] font-mono uppercase tracking-[0.25em] text-site-muted hidden sm:block">
+            Infrastructure Fabric — Multi-Site SD-WAN & Core Routing
+          </div>
+          <div class="flex items-center gap-2 font-mono text-xs text-matrix">
+            <span class="h-1.5 w-1.5 rounded-full bg-matrix deploy-pulse"></span>
+            LIVE
+          </div>
+        </div>
+
+        <!-- Main visual -->
+        <div class="relative h-[360px] overflow-hidden bg-navy-950/30">
+
+          <!-- Grid pattern -->
+          <div class="absolute inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-50"></div>
+
+          <!-- Animated scan line -->
+          <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute inset-x-0 h-24 bg-gradient-to-b from-transparent via-holtz-primary/5 to-transparent net-scan-anim"></div>
+          </div>
+
+          <!-- SVG topology -->
+          <svg class="absolute inset-0 w-full h-full" viewBox="0 0 900 360" fill="none">
+            <defs>
+              <linearGradient id="netFlowGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="var(--color-net-primary-light)"/>
+                <stop offset="100%" stop-color="var(--color-net-primary)"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Primary route -->
+            <path
+              d="M170 110 C 300 110, 340 180, 450 180 S 620 130, 730 130"
+              stroke="url(#netFlowGrad)"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-dasharray="10 10"
+              class="net-flow-anim"
+            />
+            <!-- Secondary route -->
+            <path
+              d="M170 250 C 300 250, 340 180, 450 180 S 620 215, 730 215"
+              stroke="var(--color-net-primary)"
+              stroke-opacity="0.35"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-dasharray="8 12"
+              class="net-flow-anim-slow"
+            />
+
+            <!-- Packet traces -->
+            <circle r="5" fill="var(--color-primary-light)">
+              <animateMotion dur="5s" repeatCount="indefinite"
+                path="M170 110 C 300 110, 340 180, 450 180 S 620 130, 730 130"/>
+            </circle>
+            <circle r="4" fill="var(--color-primary)">
+              <animateMotion dur="7s" repeatCount="indefinite"
+                path="M170 250 C 300 250, 340 180, 450 180 S 620 215, 730 215"/>
+            </circle>
+
+            <!-- Toronto Edge (left top) -->
+            <g>
+              <circle cx="170" cy="110" r="12" fill="var(--bg-base)" stroke="var(--color-net-primary-light)" stroke-width="2"/>
+              <circle cx="170" cy="110" r="24" fill="var(--color-net-primary-light)" opacity="0.08">
+                <animate attributeName="r" values="18;28;18" dur="3s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.15;0;0.15" dur="3s" repeatCount="indefinite"/>
+              </circle>
+              <text x="170" y="145" text-anchor="middle" fill="var(--color-text-subtle)" font-size="12" font-family="monospace">Toronto Edge</text>
+            </g>
+
+            <!-- Vancouver POP (left bottom) -->
+            <g>
+              <circle cx="170" cy="250" r="12" fill="var(--bg-base)" stroke="var(--color-net-primary)" stroke-width="2"/>
+              <circle cx="170" cy="250" r="24" fill="var(--color-net-primary)" opacity="0.08">
+                <animate attributeName="r" values="18;28;18" dur="4s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.15;0;0.15" dur="4s" repeatCount="indefinite"/>
+              </circle>
+              <text x="170" y="285" text-anchor="middle" fill="var(--color-text-subtle)" font-size="12" font-family="monospace">Vancouver POP</text>
+            </g>
+
+            <!-- Core Transit Cluster (center) -->
+            <g>
+              <circle cx="450" cy="180" r="54"
+                stroke="var(--color-net-primary-light)"
+                stroke-opacity="0.15"
+                stroke-width="1.5"
+                stroke-dasharray="4 6">
+                <animateTransform attributeName="transform" type="rotate"
+                  from="0 450 180" to="360 450 180" dur="18s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="450" cy="180" r="36"
+                stroke="var(--color-net-primary)"
+                stroke-opacity="0.2"
+                stroke-width="1.5"
+                stroke-dasharray="4 8">
+                <animateTransform attributeName="transform" type="rotate"
+                  from="360 450 180" to="0 450 180" dur="14s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="450" cy="180" r="14" fill="var(--color-net-primary-light)">
+                <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <text x="450" y="235" text-anchor="middle" fill="var(--color-text)" font-size="13" font-family="monospace">Core Transit Cluster</text>
+            </g>
+
+            <!-- Chicago Core (right top) -->
+            <g>
+              <circle cx="730" cy="130" r="12" fill="var(--bg-base)" stroke="var(--color-net-primary-light)" stroke-width="2"/>
+              <circle cx="730" cy="130" r="24" fill="var(--color-net-primary-light)" opacity="0.08">
+                <animate attributeName="r" values="18;28;18" dur="3.5s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.15;0;0.15" dur="3.5s" repeatCount="indefinite"/>
+              </circle>
+              <text x="730" y="165" text-anchor="middle" fill="var(--color-text-subtle)" font-size="12" font-family="monospace">Chicago Core</text>
+            </g>
+
+            <!-- Atlanta WAN (right bottom) -->
+            <g>
+              <circle cx="730" cy="215" r="12" fill="var(--bg-base)" stroke="var(--color-net-primary)" stroke-width="2"/>
+              <circle cx="730" cy="215" r="24" fill="var(--color-net-primary)" opacity="0.08">
+                <animate attributeName="r" values="18;28;18" dur="5s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.15;0;0.15" dur="5s" repeatCount="indefinite"/>
+              </circle>
+              <text x="730" y="250" text-anchor="middle" fill="var(--color-text-subtle)" font-size="12" font-family="monospace">Atlanta WAN</text>
+            </g>
+          </svg>
+
+          <!-- Floating: Route Health -->
+          <div class="absolute top-5 left-5 rounded-xl border border-site-border bg-black/30 backdrop-blur-xl px-4 py-3">
+            <div class="text-[10px] uppercase tracking-[0.25em] text-site-muted font-mono">Route Health</div>
+            <div class="mt-2 flex items-center gap-3">
+              <div class="text-xl font-semibold text-electric-cyan" id="route-health-ms">8ms</div>
+              <div class="text-xs text-site-muted leading-relaxed">Avg propagation<br/>latency</div>
+            </div>
+          </div>
+
+          <!-- Floating: SD-WAN Failover -->
+          <div class="absolute bottom-5 right-5 rounded-xl border border-site-border bg-black/30 backdrop-blur-xl px-4 py-3 min-w-[210px]">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="text-site-muted">SD-WAN Failover</span>
+              <span class="flex items-center gap-1.5 text-matrix">
+                <span class="h-1.5 w-1.5 rounded-full bg-matrix deploy-pulse"></span>
+                Healthy
+              </span>
+            </div>
+            <div class="mt-3 h-1 rounded-full bg-site-border/40 overflow-hidden">
+              <div class="h-full w-[92%] rounded-full bg-matrix"></div>
+            </div>
+            <div class="mt-3 flex justify-between text-[11px] text-site-muted font-mono">
+              <span id="sdwan-primary">Primary Fiber</span>
+              <span id="sdwan-secondary">Secondary LTE</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
+        {service.capabilities.map((cap) => (
+          <div class={`p-5 rounded-xl border border-site-border/60 bg-site-surface/30 hover:${service.theme.borderAccent} transition-colors`}>
+            <h3 class="font-semibold text-white mb-2">{cap.title}</h3>
+            <p class="text-site-muted text-sm leading-relaxed">{cap.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- Vendor logos row -->
+      <div class="p-5 rounded-xl border border-site-border/60 bg-site-surface/30 mb-16">
+        <p class="text-xs font-mono text-site-muted uppercase tracking-wider mb-3">{service.vendorsLabel}</p>
+        <div class="flex flex-wrap gap-2">
+          {service.vendors?.map((v) => (
+            <span class="px-2.5 py-1 text-xs rounded-full border border-site-border/60 bg-site-surface text-site-text-muted font-mono">{v}</span>
+          ))}
+        </div>
+      </div>
+
+      <div class={`p-8 rounded-2xl border ${service.theme.borderAccent} bg-site-surface/40 text-center`}>
+        <h2 class="font-display font-bold text-2xl text-white mb-3">{service.cta.heading}</h2>
+        <p class="text-site-muted mb-6">{service.cta.body}</p>
+        <a href={withBase('/contact')} class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-cta-gradient text-white font-semibold shadow-glow-sm hover:shadow-glow-md transition-all duration-300">
+          {service.cta.label}
+        </a>
+      </div>
+    </div>
+  </div>
+  <Footer />
+</Layout>
+
+<script>
+  const sdwanEndpoints = [
+    { primary: 'Primary Fiber', secondary: 'Secondary LTE' },
+    { primary: 'NYC-CORE-01',   secondary: 'CHI-BACKUP-02' },
+    { primary: 'ATL-FIBER-A',   secondary: 'DAL-LTE-B' },
+    { primary: 'SEA-PRIMARY',   secondary: 'DEN-FAILOVER' },
+    { primary: 'IAD-EDGE-01',   secondary: 'LAX-BACKUP' },
+    { primary: 'ORD-FIBER-1',   secondary: 'MIA-LTE-2' },
+  ];
+
+  let sdwanIdx = 0;
+  const sdwanPrimary = document.getElementById('sdwan-primary');
+  const sdwanSecondary = document.getElementById('sdwan-secondary');
+
+  setInterval(() => {
+    sdwanIdx = (sdwanIdx + 1) % sdwanEndpoints.length;
+    const ep = sdwanEndpoints[sdwanIdx];
+    if (sdwanPrimary) sdwanPrimary.textContent = ep.primary;
+    if (sdwanSecondary) sdwanSecondary.textContent = ep.secondary;
+  }, 4000);
+
+  const routeMs = document.getElementById('route-health-ms');
+  const msSamples = [5, 6, 7, 8, 9, 10, 11, 12, 7, 8, 6, 9, 11, 5, 10, 12];
+  let msIdx = 0;
+
+  setInterval(() => {
+    msIdx = (msIdx + 1) % msSamples.length;
+    if (routeMs) routeMs.textContent = msSamples[msIdx] + 'ms';
+  }, 2800);
+</script>
+
+<style is:global>
+  :root {
+    --color-net-primary:       #8b5cf6; /* violet-500 */
+    --color-net-primary-light: #a78bfa; /* violet-400 */
+  }
+
+  @keyframes netFlow {
+    from { stroke-dashoffset: 0; }
+    to   { stroke-dashoffset: -120; }
+  }
+
+  @keyframes netScan {
+    0%   { transform: translateY(-120%); }
+    100% { transform: translateY(420%); }
+  }
+
+  .net-flow-anim      { animation: netFlow 6s linear infinite; }
+  .net-flow-anim-slow { animation: netFlow 9s linear infinite; }
+  .net-scan-anim      { animation: netScan 7s linear infinite; }
+</style>

@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Holtzweb — Privacy & Security Series</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #0d0a1a;
+      --bg-panel:     #140f24;
+      --bg-panel-alt: #1a1232;
+      --accent:       #39ff14;
+      --accent-2:     #c084fc;
+      --text:         #e2e8f0;
+      --text-muted:   #6b618a;
+      --green:        #50fa7b;
+      --amber:        #fbbf24;
+      --red:          #ff5555;
+      --blue:         #8be9fd;
+      --border:       rgba(189,147,249,0.2);
+      --glow:         rgba(57,255,20,0.35);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       HEADER EXPLOSION EFFECTS
+    ═══════════════════════════════════════════════════ */
+
+    /* Expanding radar rings — pure CSS explosion */
+    .rings {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid var(--accent);
+      opacity: 0;
+      animation: expand-ring 5s ease-out infinite;
+    }
+    .ring:nth-child(1) { animation-delay: 0s;    border-color: var(--accent); }
+    .ring:nth-child(2) { animation-delay: 1.66s; border-color: var(--accent-2); }
+    .ring:nth-child(3) { animation-delay: 3.33s; border-color: var(--accent); }
+    @keyframes expand-ring {
+      0%   { width: 0;      height: 0;      opacity: 0.9; }
+      60%  { opacity: 0.3; }
+      100% { width: 280vw;  height: 280vw;  opacity: 0; }
+    }
+
+    /* Starburst lines radiating outward from header center */
+    .starbursts {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .starburst {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 1px;
+      background: linear-gradient(to bottom, rgba(57,255,20,0.7), transparent);
+      transform-origin: 0 0;
+      opacity: 0;
+      animation: ray-shoot 4s ease-out infinite;
+    }
+    /* 16 rays, every 22.5 degrees */
+    .starburst:nth-child(1)  { transform: rotate(0deg);      animation-delay: 0s;    height: 0; }
+    .starburst:nth-child(2)  { transform: rotate(22.5deg);   animation-delay: 0.08s; height: 0; }
+    .starburst:nth-child(3)  { transform: rotate(45deg);     animation-delay: 0.16s; height: 0; }
+    .starburst:nth-child(4)  { transform: rotate(67.5deg);   animation-delay: 0.24s; height: 0; }
+    .starburst:nth-child(5)  { transform: rotate(90deg);     animation-delay: 0.32s; height: 0; }
+    .starburst:nth-child(6)  { transform: rotate(112.5deg);  animation-delay: 0.40s; height: 0; }
+    .starburst:nth-child(7)  { transform: rotate(135deg);    animation-delay: 0.48s; height: 0; }
+    .starburst:nth-child(8)  { transform: rotate(157.5deg);  animation-delay: 0.56s; height: 0; }
+    .starburst:nth-child(9)  { transform: rotate(180deg);    animation-delay: 0.64s; height: 0; }
+    .starburst:nth-child(10) { transform: rotate(202.5deg);  animation-delay: 0.72s; height: 0; }
+    .starburst:nth-child(11) { transform: rotate(225deg);    animation-delay: 0.80s; height: 0; }
+    .starburst:nth-child(12) { transform: rotate(247.5deg);  animation-delay: 0.88s; height: 0; }
+    .starburst:nth-child(13) { transform: rotate(270deg);    animation-delay: 0.96s; height: 0; }
+    .starburst:nth-child(14) { transform: rotate(292.5deg);  animation-delay: 1.04s; height: 0; }
+    .starburst:nth-child(15) { transform: rotate(315deg);    animation-delay: 1.12s; height: 0; }
+    .starburst:nth-child(16) { transform: rotate(337.5deg);  animation-delay: 1.20s; height: 0; }
+    @keyframes ray-shoot {
+      0%   { height: 0;    opacity: 0.8; }
+      30%  { opacity: 0.5; }
+      100% { height: 80vh; opacity: 0; }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       HEADER
+    ═══════════════════════════════════════════════════ */
+
+    .landing-header {
+      position: relative;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(57,255,20,0.15);
+      overflow: hidden;
+      /* Rotating conic background glow */
+      background:
+        radial-gradient(ellipse at center, rgba(57,255,20,0.06) 0%, transparent 65%),
+        var(--bg);
+    }
+
+    /* Scanline overlay on header */
+    .landing-header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(0,0,0,0.04) 3px,
+        rgba(0,0,0,0.04) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .header-content { position: relative; z-index: 2; }
+
+    /* ── HOLTZWEB glitch title ── */
+    .glitch-wrap {
+      display: inline-block;
+      position: relative;
+      margin-bottom: 0.4rem;
+    }
+
+    .glitch-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3.5rem, 12vw, 8rem);
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      position: relative;
+      /* Shockwave ripple: the "explosion" emanating from the text */
+      animation: glow-breathe 3s ease-in-out infinite;
+    }
+
+    /* Ghost layers for glitch split */
+    .glitch-title::before,
+    .glitch-title::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      letter-spacing: inherit;
+      line-height: inherit;
+    }
+    .glitch-title::before {
+      color: var(--red);
+      clip-path: polygon(0 15%, 100% 15%, 100% 45%, 0 45%);
+      animation: glitch-top 6s steps(1) infinite;
+    }
+    .glitch-title::after {
+      color: var(--accent-2);
+      clip-path: polygon(0 60%, 100% 60%, 100% 85%, 0 85%);
+      animation: glitch-bot 6s steps(1) infinite;
+    }
+
+    @keyframes glow-breathe {
+      0%, 100% {
+        text-shadow:
+          0 0 20px var(--accent),
+          0 0 60px rgba(57,255,20,0.4),
+          0 0 120px rgba(57,255,20,0.15);
+      }
+      50% {
+        text-shadow:
+          0 0 30px var(--accent),
+          0 0 80px rgba(57,255,20,0.6),
+          0 0 160px rgba(57,255,20,0.25),
+          0 0 240px rgba(57,255,20,0.08);
+      }
+    }
+
+    /* Glitch fires briefly every ~6 seconds */
+    @keyframes glitch-top {
+      0%, 89%, 91%, 93%, 100% { transform: translate(0); opacity: 0; }
+      90%   { transform: translate(-5px,  2px); opacity: 0.85; }
+      92%   { transform: translate( 5px, -2px); opacity: 0.85; }
+    }
+    @keyframes glitch-bot {
+      0%, 90%, 92%, 94%, 100% { transform: translate(0); opacity: 0; }
+      91%   { transform: translate( 5px,  3px); opacity: 0.75; }
+      93%   { transform: translate(-5px, -3px); opacity: 0.75; }
+    }
+
+    /* Shockwave ring from the title — fires with the glitch */
+    .glitch-title {
+      --shockwave: rgba(57,255,20,0);
+    }
+    .shockwave-ring {
+      position: absolute;
+      inset: -20px;
+      border-radius: 8px;
+      border: 2px solid var(--accent);
+      opacity: 0;
+      animation: shockwave 6s ease-out infinite;
+      pointer-events: none;
+    }
+    .shockwave-ring:nth-child(2) { animation-delay: 0.2s; border-color: var(--accent-2); }
+    .shockwave-ring:nth-child(3) { animation-delay: 0.4s; border-color: var(--red); }
+    @keyframes shockwave {
+      0%, 88%  { transform: scale(1);   opacity: 0; }
+      89%       { transform: scale(1);   opacity: 0.9; }
+      100%      { transform: scale(3.5); opacity: 0; }
+    }
+
+    .header-byline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(0.6rem, 2vw, 0.8rem);
+      color: var(--accent-2);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      margin-top: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .header-tagline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      overflow: hidden;
+      display: inline-block;
+      white-space: nowrap;
+      /* Typewriter effect on page load */
+      animation: typewriter 1.8s steps(48, end) 0.3s both;
+    }
+    @keyframes typewriter {
+      from { width: 0; }
+      to   { width: 100%; }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       CARD GRID — 3D FLIP CARDS
+    ═══════════════════════════════════════════════════ */
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 2.2rem;
+      padding: 3.5rem 3rem;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    /* Perspective wrapper for 3D flip */
+    .card-wrapper {
+      height: 360px;
+      perspective: 1400px;
+      /* Staggered float — each card bobs at a different phase */
+      animation: float 7s ease-in-out infinite;
+    }
+    /* Pause float while flipping */
+    .card-wrapper:hover { animation-play-state: paused; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-12px); }
+    }
+
+    /* Slide-in entrance animation */
+    .card-wrapper {
+      animation: card-enter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both,
+                 float 7s ease-in-out infinite;
+    }
+    /* Need two animations — entrance runs once, float loops */
+    /* Use animation shorthand carefully: */
+    .card-wrapper:nth-child(1) { animation: card-enter 0.3s 0.04s cubic-bezier(0.25,0.46,0.45,0.94) both, float 6.8s 0s    ease-in-out 0.35s infinite; }
+    .card-wrapper:nth-child(2) { animation: card-enter 0.3s 0.10s cubic-bezier(0.25,0.46,0.45,0.94) both, float 7.2s 1.4s  ease-in-out 0.41s infinite; }
+    .card-wrapper:nth-child(3) { animation: card-enter 0.3s 0.16s cubic-bezier(0.25,0.46,0.45,0.94) both, float 6.5s 2.8s  ease-in-out 0.47s infinite; }
+    .card-wrapper:nth-child(4) { animation: card-enter 0.3s 0.22s cubic-bezier(0.25,0.46,0.45,0.94) both, float 7.5s 0.7s  ease-in-out 0.53s infinite; }
+    .card-wrapper:nth-child(5) { animation: card-enter 0.3s 0.28s cubic-bezier(0.25,0.46,0.45,0.94) both, float 6.9s 2.1s  ease-in-out 0.59s infinite; }
+    .card-wrapper:nth-child(6) { animation: card-enter 0.3s 0.34s cubic-bezier(0.25,0.46,0.45,0.94) both, float 7.3s 1.0s  ease-in-out 0.65s infinite; }
+
+    @keyframes card-enter {
+      from { opacity: 0; transform: translateY(50px) scale(0.93); }
+      to   { opacity: 1; transform: translateY(0)    scale(1); }
+    }
+
+    /* Flip card container fills the wrapper */
+    .card {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      color: var(--text);
+      cursor: default;
+    }
+
+    @media (max-width: 640px) {
+      .card-grid {
+        grid-template-columns: 1fr;
+        padding: 1.5rem 1rem;
+        gap: 1.4rem;
+      }
+      .card-wrapper {
+        min-height: 500px;
+      }
+    }
+
+    /* Flip container */
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.75s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    .card:hover .card-inner { transform: rotateY(180deg); }
+
+    /* Front and back share base styles */
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 14px;
+      padding: 2.4rem;
+      overflow: hidden;
+    }
+
+    /* ── CARD FRONT ── */
+    .card-front {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    /* Top accent bar — color per card */
+    .card-front::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--card-color, var(--accent));
+      box-shadow: 0 0 20px var(--card-color, var(--accent));
+    }
+
+    /* Big background number */
+    .card-front::after {
+      content: attr(data-num);
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -60%);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9rem;
+      font-weight: 700;
+      color: var(--card-color, var(--accent));
+      opacity: 0.04;
+      line-height: 1;
+      pointer-events: none;
+      letter-spacing: -0.05em;
+    }
+
+    /* Card-specific accent colors */
+    .card-wrapper:nth-child(1) .card-front { --card-color: var(--accent); }
+    .card-wrapper:nth-child(2) .card-front { --card-color: var(--accent-2); }
+    .card-wrapper:nth-child(3) .card-front { --card-color: var(--blue); }
+    .card-wrapper:nth-child(4) .card-front { --card-color: var(--amber); }
+    .card-wrapper:nth-child(5) .card-front { --card-color: var(--red); }
+    .card-wrapper:nth-child(6) .card-front { --card-color: #00d4ff; }
+
+    .card-index {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.15;
+      margin-bottom: 0.7rem;
+      text-shadow: 0 0 25px rgba(57,255,20,0.25);
+    }
+    .card-wrapper:nth-child(2) .card-title { color: var(--accent-2); text-shadow: 0 0 25px rgba(192,132,252,0.3); }
+    .card-wrapper:nth-child(3) .card-title { color: var(--blue);     text-shadow: 0 0 25px rgba(139,233,253,0.3); }
+    .card-wrapper:nth-child(4) .card-title { color: var(--amber);    text-shadow: 0 0 25px rgba(251,191,36,0.3); }
+    .card-wrapper:nth-child(5) .card-title { color: var(--red);      text-shadow: 0 0 25px rgba(255,85,85,0.3); }
+    .card-wrapper:nth-child(6) .card-title { color: #00d4ff;         text-shadow: 0 0 25px rgba(0,212,255,0.3); }
+
+    .card-hook {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      font-style: italic;
+    }
+
+    /* "hover to flip" hint pulses in bottom-right */
+    .card-hint {
+      position: absolute;
+      bottom: 1.2rem;
+      right: 1.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--text-muted);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      animation: hint-pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes hint-pulse {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 0.9; }
+    }
+
+    /* ── CARD BACK ── */
+    .card-back {
+      background: var(--bg-panel-alt);
+      border: 1px solid rgba(57,255,20,0.25);
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      box-shadow: inset 0 0 60px rgba(57,255,20,0.03);
+    }
+
+    /* Spinning corner accent on back */
+    .card-back::before {
+      content: '';
+      position: absolute;
+      top: -1px; right: -1px;
+      width: 60px; height: 60px;
+      background: conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent));
+      border-radius: 0 14px 0 100%;
+      opacity: 0.5;
+      animation: corner-spin 4s linear infinite;
+    }
+    @keyframes corner-spin {
+      from { filter: hue-rotate(0deg); }
+      to   { filter: hue-rotate(360deg); }
+    }
+
+    .card-back-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-2);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .card-desc {
+      font-size: 1.05rem;
+      color: var(--text);
+      line-height: 1.65;
+      flex-grow: 1;
+      margin-bottom: 1.2rem;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .card-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      padding: 0.28em 0.85em;
+      border-radius: 20px;
+      border: 1px solid rgba(57,255,20,0.3);
+      color: var(--accent);
+      background: rgba(57,255,20,0.07);
+      letter-spacing: 0.05em;
+    }
+
+    .card-launch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5em;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 0.6em 1.5em;
+      border-radius: 6px;
+      align-self: flex-start;
+      letter-spacing: 0.02em;
+      box-shadow: 0 0 30px rgba(57,255,20,0.5), 0 0 60px rgba(57,255,20,0.2);
+      transition: box-shadow 0.25s, transform 0.15s;
+      text-decoration: none;
+    }
+    .card-launch:hover {
+      box-shadow: 0 0 50px rgba(57,255,20,0.8), 0 0 100px rgba(57,255,20,0.35);
+      transform: scale(1.04);
+    }
+    .card-launch.cyan {
+      background: #00d4ff;
+      box-shadow: 0 0 30px rgba(0,212,255,0.5), 0 0 60px rgba(0,212,255,0.2);
+    }
+    .card-launch.cyan:hover {
+      box-shadow: 0 0 50px rgba(0,212,255,0.8), 0 0 100px rgba(0,212,255,0.35);
+    }
+    .card-launch.ghost {
+      background: transparent;
+      color: #00d4ff;
+      border: 1px solid rgba(0,212,255,0.5);
+      box-shadow: 0 0 20px rgba(0,212,255,0.2);
+    }
+    .card-launch.ghost:hover {
+      background: rgba(0,212,255,0.1);
+      box-shadow: 0 0 40px rgba(0,212,255,0.4);
+    }
+    .card-back-links {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════ */
+
+    /* ═══════════════════════════════════════════════════
+       SECTION DIVIDER
+    ═══════════════════════════════════════════════════ */
+
+    .resource-divider {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0.5rem 3rem 2.5rem;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(57,255,20,0.45), transparent);
+    }
+    .divider-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      text-shadow: 0 0 12px rgba(57,255,20,0.5);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SMALL LINK CARDS
+    ═══════════════════════════════════════════════════ */
+
+    .card-grid-sm {
+      padding-top: 0;
+    }
+
+    .link-card-wrapper {
+      height: 180px;
+      perspective: 1400px;
+    }
+    .link-card-wrapper:nth-child(1) { animation: card-enter 0.3s 0.10s cubic-bezier(0.25,0.46,0.45,0.94) both, float 7.1s 0.5s ease-in-out 0.42s infinite; }
+    .link-card-wrapper:nth-child(2) { animation: card-enter 0.3s 0.18s cubic-bezier(0.25,0.46,0.45,0.94) both, float 6.7s 1.8s ease-in-out 0.50s infinite; }
+    .link-card-wrapper:hover { animation-play-state: paused; }
+
+    .link-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem 2rem;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .link-card:hover {
+      border-color: rgba(57,255,20,0.35);
+      box-shadow: 0 0 40px rgba(57,255,20,0.06);
+    }
+    .link-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--lc-color, var(--accent));
+      box-shadow: 0 0 16px var(--lc-color, var(--accent));
+    }
+    /* Faint ghost label top-right */
+    .link-card::after {
+      content: attr(data-ghost);
+      position: absolute;
+      top: 0.8rem; right: 1.2rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 4.5rem;
+      font-weight: 700;
+      color: var(--lc-color, var(--accent));
+      opacity: 0.04;
+      line-height: 1;
+      pointer-events: none;
+      letter-spacing: -0.05em;
+    }
+    .link-card-top {
+      flex: 1;
+    }
+    .link-card-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+      display: block;
+    }
+    .link-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+      font-weight: 700;
+      color: var(--lc-color, var(--accent));
+      line-height: 1.2;
+      margin-bottom: 0.3rem;
+    }
+    .link-card-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .link-card-buttons {
+      display: flex;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+    .link-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.3em 0.95em;
+      border-radius: 5px;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: transform 0.15s, box-shadow 0.2s;
+      font-weight: 600;
+    }
+    .link-btn.primary {
+      background: var(--lc-color, var(--accent));
+      color: var(--bg);
+      box-shadow: 0 0 14px color-mix(in srgb, var(--lc-color, var(--accent)) 50%, transparent);
+    }
+    .link-btn.secondary {
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--lc-color, var(--accent)) 60%, transparent);
+      color: var(--lc-color, var(--accent));
+    }
+    .link-btn:hover { transform: scale(1.06); }
+
+    /* per-card colors */
+    .lc-orange { --lc-color: #f97316; }
+    .lc-purple  { --lc-color: var(--accent-2); }
+
+    /* ═══════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════ */
+
+    .landing-footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      border-top: 1px solid var(--border);
+      letter-spacing: 0.05em;
+    }
+
+    .landing-footer kbd {
+      background: rgba(57,255,20,0.1);
+      border: 1px solid rgba(57,255,20,0.3);
+      padding: 0.1em 0.5em;
+      border-radius: 3px;
+      color: var(--accent);
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+<header class="landing-header"><!-- Exploding rings -->
+<div class="rings" aria-hidden="true">
+<div class="ring"></div>
+<div class="ring"></div>
+<div class="ring"></div>
+</div>
+<!-- Starburst rays -->
+<div class="starbursts" aria-hidden="true">
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+<div class="starburst"></div>
+</div>
+<div class="header-content"><!-- Glitch title with shockwave rings -->
+<div class="glitch-wrap">
+<h1 class="glitch-title" data-text="HOLTZWEB">HOLTZWEB</h1>
+<!-- Shockwave explosion rings synced to glitch -->
+<div class="shockwave-ring" aria-hidden="true"></div>
+<div class="shockwave-ring" aria-hidden="true"></div>
+<div class="shockwave-ring" aria-hidden="true"></div>
+</div>
+<p class="header-byline">//&nbsp;Home network&nbsp;security &middot; five presentations</p>
+<p class="header-tagline">open source tools &nbsp;&middot;&nbsp; respecting your freedom&nbsp; &middot;&nbsp; no <span>proprietary systems</span></p>
+</div>
+</header>
+<p></p>
+<p></p>
+<p></p>
+<p><main class="card-grid">
+<div class="card-wrapper">
+<div class="card">
+<div class="card-inner">
+<div class="card-face card-front" data-num="01"><span class="card-index">01 / 05 &nbsp;&middot;&nbsp; Android</span>
+<h2 class="card-title">Auditing Android Network Traffic</h2>
+<p class="card-hook">What is your phone actually sending?</p>
+<span class="card-hint">hover to flip ▸</span></div>
+<div class="card-face card-back"><span class="card-back-label">01 &mdash; Android Auditing</span>
+<p class="card-desc">From TrackerControl on F-Droid to Magisk root, LSPosed, and Inspeckage &mdash; the full spectrum of Android network auditing. Block trackers, decrypt HTTPS, and bypass certificate pinning on any app.</p>
+<div class="card-tags"><span class="card-tag">TrackerControl</span> <span class="card-tag">Magisk</span> <span class="card-tag">LSPosed</span> <span class="card-tag">Inspeckage</span> <span class="card-tag">PCAPdroid</span></div>
+<a href="android_audit.html" target="_blank" rel="noopener noreferrer" class="card-launch">Launch &rarr;</a></div>
+</div>
+</div>
+</div>
+<div class="card-wrapper">
+<div class="card">
+<div class="card-inner">
+<div class="card-face card-front" data-num="02"><span class="card-index">02 / 05 &nbsp;&middot;&nbsp; All Platforms</span>
+<h2 class="card-title">Monitor App Connections</h2>
+<p class="card-hook">You are a hose spewing data.</p>
+<span class="card-hint">hover to flip ▸</span></div>
+<div class="card-face card-back"><span class="card-back-label">02 &mdash; Per-App Firewalls</span>
+<p class="card-desc">Per-app outbound firewalls for every platform. TrackerControl on Android, WFC on Windows, OpenSnitch on Linux, Little Snitch and Radio Silence on macOS. See who's calling home and cut them off.</p>
+<div class="card-tags"><span class="card-tag">Windows</span> <span class="card-tag">macOS</span> <span class="card-tag">Linux</span> <span class="card-tag">Android</span> <span class="card-tag">OpenSnitch</span></div>
+<a href="monitor_app_connections.html" target="_blank" rel="noopener noreferrer" class="card-launch">Launch &rarr;</a></div>
+</div>
+</div>
+</div>
+<div class="card-wrapper">
+<div class="card">
+<div class="card-inner">
+<div class="card-face card-front" data-num="03"><span class="card-index">03 / 05 &nbsp;&middot;&nbsp; Network Layer</span>
+<h2 class="card-title">Network Monitoring</h2>
+<p class="card-hook">What slips through after you've firewalled your devices?</p>
+<span class="card-hint">hover to flip ▸</span></div>
+<div class="card-face card-back"><span class="card-back-label">03 &mdash; The Router Sees All</span>
+<p class="card-desc">ntopng, OPNsense, Suricata IDS/IPS, DNS blocklists, and IP blocklists &mdash; the router sees everything. Your smart TV has a lot of opinions about your viewing habits.</p>
+<div class="card-tags"><span class="card-tag">OPNsense</span> <span class="card-tag">ntopng</span> <span class="card-tag">Suricata</span> <span class="card-tag">DNS Blocklists</span></div>
+<a href="network_monitoring.html" target="_blank" rel="noopener noreferrer" class="card-launch">Launch &rarr;</a></div>
+</div>
+</div>
+</div>
+<div class="card-wrapper">
+<div class="card">
+<div class="card-inner">
+<div class="card-face card-front" data-num="04"><span class="card-index">04 / 05 &nbsp;&middot;&nbsp; Beyond the Router</span>
+<h2 class="card-title">Secure Networks Outside Your LAN</h2>
+<p class="card-hook">When data leaves your network, how do you protect it?</p>
+<span class="card-hint">hover to flip ▸</span></div>
+<div class="card-face card-back"><span class="card-back-label">04 &mdash; Every Exit Strategy</span>
+<p class="card-desc">VPNs, VPN-over-port-53, Tor, I2P, Lokinet, XRAY Trojan (your VPN is a website), mesh networks, and Tor hidden services with vanity .onion addresses. Every exit strategy, every threat model.</p>
+<div class="card-tags"><span class="card-tag">VPN / Tor</span> <span class="card-tag">XRAY</span> <span class="card-tag">Port 53</span> <span class="card-tag">.onion</span> <span class="card-tag">Mesh</span></div>
+<a href="secure_networks.html" target="_blank" rel="noopener noreferrer" class="card-launch">Launch &rarr;</a></div>
+</div>
+</div>
+</div>
+<div class="card-wrapper">
+<div class="card">
+<div class="card-inner">
+<div class="card-face card-front" data-num="05"><span class="card-index">05 / 05 &nbsp;&middot;&nbsp; Foundation</span>
+<h2 class="card-title">Open Source Home Network</h2>
+<p class="card-hook">The foundation everything else runs on.</p>
+<span class="card-hint">hover to flip ▸</span></div>
+<div class="card-face card-back"><span class="card-back-label">05 &mdash; Build Your Stack</span>
+<p class="card-desc">OpenWRT with DSA VLANs, SSID isolation, OpenNDS captive portals, and rotating emoji SSIDs &mdash; then OPNsense for firewalling, HAProxy, WireGuard, and Suricata. Build it once, own it forever.</p>
+<div class="card-tags"><span class="card-tag">OpenWRT</span> <span class="card-tag">OPNsense</span> <span class="card-tag">WireGuard</span> <span class="card-tag">HAProxy</span> <span class="card-tag">Suricata</span></div>
+<a href="home_network_foundation.html" target="_blank" rel="noopener noreferrer" class="card-launch">Launch &rarr;</a></div>
+</div>
+</div>
+</div>
+<!-- 6th card — ABOUT / INFO -->
+<div class="card-wrapper">
+<div class="card-inner" style="transform-style: preserve-3d; transition: transform 0.75s cubic-bezier(0.4,0.2,0.2,1);" id="about-inner">
+<div class="card-face card-front" data-num="&infin;" style="cursor: pointer;" onclick="document.getElementById('about-inner').style.transform='rotateY(180deg)'"><span class="card-index">INFO &nbsp;&middot;&nbsp; About the Author</span>
+<h2 class="card-title">MarcusHoltz<br />@ Holtzweb</h2>
+<p class="card-hook">Homelab tinkerer. Open source absolutist.</p>
+<span class="card-hint">click to flip ▸</span></div>
+<div class="card-face card-back" style="cursor: pointer;" onclick="document.getElementById('about-inner').style.transform='rotateY(0deg)'"><span class="card-back-label">&infin; &mdash; Find More</span>
+<p class="card-desc">All configs, write-ups, and repos from this series live on the blog and GitHub. Everything is reproducible, documented, and actually tested on real hardware.</p>
+<div class="card-tags"><span class="card-tag">blog.holtzweb.com</span> <span class="card-tag">github/MarcusHoltz</span> <span class="card-tag">open source</span></div>
+<div class="card-back-links"><a href="https://blog.holtzweb.com" target="_blank" rel="noopener noreferrer" class="card-launch cyan">Blog &rarr;</a> <a href="https://github.com/MarcusHoltz" target="_blank" rel="noopener noreferrer" class="card-launch ghost">GitHub &rarr;</a></div>
+</div>
+</div>
+</div>
+</main></p>
+<p></p>
+<p></p>
+<p></p>
+<!-- ── Section divider ─────────────────────────────── -->
+<div class="resource-divider" aria-hidden="true">
+<div class="divider-line"></div>
+<span class="divider-label">// more from holtzweb</span>
+<div class="divider-line"></div>
+</div>
+<!-- ── Small link cards ────────────────────────────── -->
+<section class="card-grid card-grid-sm" aria-label="Additional resources"><!-- Card 0A — nzyme -->
+<div class="link-card-wrapper">
+<div class="link-card lc-orange" data-ghost="0A">
+<div class="link-card-top"><span class="link-card-tag">Wireless Security &nbsp;&middot;&nbsp; Detection &amp; Monitoring</span>
+<div class="link-card-title">Wireless Penetration Defense &amp; Monitoring</div>
+<div class="link-card-desc">Detect and alert on hostile WiFi APs, rogue SSIDs, and wireless intrusion attempts using nzyme &mdash; deployable on a Raspberry Pi.</div>
+</div>
+<div class="link-card-buttons"><a href="https://blog.holtzweb.com/posts/nzyme-wireless-penetration-defense/" target="_blank" rel="noopener noreferrer" class="link-btn primary">Blog Post &rarr;</a> <a href="https://is.gd/nzyme" target="_blank" rel="noopener noreferrer" class="link-btn secondary">Slides</a> <a href="https://is.gd/nzymevideo" target="_blank" rel="noopener noreferrer" class="link-btn secondary">Video</a></div>
+</div>
+</div>
+<!-- Card 0B — browser privacy -->
+<div class="link-card-wrapper">
+<div class="link-card lc-purple" data-ghost="0B">
+<div class="link-card-top"><span class="link-card-tag">Browser Privacy &nbsp;&middot;&nbsp; All Platforms</span>
+<div class="link-card-title">Web Confidentiality, Privacy, and Security</div>
+<div class="link-card-desc">Safeguard your browsing experience. Covers Brave, Firefox forks, uBlock Origin, CanvasBlocker, container tabs, and tracker noise injection.</div>
+</div>
+<div class="link-card-buttons"><a href="https://blog.holtzweb.com/posts/browsers-web-browser-privacy/" target="_blank" rel="noopener noreferrer" class="link-btn primary">Blog Post &rarr;</a> <a href="https://is.gd/browserprivacyslides" target="_blank" rel="noopener noreferrer" class="link-btn secondary">Slides</a> <a href="https://is.gd/browserprivacyvideo" target="_blank" rel="noopener noreferrer" class="link-btn secondary">Video</a></div>
+</div>
+</div>
+</section>
+<footer class="landing-footer">
+<p>Press <kbd>F</kbd> for fullscreen &nbsp;&middot;&nbsp; <kbd>O</kbd> for overview &nbsp;&middot;&nbsp; <kbd>S</kbd> for speaker notes &nbsp;&middot;&nbsp; append <kbd>?view=scroll</kbd> for reading mode</p>
+</footer>
+<script>// <![CDATA[
+// ── Console art easter egg ──────────────────────────────
+    console.log(
+      '%c\n' +
+      '  ██╗  ██╗ ██████╗ ██╗  ████████╗███████╗██╗    ██╗███████╗██████╗ \n' +
+      '  ██║  ██║██╔═══██╗██║  ╚══██╔══╝╚════██║██║    ██║██╔════╝██╔══██╗\n' +
+      '  ███████║██║   ██║██║     ██║       ██╔╝██║ █╗ ██║█████╗  ██████╔╝\n' +
+      '  ██╔══██║██║   ██║██║     ██║      ██╔╝ ██║███╗██║██╔══╝  ██╔══██╗\n' +
+      '  ██║  ██║╚██████╔╝███████╗██║      ██║  ╚███╔███╔╝███████╗██████╔╝\n' +
+      '  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝      ╚═╝   ╚══╝╚══╝ ╚══════╝╚═════╝ \n' +
+      '\n  👋 Hey, you opened the console. Respect.\n' +
+      '  → blog.holtzweb.com\n' +
+      '  → github.com/MarcusHoltz\n',
+      'color:#39ff14; font-family:monospace; font-size:11px; background:#0d0a1a;'
+    );
+
+    // ── Konami code → MAXIMUM OVERDRIVE ─────────────────────
+    const KONAMI = [38,38,40,40,37,39,37,39,66,65];
+    let konamiIdx = 0;
+    document.addEventListener('keydown', e => {
+      if (e.keyCode === KONAMI[konamiIdx]) {
+        konamiIdx++;
+        if (konamiIdx === KONAMI.length) {
+          konamiIdx = 0;
+          triggerOverdrive();
+        }
+      } else {
+        konamiIdx = 0;
+      }
+    });
+
+    function triggerOverdrive() {
+      const el = document.querySelector('.glitch-title');
+      el.style.setProperty('animation', 'glow-breathe 0.3s ease-in-out infinite');
+      // Flash the whole page
+      document.body.style.transition = 'background 0.05s';
+      let flashes = 0;
+      const iv = setInterval(() => {
+        document.body.style.background = flashes % 2 === 0 ? '#1a0a2e' : '#0d0a1a';
+        flashes++;
+        if (flashes > 10) {
+          clearInterval(iv);
+          document.body.style.background = '#0d0a1a';
+          el.style.removeProperty('animation');
+          // Drop the konami message
+          const msg = document.createElement('div');
+          msg.textContent = '// MAXIMUM OVERDRIVE ACTIVATED';
+          msg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-family:JetBrains Mono,monospace;font-size:clamp(1rem,3vw,1.8rem);color:#39ff14;text-shadow:0 0 40px #39ff14;letter-spacing:0.15em;z-index:9999;pointer-events:none;animation:konamiMsg 2s ease-out forwards;';
+          document.head.insertAdjacentHTML('beforeend', '<style>@keyframes konamiMsg{0%{opacity:0;transform:translate(-50%,-50%) scale(0.5)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-60%)}}</style>');
+          document.body.appendChild(msg);
+          setTimeout(() => msg.remove(), 2100);
+        }
+      }, 80);
+    }
+
+    // ── Click HOLTZWEB title 5× → glitch storm ──────────────
+    let titleClicks = 0;
+    let titleTimer;
+    document.querySelector('.glitch-title').addEventListener('click', () => {
+      titleClicks++;
+      clearTimeout(titleTimer);
+      titleTimer = setTimeout(() => { titleClicks = 0; }, 2000);
+      if (titleClicks >= 5) {
+        titleClicks = 0;
+        const title = document.querySelector('.glitch-title');
+        title.style.setProperty('--glitch-speed', '0.4s');
+        title.style.animation = 'glow-breathe 0.5s ease-in-out infinite, glitch-storm 0.15s steps(1) infinite';
+        document.head.insertAdjacentHTML('beforeend',
+          '<style>@keyframes glitch-storm{' +
+          '0%{color:#39ff14}16%{color:#ff5555;transform:translate(-4px,2px)}' +
+          '33%{color:#c084fc;transform:translate(4px,-2px)}' +
+          '50%{color:#39ff14;transform:translate(0)}' +
+          '66%{color:#8be9fd;transform:translate(-2px,4px)}' +
+          '83%{color:#fbbf24;transform:translate(3px,-3px)}' +
+          '100%{color:#39ff14;transform:translate(0)}}</style>'
+        );
+        setTimeout(() => {
+          title.style.animation = '';
+          title.style.color = '';
+        }, 2000);
+      }
+    });
+// ]]></script>
+</body>
+</html>

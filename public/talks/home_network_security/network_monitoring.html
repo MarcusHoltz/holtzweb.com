@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Network Monitoring</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="css/theme-cyber.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class="title-slide" data-background-gradient="radial-gradient(ellipse at 40% 50%, rgba(57,255,20,0.06) 0%, transparent 55%), radial-gradient(ellipse at 70% 60%, rgba(192,132,252,0.06) 0%, transparent 55%)">
+        <h1 class="r-fit-text">The Network Layer</h1>
+    <h3>What Slips Through After You've Firewalled Your Devices</h3>
+    <p class="meta"><em>We've locked down the apps. Now let's watch the pipe.</em></p>
+    <p class="meta">You've installed TrackerControl. You've got WFC or OpenSnitch running.</p>
+      </section>
+      <section>
+        <h2>Your Device Firewall Has a Blind Spot</h2>
+        <ul>
+  <li><strong>Device firewalls see what your device thinks it's doing</strong>
+    <ul>
+      <li>They see the process, the destination, the port — they ask you to allow or deny</li>
+      <li>A rule you got wrong, an app that connected before the firewall loaded — the device won't tell you</li>
+    </ul>
+  </li>
+  <li><strong>They see nothing from devices that can't run software</strong>
+    <ul>
+      <li>Your smart TV, printer, thermostat, game console — none of those have Little Snitch installed</li>
+      <li>Your guest's laptop, phone, or laptop — not your device, not your firewall, fully visible to you</li>
+    </ul>
+  </li>
+  <li><strong>The network sees all of it — always</strong>
+    <ul>
+      <li>Every packet that leaves your LAN passes through one chokepoint: the router</li>
+      <li>One monitor at that chokepoint covers every device, no agents required, all the time</li>
+    </ul>
+  </li>
+  <li><strong>Endpoint visibility vs network visibility — different questions</strong>
+    <ul>
+      <li>Endpoint: "did this app try to connect?" — reported by the device itself</li>
+      <li>Network: "what actually left?" — observed by something the device can't influence or hide from</li>
+    </ul>
+  </li>
+  <li><strong>The network layer is also where you can block globally</strong>
+    <ul>
+      <li>DNS blocklists cut off entire categories of tracking for every device simultaneously</li>
+      <li>IP blocklists drop known malware infrastructure before any device completes a TCP handshake</li>
+    </ul>
+  </li>
+  <li><strong>Your ISP router is not neutral</strong>
+    <ul>
+      <li>Consumer ISP routers report connected devices, DNS queries, and usage patterns upstream</li>
+      <li>Replace it with something you control — OPNsense — and the chokepoint becomes yours</li>
+    </ul>
+  </li>
+  <li><strong>What you build here is independent of every device on your network</strong>
+    <ul>
+      <li>Works on smart TVs, IoT, guests, VMs, containers — anything that passes through the router</li>
+    </ul>
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>The Setup — Come Join My WiFi</h2>
+        <pre><code class="language-text" data-trim data-noescape data-line-numbers>[ Your Devices ]
+  [ Guest Devices ]     ← "Everyone jump on my OpenWRT WiFi"
+  [ IoT / Smart TV ]
+         |
+         |  (all traffic)
+         ▼
+  [ OpenWRT Access Point ]
+         |
+         |  (everything funneled here)
+         ▼
+  [ OPNsense Router / Firewall ]
+    ├── ntopng        ← see everything
+    ├── Suricata      ← flag the bad stuff
+    ├── Unbound DNS   ← block at DNS level
+    └── IP Aliases    ← block by IP list
+         |
+         ▼
+  [ Your ISP / The Internet ]</code></pre>
+<ul>
+  <li><strong>OpenWRT</strong> — the access point: manages WiFi radios, SSIDs, and VLANs at the edge
+  </li>
+  <li><strong>OPNsense</strong> — the router and firewall: all policy, all monitoring, all security lives here
+  </li>
+  <li><strong>ntopng</strong> — flow analyzer living inside OPNsense, sees every conversation across every device
+  </li>
+  <li><strong>Suricata</strong> — IDS/IPS watching all traffic against known bad signatures and JA3 fingerprints
+  </li>
+  <li><strong>Unbound DNS</strong> — the resolver that can block entire domains before they resolve to an IP
+  </li>
+  <li><strong>IP blocklists</strong> — drop packets to/from known bad infrastructure at the firewall level, below DNS
+  </li>
+  <li>You don't need all of this at once — each layer adds visibility or protection independently
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>OPNsense and OpenWRT — The Two-Device Stack</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>OPNsense — Your Router and Firewall</h3>
+            <ul>
+  <li>Open source firewall and router OS based on FreeBSD — fork of pfSense, more actively maintained
+  </li>
+  <li>Runs on a mini PC, old ThinkCentre, or dedicated appliance (Protectli Vault ~$200, Beelink ~$100)
+  </li>
+  <li>One NIC = WAN (to your modem), one NIC = LAN (to your switch/AP) — web UI at 192.168.1.1
+  </li>
+  <li>ISP routers report to your ISP: connected devices, DNS queries, usage stats — OPNsense does not
+  </li>
+  <li>Plugins relevant here: <code>os-ntopng</code>, <code>os-suricata</code>, <code>os-crowdsec</code> — all from the plugin manager
+  </li>
+  <li>Download from opnsense.org — flash to USB, boot, run installer, done
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>OpenWRT — Your Access Point</h3>
+            <ul>
+  <li>Linux-based open source firmware for routers and APs — replaces stock firmware with full control
+  </li>
+  <li>SSH access, firewall rules, traffic mirroring, VLANs, package manager — none of that on stock firmware
+  </li>
+  <li>VLAN support: IoT network, trusted network, guest network — all segmented at the AP layer
+  </li>
+  <li>Compatible hardware: GL.iNet travel routers (OpenWRT pre-installed), TP-Link Archer series
+  </li>
+  <li>Forward all DNS to OPNsense resolver — no device on any VLAN can bypass your resolver
+  </li>
+  <li>Demo moment: "everyone connect to this network" — ntopng is now watching all of you
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>ntopng — Network Traffic Monitoring</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>What It Shows You</h3>
+            <ul>
+  <li><strong>Live flows</strong> — every active connection on your network right now, by source, destination, bytes
+  </li>
+  <li><strong>Top hosts</strong> — which device is generating the most traffic, sorted by volume or connection count
+  </li>
+  <li><strong>Top destinations</strong> — which external IPs and hostnames are contacted most — the wall of shame
+  </li>
+  <li><strong>Protocol breakdown</strong> — HTTPS, DNS, NTP, QUIC, STUN, BitTorrent — nDPI identifies by fingerprint
+  </li>
+  <li><strong>Geo map</strong> — where your traffic is going: that DNS call resolving to Singapore is worth investigating
+  </li>
+  <li><strong>nDPI deep packet inspection</strong> — identifies app protocols even on non-standard ports, even over HTTPS
+  </li>
+  <li>Detects Netflix, Zoom, TikTok, WhatsApp, Telegram, Tor — by traffic behavior, not just port number
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Install and First Findings</h3>
+            <ul>
+  <li>System → Firmware → Plugins → search <code>os-ntopng</code> → install — then Services → ntopng → enable on LAN
+  </li>
+  <li>Your smart TV making 30+ connections before you've touched the remote — that's finding number one
+  </li>
+  <li>NTP sync from every device on different schedules — a surprising number of NTP calls go to Google
+  </li>
+  <li>QUIC (Google's UDP-based HTTP/3) from every Chrome browser simultaneously — visible as UDP/443
+  </li>
+  <li>DNS queries from devices you forgot were on your network — that IP ending in .247 — what is that?
+  </li>
+  <li>Connection to raw IPs with no reverse DNS: legitimate services have PTR records — raw IPs are a flag
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Reading ntopng — What to Actually Look For</h2>
+                <div class="cols-3">
+          <div class="panel">
+            <h3>Hosts to Watch</h3>
+            <ul>
+  <li>Any device making <strong>unusually high connection counts</strong> — spyware behavior or a misconfigured sync app
+  </li>
+  <li>Devices connecting at <strong>3am or 4am</strong> — background telemetry batching, covert exfil pattern
+  </li>
+  <li>Devices you don't recognize — enumerate everything on your network and know what each one is
+  </li>
+  <li>A device that spikes traffic after being idle all day — update downloading or something else
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Destinations to Investigate</h3>
+            <ul>
+  <li><strong>Connections to raw IPs with no reverse DNS</strong> — legitimate services almost always have PTR records
+  </li>
+  <li><strong>Unexpected geographic destinations</strong> — your printer talking to servers in China is worth a question
+  </li>
+  <li><strong>High-volume repeated connections to a single unknown host</strong> — update server or data exfil?
+  </li>
+  <li>CDN hostnames that resolve to different IPs each time — check the owning organization via whois
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Protocol Anomalies</h3>
+            <ul>
+  <li><strong>DNS queries to non-standard ports</strong> — something is trying to bypass your resolver
+  </li>
+  <li><strong>STUN/TURN traffic</strong> — peer-to-peer NAT traversal for Zoom, Teams, games, and occasionally spyware
+  </li>
+  <li><strong>High UDP to random IPs</strong> — could be a game, could be a botnet calling home
+  </li>
+  <li><strong>Tor traffic signatures</strong> — nDPI fingerprints Tor circuit establishment even over non-standard ports
+  </li>
+  <li><strong>Encrypted traffic metadata</strong> — even with HTTPS, ntopng sees: device, destination IP, volume, timing
+  </li>
+  <li>This metadata alone identifies most services — encrypted is not the same as invisible
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Suricata — Intrusion Detection and Prevention</h2>
+                <div class="cols-3">
+          <div class="panel">
+            <h3>What It Is and How to Deploy</h3>
+            <ul>
+  <li>Open source IDS/IPS — watches all traffic against a database of known bad signatures
+  </li>
+  <li>IDS mode: alert and log. IPS mode: drop the matching packet too. Start in IDS, tune, then switch.
+  </li>
+  <li>OPNsense: Services → Intrusion Detection → install rules, enable on WAN and LAN interfaces
+  </li>
+  <li>Enable on WAN to stop inbound threats; enable on LAN to catch compromised devices calling out
+  </li>
+  <li>ET Open (Emerging Threats) is free, updated daily — the baseline ruleset for any deployment
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>What It Catches</h3>
+            <ul>
+  <li>Known malware command-and-control traffic — even over HTTPS, via JA3 fingerprinting
+  </li>
+  <li>Exploit kit traffic patterns: specific URI structures, headers, response sequences
+  </li>
+  <li>Port scans and reconnaissance originating from inside your network (compromised device indicator)
+  </li>
+  <li>DNS exfiltration — data encoded in long subdomain strings — Suricata has dedicated rule categories
+  </li>
+  <li>Cryptocurrency mining pool connections — distinct protocol patterns, easily detected
+  </li>
+  <li>Credential phishing infrastructure — domains and IPs from active campaign feeds (Abuse.ch)
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>JA3 Fingerprinting — The Interesting Part</h3>
+            <ul>
+  <li>TLS handshakes have a fingerprint: which cipher suites and extensions the client offers
+  </li>
+  <li>Malware families use the same TLS library → consistent JA3 hash across all infections
+  </li>
+  <li>Suricata flags: "this HTTPS connection has a JA3 hash associated with Emotet" — no decryption needed
+  </li>
+  <li>Rule sets: Abuse.ch SSL Blacklist includes JA3 hashes from active malware campaigns
+  </li>
+  <li>Tuning: week 1 in IDS mode, identify false positives (Steam trips rules), suppress known-good traffic
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>DNS Blocklists — Block It Before It Resolves</h2>
+                <div class="cols-3">
+          <div class="panel">
+            <h3>How DNS Blocking Works and Why It's Powerful</h3>
+            <ul>
+  <li>Every connection starts with a DNS lookup — if the resolver returns NXDOMAIN, no connection happens
+  </li>
+  <li>No IP = no TCP handshake = no data leaves any device on your network for that destination
+  </li>
+  <li>Works on smart TVs, IoT, game consoles, guests — anything using your DNS server
+  </li>
+  <li>OPNsense runs Unbound as its resolver — all devices get OPNsense via DHCP automatically
+  </li>
+  <li>Services → Unbound DNS → Blocklists tab — add URLs, Unbound downloads and applies them
+  </li>
+  <li>One blocklist addition covers every device on your network simultaneously, no per-device config
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Best Blocklist Sources</h3>
+            <ul>
+  <li><strong>Hagezi DNS Blocklists</strong> — tiered: normal, pro, ultimate — well maintained, low false positives
+  </li>
+  <li><strong>OISD</strong> — large, actively curated, low breakage rate — good starting point for any network
+  </li>
+  <li><strong>Steven Black's hosts</strong> — merged ad/tracking/malware list, multiple variants by category
+  </li>
+  <li><strong>Abuse.ch</strong> — malware and botnet C2 domains specifically — not ad-blocking, threat intelligence
+  </li>
+  <li><strong>EasyList + EasyPrivacy</strong> — the lists that power uBlock Origin, available in hosts format
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>What You'll Block on Day One</h3>
+            <ul>
+  <li>Advertising networks: doubleclick.net, googlesyndication.com, moatads.com, taboola.com
+  </li>
+  <li>Tracking pixels: scorecardresearch.com, omtrdc.net, quantserve.com, demdex.net
+  </li>
+  <li>Smart TV telemetry: samsungads.com, lgtvsdp.com, *.amazon-adsystem.com, tvsquared.com
+  </li>
+  <li>Windows telemetry: vortex.data.microsoft.com, settings-win.data.microsoft.com, watson endpoints
+  </li>
+  <li>Start with OISD normal + Hagezi normal — good coverage, minimal breakage, whitelist as needed
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>IP Blocklists — Drop the Packet at the Border</h2>
+                <div class="cols-3">
+          <div class="panel">
+            <h3>How IP Blocking Works</h3>
+            <ul>
+  <li>Block by IP address range — firewall drops packets to/from listed IPs before DNS, before TCP
+  </li>
+  <li>Catches malware that hardcodes IP addresses and skips DNS entirely — no DNS query to intercept
+  </li>
+  <li>OPNsense: Firewall → Aliases → URL Table type → point at a blocklist URL → auto-refreshed
+  </li>
+  <li>Create a floating rule: block any traffic matching the alias — applies across all interfaces at once
+  </li>
+  <li>Combine with DNS blocking: DNS catches domain-based connections, IP catches hardcoded bypasses
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Best IP Blocklist Sources</h3>
+            <ul>
+  <li><strong>Spamhaus DROP/EDROP</strong> — don't-route-or-peer lists: hijacked ASNs, malicious allocations
+  </li>
+  <li><strong>Abuse.ch Feodo Tracker</strong> — botnet C2 IPs: Emotet, TrickBot, Dridex infrastructure updated daily
+  </li>
+  <li><strong>Emerging Threats IP blocklist</strong> — known C2 and malware hosting IPs, matches the Suricata ruleset
+  </li>
+  <li><strong>Firehol Level 1</strong> — conservative merged list, minimal false positives, good baseline
+  </li>
+  <li><strong>CrowdSec</strong> — collaborative threat intelligence: IPs seen attacking other CrowdSec users globally
+  </li>
+  <li><code>os-crowdsec</code> plugin: community-sourced blocklist updated in near-real-time from attack observations
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Geo-Blocking and Considerations</h3>
+            <ul>
+  <li>OPNsense supports MaxMind GeoIP — block entire country IP ranges at the firewall level
+  </li>
+  <li>Useful for inbound only, or if you have no legitimate reason to communicate with specific regions
+  </li>
+  <li>CDNs serve from everywhere — geo-blocking will break legitimate services if applied broadly
+  </li>
+  <li>Blunt instrument: use narrowly, document what you block and why, maintain a whitelist
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>The Layered Defense Stack</h2>
+        <table>
+<thead><tr>
+  <th>Layer</th>
+  <th>Tool</th>
+  <th>What It Catches Uniquely</th>
+</tr></thead><tbody>
+<tr>
+  <td><strong>Device firewall</strong></td>
+  <td>WFC / OpenSnitch / Little Snitch</td>
+  <td>Which specific process made the connection</td>
+</tr>
+<tr>
+  <td><strong>DNS blocklist</strong></td>
+  <td>Unbound + Hagezi/OISD</td>
+  <td>Domain-based tracking, telemetry — all devices at once</td>
+</tr>
+<tr>
+  <td><strong>IP blocklist</strong></td>
+  <td>OPNsense Aliases + Firehol</td>
+  <td>Hardcoded IPs, known malicious ASNs, geo threats</td>
+</tr>
+<tr>
+  <td><strong>Suricata IDS/IPS</strong></td>
+  <td>ET Open + Abuse.ch rules</td>
+  <td>Malware behavior signatures, encrypted C2 by JA3 fingerprint</td>
+</tr>
+<tr>
+  <td><strong>ntopng</strong></td>
+  <td>nDPI flow analysis</td>
+  <td>Anomaly visibility, metadata analysis, full device inventory</td>
+</tr>
+<tr>
+  <td><strong>CrowdSec</strong></td>
+  <td>Collaborative CTI feed</td>
+  <td>IPs actively attacking other users right now, globally</td>
+</tr>
+</tbody></table>
+<ul>
+  <li>Each layer catches what the others miss — no single tool sees everything
+  </li>
+  <li>Stack them in order: device → DNS → IP → IDS → visibility
+  </li>
+  <li>Start with just OPNsense + DNS blocklists — that alone covers every device with zero per-device work
+  </li>
+  <li>Add Suricata in IDS mode next — tune for a week before switching anything to IPS/drop mode
+  </li>
+  <li>Add ntopng last — it's the visibility layer that shows you whether the blocking is working
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>What the Network Layer Catches That Devices Don't</h2>
+        <ul>
+  <li><strong>Your smart TV's full data diet — with no agent installed</strong>
+    <ul>
+      <li>Samsung, LG, Roku, Fire TV all phone home on a schedule regardless of any device-side setting</li>
+      <li>ACR (Automatic Content Recognition) fingerprints what you're watching and reports it to ad networks</li>
+      <li>DNS blocklist kills this for every TV on your network simultaneously — no configuration on the TV</li>
+    </ul>
+  </li>
+  <li><strong>The connection that happened before the device firewall loaded</strong>
+    <ul>
+      <li>On boot, some apps connect before per-app firewalls initialize — the network sees it regardless</li>
+    </ul>
+  </li>
+  <li><strong>Every device that joins your network — including guests</strong>
+    <ul>
+      <li>ntopng shows every device, every connection, including the ones you invited to the workshop</li>
+      <li>You have approximately zero privacy right now. Mwahahaha.</li>
+    </ul>
+  </li>
+  <li><strong>IoT devices with no user-facing controls whatsoever</strong>
+    <ul>
+      <li>Smart plugs, bulbs, thermostats, printers — all calling somewhere, nothing you can configure</li>
+      <li>Many contact Chinese cloud infrastructure by default — DNS and IP blocklists cut this off silently</li>
+    </ul>
+  </li>
+  <li><strong>Suricata catches the things that look normal but aren't</strong>
+    <ul>
+      <li>HTTPS traffic to a known malware C2 server on port 443 — looks like web traffic, JA3 says otherwise</li>
+      <li>DNS exfiltration: data encoded in subdomain strings — <code>a2f3b1c9d.exfil.attacker.com</code> — Suricata has rules</li>
+    </ul>
+  </li>
+  <li><strong>The bigger picture — two different views</strong>
+    <ul>
+      <li>Device tools show what your devices think they're doing</li>
+      <li>Network tools show what's actually happening — you want both views simultaneously</li>
+    </ul>
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>Resources</h2>
+        <table>
+<thead><tr>
+  <th>Tool</th>
+  <th>Link</th>
+</tr></thead><tbody>
+<tr>
+  <td><strong>OPNsense</strong></td>
+  <td>opnsense.org — download, docs, community forum</td>
+</tr>
+<tr>
+  <td><strong>OpenWRT</strong></td>
+  <td>openwrt.org — firmware + hardware compatibility table</td>
+</tr>
+<tr>
+  <td><strong>ntopng</strong></td>
+  <td>ntop.org/ntopng — standalone or OPNsense plugin <code>os-ntopng</code></td>
+</tr>
+<tr>
+  <td><strong>Suricata</strong></td>
+  <td>suricata.io — OPNsense plugin <code>os-suricata</code></td>
+</tr>
+<tr>
+  <td><strong>CrowdSec</strong></td>
+  <td>crowdsec.net — OPNsense plugin <code>os-crowdsec</code></td>
+</tr>
+<tr>
+  <td><strong>Hagezi DNS Blocklists</strong></td>
+  <td>github.com/hagezi/dns-blocklists</td>
+</tr>
+<tr>
+  <td><strong>Steven Black hosts</strong></td>
+  <td>github.com/StevenBlack/hosts</td>
+</tr>
+<tr>
+  <td><strong>OISD blocklist</strong></td>
+  <td>oisd.nl</td>
+</tr>
+<tr>
+  <td><strong>Abuse.ch</strong></td>
+  <td>abuse.ch — Feodo Tracker, URLhaus, SSL Blacklist</td>
+</tr>
+<tr>
+  <td><strong>Spamhaus DROP/EDROP</strong></td>
+  <td>spamhaus.org/drop</td>
+</tr>
+<tr>
+  <td><strong>Firehol blocklist-ipsets</strong></td>
+  <td>github.com/firehol/blocklist-ipsets</td>
+</tr>
+<tr>
+  <td><strong>Protectli Vault</strong></td>
+  <td>protectli.com — fanless purpose-built OPNsense boxes</td>
+</tr>
+<tr>
+  <td><strong>GL.iNet routers</strong></td>
+  <td>gl-inet.com — OpenWRT pre-installed, travel or home AP</td>
+</tr>
+</tbody></table>
+<h3>Further Reading</h3>
+<ul>
+  <li>OPNsense documentation: docs.opnsense.org
+  </li>
+  <li>ntopng user guide: ntop.org/guides/ntopng
+  </li>
+  <li>Suricata rules writing: suricata.readthedocs.io
+  </li>
+  <li>Emerging Threats ruleset changelog — good reading for what is active in the wild right now
+  </li>
+</ul>
+      </section>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      transition: 'fade',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      fragments: false,
+      progress: true,
+      slideNumber: 'c/t',
+      autoAnimateEasing: 'ease-out',
+      autoAnimateDuration: 0.65,
+      plugins: [ RevealHighlight, RevealNotes ]
+    });
+  </script>
+</body>
+</html>

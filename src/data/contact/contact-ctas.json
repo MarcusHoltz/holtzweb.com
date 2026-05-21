@@ -1,32 +1,42 @@
 [
   {
-    "emoji": "📊",
-    "title": "Investment Inquiry",
-    "description": "Considering a co-investment or partnership opportunity? Submit your mandate details and a member of our team will follow up with qualified prospective partners."
+    "emoji": "🖥️",
+    "title": "Server Checkup",
+    "description": "Every setup is different. Your distro, filesystem, bare metal or cloud, the works. We can discuss your system and implement any needs."
   },
   {
-    "emoji": "🏢",
-    "title": "Business Acquisition",
-    "description": "Operating a business and exploring a sale or recapitalization? Submit your details for a confidential preliminary evaluation from our deal team."
+    "emoji": "🌐",
+    "title": "Network Walkthrough",
+    "description": "Let's just take a look together. I'll walk you through what I see and we'll talk about what, if anything, makes sense to do next."
   },
   {
-    "emoji": "📋",
-    "title": "Portfolio Matter",
-    "description": "Existing portfolio company stakeholders, lender representatives, or board members may use this form for direct correspondence with the Apex Capital Group management team."
+    "emoji": "🌍",
+    "title": "Website Review",
+    "description": "Tell me about your site, what you wished it had. New Features? More SEO? Better Design? All three!? Share your thoughts and we can go from there."
+  },
+  {
+    "emoji": "🧠",
+    "title": "Start a Conversation",
+    "description": "Sometimes you just need someone to think through it out with you. Send me what's on your mind and I can give you my thoughts."
+  },
+  {
+    "emoji": "💡",
+    "title": "Dont Know Where to Start?",
+    "description": "Not sure where to start? That's what we're here for. Just send a message and get the flow of ideas started."
   },
   {
     "emoji": "🤝",
-    "title": "Institutional Partnership",
-    "description": "Family offices, institutional allocators, and intermediaries seeking to discuss deal flow, co-investment structures, or referral arrangements are welcome to reach out directly."
+    "title": "Let's Talk",
+    "description": "Tell me what you're working on. I'm always excited to hear, and happy to help however I can."
   },
   {
-    "emoji": "⚖️",
-    "title": "Legal or Compliance",
-    "description": "Regulatory filings, compliance inquiries, and legal correspondence should be directed here. All legal communications are logged and routed to counsel."
+    "emoji": "⚡",
+    "title": "Just a Message",
+    "description": "Not a big deal — just shoot me a message and we'll talk. Sometimes 1 message is all it takes to get that A-HA moment."
   },
   {
-    "emoji": "📬",
-    "title": "General Inquiry",
-    "description": "For inquiries not covered above, use this form to reach the appropriate team. Include sufficient context so the correct party can respond promptly."
+    "emoji": "😄",
+    "title": "Wanna Talk?",
+    "description": "Want to talk about the thing you built. How about the idea of the thing you're about to build? Message me."
   }
 ]

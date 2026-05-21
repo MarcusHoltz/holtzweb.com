@@ -1,6 +1,6 @@
 {
-  "welcomeText": "Apex Capital Group",
-  "ctaText": "Investor Inquiry",
+  "welcomeText": "Welcome to Holtzweb",
+  "ctaText": "Contact Us Now",
   "navItems": [
     { "label": "Home", "href": "/", "iconKey": "home" },
     {
@@ -8,10 +8,10 @@
       "href": "/services",
       "iconKey": "server",
       "children": [
-        { "label": "Acquisition & Intake", "href": "/services/acquisition-intake", "iconKey": "terminal" },
-        { "label": "Operational Efficiency", "href": "/services/operational-efficiency", "iconKey": "network" },
-        { "label": "Portfolio Disposition", "href": "/services/portfolio-disposition", "iconKey": "star" },
-        { "label": "Leadership Transition", "href": "/services/leadership-transition", "iconKey": "support" }
+        { "label": "WordPress & Web Dev", "href": "/services/wordpress-web-development", "iconKey": "wordpress" },
+        { "label": "Linux Server Admin", "href": "/services/linux-server-administration", "iconKey": "terminal" },
+        { "label": "Networking & Infrastructure", "href": "/services/networking-infrastructure", "iconKey": "network" },
+        { "label": "Consulting & Support", "href": "/services/consulting-project-support", "iconKey": "support" }
       ]
     },
     { "label": "About", "href": "/about", "iconKey": "user" },
@@ -25,33 +25,32 @@
         { "label": "Timeline", "href": "/blog/timeline", "iconKey": "clock" }
       ]
     },
-    { "label": "Portfolio", "href": "/projects", "iconKey": "monitor" },
+    { "label": "Projects", "href": "/projects", "iconKey": "monitor" },
     { "label": "Contact", "href": "/contact", "iconKey": "mail" }
   ],
-  "footerTagline": "Investor Relations — Voice or Message",
+  "sidebarSocialLabel": "Social",
+  "sidebarOtherSitesLabel": "Other Sites",
+  "otherSites": [
+    { "label": "marcusholtz.com", "href": "https://marcusholtz.com", "iconKey": "user-outline" },
+    { "label": "holtzhost.com",   "href": "https://holtzhost.com",   "iconKey": "home-outline" }
+  ],
+  "footerTagline": "Contact Us - Voice or Message",
   "footerLinks": {
     "Services": [
-      { "label": "Acquisition & Intake", "href": "/services/acquisition-intake" },
-      { "label": "Operational Efficiency", "href": "/services/operational-efficiency" },
-      { "label": "Portfolio Disposition", "href": "/services/portfolio-disposition" },
-      { "label": "Leadership Transition", "href": "/services/leadership-transition" }
+      { "label": "WordPress & Web Dev", "href": "/services/wordpress-web-development" },
+      { "label": "Linux Server Admin", "href": "/services/linux-server-administration" },
+      { "label": "Networking & Infrastructure", "href": "/services/networking-infrastructure" },
+      { "label": "Consulting & Support", "href": "/services/consulting-project-support" }
     ],
     "Company": [
       { "label": "About Us", "href": "/about" },
-      { "label": "Portfolio", "href": "/projects" },
       { "label": "Blog", "href": "/blog" },
+      { "label": "Projects", "href": "/projects" },
       { "label": "Contact", "href": "/contact" }
     ],
     "Legal": [
       { "label": "Privacy Policy", "href": "/privacy" },
       { "label": "Terms of Service", "href": "/terms" }
     ]
-  },
-  "sidebarSocialLabel": "Social",
-  "sidebarOtherSitesLabel": "Other Sites",
-  "otherSites": [
-    { "label": "Secure Client Access", "href": "https://client.apexcap.example", "iconKey": "user-outline" },
-    { "label": "Investor Relations", "href": "mailto:ir@apexcap.example", "iconKey": "home-outline" }
-  ]
+  }
 }
-

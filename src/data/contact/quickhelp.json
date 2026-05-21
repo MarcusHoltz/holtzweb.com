@@ -1,28 +1,28 @@
 {
   "sectionLabel": "Quick Contact",
-  "heading": "What are we discussing?",
-  "blurb": "Tell us in a few seconds. Select the topic below, provide your contact information, and we will follow up appropriately.",
-  "stepLabels": ["Select topic", "Your info"],
+  "heading": "What are we working on?",
+  "blurb": "Tell us in a few seconds. Pick your topic below, fill-in your info, send it our way. No message required.",
+  "stepLabels": ["Pick a topic", "Your info"],
   "services": [
-    { "label": "Acquisition",   "subLabel": "Deal sourcing & intake",      "serviceValue": "Acquisition Inquiry",     "iconKey": "search"     },
-    { "label": "Investor",      "subLabel": "LP & investor relations",      "serviceValue": "Investor Relations",      "iconKey": "chart"      },
-    { "label": "Operations",    "subLabel": "Portfolio company support",    "serviceValue": "Portfolio Operations",    "iconKey": "settings"   },
-    { "label": "Leadership",    "subLabel": "Management & transition",      "serviceValue": "Leadership Transition",   "iconKey": "person"     },
-    { "label": "Exit Planning", "subLabel": "Disposition & sale",          "serviceValue": "Portfolio Disposition",   "iconKey": "lightbulb2" },
-    { "label": "Other",         "subLabel": "General inquiry",              "serviceValue": "General Inquiry",         "iconKey": "list"       }
+    { "label": "Server Admin",  "subLabel": "DevSecOps & Infrastructure",   "serviceValue": "Server Admin",          "iconKey": "server"    },
+    { "label": "Networking",    "subLabel": "Connectivity & VPN",      "serviceValue": "Networking",                 "iconKey": "network"   },
+    { "label": "Website",       "subLabel": "Design & Development",   "serviceValue": "Website Development",         "iconKey": "wordpress" },
+    { "label": "Consulting",    "subLabel": "Strategy & Planning",    "serviceValue": "Consulting",                  "iconKey": "person"    },
+    { "label": "General Contact","subLabel": "Quick Support",         "serviceValue": "Use Contact Page for Full Messages",  "iconKey": "lightbulb2" },
+    { "label": "Not Sure",      "subLabel": "Let's figure it out",    "serviceValue": "Not Sure",                    "iconKey": "list"      }
   ],
   "formLabels": {
     "name": "Your Name",
     "email": "Email",
-    "namePlaceholder": "Name or Company",
-    "emailPlaceholder": "your_email@company.example"
+    "namePlaceholder": "Bob Fulan",
+    "emailPlaceholder": "your_email@gcloudimail.com"
   },
   "buttons": {
     "next": "Next",
     "back": "Back",
     "submit": "Send It"
   },
-  "footerNote": "Expect a confirmation and a response within one business day.",
-  "successTitle": "Received.",
-  "successMessage": "Expect a response from our team to the email you provided."
+  "footerNote": "Expect an auto-reply letting you know the message was received.",
+  "successTitle": "We got it.",
+  "successMessage": "Expect a reply from us soon. We'll reach out to the email you provided."
 }

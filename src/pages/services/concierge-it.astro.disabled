@@ -1,0 +1,261 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Footer from "@/components/Footer.astro";
+import siteData from "@/data/global/site.json";
+import { withBase } from "@/lib/assetPath";
+import { icons } from "@/lib/icons";
+
+const tiers = [
+  {
+    name: "Essential",
+    description: "Automated monitoring and patching for small teams",
+    price: "Starting at $149/mo",
+    features: [
+      "Automated OS & app patching",
+      "Uptime monitoring (5-min intervals)",
+      "Daily automated backups",
+      "Email + SMS alerting",
+      "Monthly health report",
+      "1 business-day human response",
+    ],
+    cta: "Get Started",
+    highlight: false,
+  },
+  {
+    name: "Managed",
+    description: "Full automation + priority human support",
+    price: "Starting at $349/mo",
+    features: [
+      "Everything in Essential",
+      "Custom runbook automation",
+      "Security vulnerability scanning",
+      "4-hour human response SLA",
+      "Quarterly infrastructure review",
+      "Compliance reporting",
+      "Dedicated engineer contact",
+    ],
+    cta: "Most Popular",
+    highlight: true,
+  },
+  {
+    name: "Enterprise",
+    description: "Custom automation for complex environments",
+    price: "Custom pricing",
+    features: [
+      "Everything in Managed",
+      "Multi-site / multi-cloud support",
+      "1-hour emergency response SLA",
+      "On-site visits included",
+      "Custom integration development",
+      "Annual security audit",
+      "Executive reporting",
+    ],
+    cta: "Contact Us",
+    highlight: false,
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: `Concierge IT by ${siteData.name}`,
+  description: "Managed IT automation service with human escalation. Automated patching, monitoring, backups, and runbooks for businesses.",
+  brand: { "@type": "Brand", name: siteData.name },
+  offers: tiers.map((t) => ({
+    "@type": "Offer",
+    name: t.name,
+    description: t.description,
+  })),
+};
+---
+
+<Layout
+  title="Concierge IT — Automated IT Management"
+  description={`${siteData.name} Concierge IT: automated patching, monitoring, backups, and runbook automation with real human engineers on standby. IT on autopilot — until it needs a human.`}
+  schema={schema}
+>
+  <div class="px-6 lg:px-12 py-16">
+    <div class="max-w-5xl mx-auto">
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb" class="mb-8">
+        <ol class="flex items-center gap-2 text-sm text-site-muted font-mono">
+          <li><a href={withBase('/')} data-astro-reload class="hover:text-white transition-colors">Home</a></li>
+          <li class="text-site-border">/</li>
+          <li><a href={withBase('/services')} class="hover:text-white transition-colors">Services</a></li>
+          <li class="text-site-border">/</li>
+          <li class="text-electric-cyan">Concierge IT</li>
+        </ol>
+      </nav>
+
+      <!-- Hero -->
+      <div class="mb-16">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-electric-cyan/30 bg-electric-cyan/5 mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-matrix animate-pulse"></span>
+          <span class="text-xs font-mono font-medium text-electric-cyan tracking-wider uppercase">Flagship Product</span>
+        </div>
+
+        <h1 class="font-display font-bold text-4xl sm:text-5xl text-white mb-6 leading-tight">
+          Concierge IT —<br />
+          <span class="bg-cta-gradient bg-clip-text text-transparent">Your IT on autopilot.</span>
+        </h1>
+
+        <p class="text-site-text-muted text-xl leading-relaxed max-w-3xl mb-6">
+          Inspired by private cloud concierge services, we built something better: a fully automated IT management platform with real engineers in the loop.
+          The robots handle the routine. The humans handle everything else.
+        </p>
+
+        <p class="text-site-text-muted leading-relaxed max-w-3xl">
+          Automated patching on your schedule. Backups that get tested. Runbooks that execute themselves. Monitoring that doesn't require you to stare at dashboards.
+          And when something actually needs attention — a person who knows your environment calls you back.
+        </p>
+      </div>
+
+      <!-- How it works -->
+      <div class="mb-16">
+        <h2 class="font-display font-bold text-2xl text-white mb-8">How Concierge IT works</h2>
+        <div class="relative">
+          <div class="absolute left-6 top-8 bottom-8 w-px bg-site-border/60 hidden sm:block" aria-hidden="true"></div>
+          <div class="space-y-6">
+            {[
+              {
+                step: "01",
+                title: "We audit your environment",
+                description: "We connect to your infrastructure (servers, network, cloud) and build a complete map. No surprises about what you have.",
+                icon: "🔍",
+              },
+              {
+                step: "02",
+                title: "We automate the repetitive work",
+                description: "Patching schedules, backup jobs, SSL renewals, log rotation, user onboarding — anything done on a schedule becomes a runbook.",
+                icon: "⚡",
+              },
+              {
+                step: "03",
+                title: "Continuous monitoring kicks in",
+                description: "Every service, every server, every 60 seconds. Alerts route to dashboards first, humans second — no alert fatigue for you.",
+                icon: "👁",
+              },
+              {
+                step: "04",
+                title: "Humans handle what needs judgment",
+                description: "When automation hits a decision point or something unexpected happens, a real engineer steps in. You get a call, not a ticket.",
+                icon: "🤝",
+              },
+              {
+                step: "05",
+                title: "Monthly reports, plain English",
+                description: "What ran, what was fixed, what we're watching. No dashboards you have to decode — a clear summary of your IT health.",
+                icon: "📊",
+              },
+            ].map((item) => (
+              <div class="flex gap-6 pl-0 sm:pl-16 relative">
+                <div class="absolute left-0 top-1 w-12 h-12 rounded-full border border-site-border bg-site-surface flex items-center justify-center text-xl hidden sm:flex flex-shrink-0">
+                  {item.icon}
+                </div>
+                <div class="p-5 rounded-xl border border-site-border/60 bg-site-surface/30 flex-1">
+                  <div class="flex items-center gap-3 mb-2">
+                    <span class="text-xs font-mono font-bold text-site-muted">{item.step}</span>
+                    <h3 class="font-semibold text-white">{item.title}</h3>
+                  </div>
+                  <p class="text-site-muted text-sm leading-relaxed">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing tiers -->
+      <div class="mb-16">
+        <h2 class="font-display font-bold text-2xl text-white mb-3">Pricing</h2>
+        <p class="text-site-muted mb-8">Flat-rate pricing. No per-device fees. No surprise overages.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {tiers.map((tier) => (
+            <div class={`relative flex flex-col p-6 rounded-2xl border transition-all duration-200 ${
+              tier.highlight
+                ? "border-electric-cyan/40 bg-electric-cyan/5 shadow-glow-cyan"
+                : "border-site-border/60 bg-site-surface/30"
+            }`}>
+              {tier.highlight && (
+                <div class="absolute -top-px left-1/2 -translate-x-1/2">
+                  <span class="inline-block px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-b-lg bg-cta-gradient text-white">
+                    Most Popular
+                  </span>
+                </div>
+              )}
+              <div class={tier.highlight ? "mt-4" : ""}>
+                <h3 class="font-display font-bold text-xl text-white mb-1">{tier.name}</h3>
+                <p class="text-site-muted text-sm mb-4">{tier.description}</p>
+                <p class="text-electric-cyan font-bold text-lg mb-6">{tier.price}</p>
+
+                <ul class="space-y-2.5 mb-8 flex-1">
+                  {tier.features.map((feature) => (
+                    <li class="flex items-start gap-2.5 text-sm text-site-text">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-matrix flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" set:html={icons['check']} />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <a
+                  href={withBase('/contact')}
+                  class={`w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
+                    tier.highlight
+                      ? "bg-cta-gradient text-white shadow-glow-sm hover:shadow-glow-md"
+                      : "border border-site-border bg-site-surface text-site-text hover:border-electric-blue/40 hover:text-white"
+                  }`}
+                >
+                  {tier.highlight ? tier.cta : "Get Started"}
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="mb-16">
+        <h2 class="font-display font-bold text-2xl text-white mb-8">Common questions</h2>
+        <div class="space-y-3">
+          {[
+            {
+              q: "Do I need to change my existing infrastructure?",
+              a: "No. We work with what you have. We'll audit your environment and integrate our monitoring and automation tools without requiring a full migration.",
+            },
+            {
+              q: "What if the automation breaks something?",
+              a: "Everything runs in a staging-first model when possible, and humans review changes before production deployment for critical systems. We also keep rollback points for every automated action.",
+            },
+            {
+              q: "How is this different from a standard MSP?",
+              a: "Traditional MSPs wait for you to submit tickets. Concierge IT catches problems before you notice them, resolves them automatically when possible, and escalates to a human engineer — not a support queue — when needed.",
+            },
+            {
+              q: "What systems do you support?",
+              a: "Linux (Ubuntu, Debian, RHEL, CentOS, Rocky), Windows Server, cloud environments (AWS, DigitalOcean, Hetzner, Linode), and hybrid setups. If it has an API or SSH access, we can monitor and automate it.",
+            },
+          ].map((item) => (
+            <details class="group p-5 rounded-xl border border-site-border/60 bg-site-surface/30 cursor-pointer">
+              <summary class="flex items-center justify-between gap-4 list-none font-semibold text-white text-sm">
+                {item.q}
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-site-muted flex-shrink-0 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" set:html={icons['chevron-down']} />
+              </summary>
+              <p class="mt-3 text-site-muted text-sm leading-relaxed">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <!-- Bottom CTA -->
+      <div class="p-8 rounded-2xl border border-electric-blue/20 bg-site-surface/40 text-center">
+        <h2 class="font-display font-bold text-2xl text-white mb-3">Ready to automate your IT?</h2>
+        <p class="text-site-muted mb-6">Schedule a free infrastructure audit — we'll show you exactly what Concierge IT would automate in your environment.</p>
+        <a href={withBase('/contact')} class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-cta-gradient text-white font-semibold shadow-glow-md hover:shadow-glow-lg transition-all duration-300 hover:scale-105">
+          Schedule Free Audit →
+        </a>
+      </div>
+    </div>
+  </div>
+  <Footer />
+</Layout>

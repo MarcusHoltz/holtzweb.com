@@ -1,0 +1,170 @@
+---
+import personalData from '@/data/global/personal.json';
+import marcusData from '@/data/home/marcus.json';
+import { icons } from '../lib/icons';
+---
+
+<div class="site-band"></div>
+
+<section id="marcus" aria-labelledby="marcus-heading" class="py-16 lg:py-24 relative" style="background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-deep) 100%);">
+
+  <!-- Subtle dot grid overlay -->
+  <div class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(circle, rgb(var(--primary-ch) / 0.05) 1px, transparent 1px); background-size: 28px 28px;"></div>
+
+  <div class="relative z-10 w-full max-w-5xl mx-auto px-6 lg:px-12">
+
+    <!-- Section heading -->
+    <div class="flex items-center gap-3 mb-3">
+      <div class="h-px w-8" style="background: var(--color-primary);"></div>
+      <span class="text-xs font-mono font-semibold tracking-[3px] uppercase" style="color: var(--color-primary);">{marcusData.sectionLabel}</span>
+    </div>
+    <h2 id="marcus-heading" class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-white uppercase tracking-wide mb-10">
+      {marcusData.heading} <span style="color: var(--color-primary);">{marcusData.headingAccent}</span>
+    </h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Left: bio + info grid -->
+      <div class="lg:col-span-2">
+        <div class="p-6 border border-site-border/60 bg-site-surface/30 rounded-xl backdrop-blur-sm">
+          <p class="text-site-text-muted leading-relaxed mb-6 text-sm lg:text-base">
+            {personalData.aboutLong}
+          </p>
+
+          <div class="h-px bg-site-border/40 my-6"></div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+            <!-- Role -->
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background: rgb(var(--primary-ch) / 0.08); border: 1px solid rgb(var(--primary-ch) / 0.15);">
+                <svg aria-hidden="true" class="w-5 h-5" style="color: var(--color-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" set:html={icons['briefcase']} />
+              </div>
+              <div>
+                <p class="text-[10px] font-mono font-semibold uppercase tracking-[2px] text-site-muted mb-1">{marcusData.infoLabels.role}</p>
+                <p class="text-sm text-site-text font-medium leading-snug">{personalData.title}</p>
+              </div>
+            </div>
+
+            <!-- Location -->
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background: rgb(var(--primary-ch) / 0.08); border: 1px solid rgb(var(--primary-ch) / 0.15);">
+                <svg aria-hidden="true" class="w-5 h-5" style="color: var(--color-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" set:html={icons['map-pin']} />
+              </div>
+              <div>
+                <p class="text-[10px] font-mono font-semibold uppercase tracking-[2px] text-site-muted mb-1">{marcusData.infoLabels.location}</p>
+                <p class="text-sm text-site-text font-medium">{personalData.location}</p>
+              </div>
+            </div>
+
+            <!-- Experience -->
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background: rgb(var(--primary-ch) / 0.08); border: 1px solid rgb(var(--primary-ch) / 0.15);">
+                <svg aria-hidden="true" class="w-5 h-5" style="color: var(--color-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" set:html={icons['clock']} />
+              </div>
+              <div>
+                <p class="text-[10px] font-mono font-semibold uppercase tracking-[2px] text-site-muted mb-1">{marcusData.infoLabels.experience}</p>
+                <p class="text-sm text-site-text font-medium">{personalData.yearsExperience}{marcusData.infoLabels.experienceSuffix}</p>
+              </div>
+            </div>
+
+            <!-- Education -->
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background: rgb(var(--primary-ch) / 0.08); border: 1px solid rgb(var(--primary-ch) / 0.15);">
+                <svg aria-hidden="true" class="w-5 h-5" style="color: var(--color-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" set:html={icons['academic-cap']} />
+              </div>
+              <div>
+                <p class="text-[10px] font-mono font-semibold uppercase tracking-[2px] text-site-muted mb-1">{marcusData.infoLabels.education}</p>
+                <p class="text-sm text-site-text font-medium leading-snug">{personalData.education}</p>
+              </div>
+            </div>
+
+            <!-- Blog -->
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background: rgb(var(--primary-ch) / 0.08); border: 1px solid rgb(var(--primary-ch) / 0.15);">
+                <svg aria-hidden="true" class="w-5 h-5" style="color: var(--color-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" set:html={icons['book-open']} />
+              </div>
+              <div>
+                <p class="text-[10px] font-mono font-semibold uppercase tracking-[2px] text-site-muted mb-1">{marcusData.infoLabels.blog}</p>
+                <a href={personalData.blog_url} target="_blank" rel="noopener noreferrer"
+                  class="text-sm font-mono transition-colors hover:underline" style="color: var(--color-primary);">
+                  blog.holtzweb.com
+                </a>
+              </div>
+            </div>
+
+            <!-- GitHub -->
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background: rgb(var(--primary-ch) / 0.08); border: 1px solid rgb(var(--primary-ch) / 0.15);">
+                <svg aria-hidden="true" class="w-5 h-5" style="color: var(--color-primary);" fill="currentColor" viewBox="0 0 24 24" set:html={icons['github']} />
+              </div>
+              <div>
+                <p class="text-[10px] font-mono font-semibold uppercase tracking-[2px] text-site-muted mb-1">{marcusData.infoLabels.openSource}</p>
+                <a href={`https://github.com/${personalData.github}`} target="_blank" rel="noopener noreferrer"
+                  class="text-sm font-mono transition-colors hover:underline" style="color: var(--color-primary);">
+                  github.com/{personalData.github}
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: CTA cards -->
+      <div class="flex flex-col gap-5">
+
+        <!-- marcusholtz.com card -->
+        <a
+          href={personalData.personal_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group flex flex-col p-6 border rounded-xl bg-site-surface/20 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-site-surface/40"
+          style="border-color: rgb(var(--primary-ch) / 0.2);"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgb(var(--primary-ch) / 0.12); border: 1px solid rgb(var(--primary-ch) / 0.2);">
+              <svg aria-hidden="true" class="w-4 h-4" style="color: var(--color-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" set:html={icons['user-outline']} />
+            </div>
+            <span class="text-[10px] font-mono font-semibold uppercase tracking-[2px] text-site-muted">{marcusData.personalSiteCard.label}</span>
+          </div>
+          <p class="font-display font-bold text-xl text-site-text mb-2 group-hover:text-electric-cyan transition-colors">{marcusData.personalSiteCard.displayName}</p>
+          <p class="text-xs text-site-muted leading-relaxed flex-1">
+            {marcusData.personalSiteCard.description}
+          </p>
+          <div class="mt-4 flex items-center gap-1 text-xs font-mono" style="color: var(--color-primary);">
+            {marcusData.personalSiteCard.visitLabel}
+            <svg aria-hidden="true" class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" set:html={icons['external-link-v2']} />
+          </div>
+        </a>
+
+        <!-- Quick stats -->
+        <div class="p-5 border border-site-border/40 rounded-xl bg-site-surface/20">
+          <p class="text-[10px] font-mono font-semibold uppercase tracking-[2px] text-site-muted mb-4">{marcusData.quickStats.label}</p>
+          <div class="space-y-3">
+            {marcusData.quickStats.items.map((item, i) => (
+              <>
+                {i > 0 && <div class="h-px bg-site-border/30"></div>}
+                <div class="flex justify-between items-center">
+                  <span class="text-xs text-site-muted font-mono">{item.key}</span>
+                  {'linkBase' in item
+                    ? <a href={`${(item as any).linkBase}${(personalData as any)[(item as any).valueKey]}`} target="_blank" rel="noopener noreferrer"
+                        class="text-xs font-mono transition-colors hover:underline" style="color: var(--color-primary);">
+                        {(item as any).prefix}{(personalData as any)[(item as any).valueKey]}
+                      </a>
+                    : <span class="text-sm font-bold font-mono" style="color: var(--color-primary);">
+                        {'value' in item
+                          ? (item as any).value
+                          : (personalData as any)[(item as any).valueKey] + ((item as any).suffix ?? '')}
+                      </span>
+                  }
+                </div>
+              </>
+            ))}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

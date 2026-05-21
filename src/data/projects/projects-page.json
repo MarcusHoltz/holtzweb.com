@@ -1,22 +1,20 @@
 {
-  "pageTitle": "Portfolio — Apex Capital Group",
-  "pageDescription": "Apex Capital Group portfolio companies across manufacturing, services, consumer, industrial, healthcare, and distribution sectors.",
-  "featuredEyebrow": "Portfolio Highlights",
+  "pageTitle": "Projects & Builds — Holtzweb",
+  "pageDescription": "Every project, build, and system Marcus has shipped — infrastructure automation, self-hosted apps, networking, security, and more.",
+  "featuredEyebrow": "Highlighted Work",
   "featuredHeading": "Featured",
-  "featuredAccent": "Holdings",
-  "allEyebrow": "Full Portfolio",
-  "allHeading": "Portfolio",
-  "allAccent": "Companies",
-  "viewAllLabel": "View full portfolio",
-  "viewAllUnit": "companies",
-  "featuredPortfolioLabel": "Portfolio Highlights",
+  "featuredAccent": "Projects",
+  "allEyebrow": "All Work",
+  "allHeading": "Projects &",
+  "allAccent": "Builds",
+  "viewAllLabel": "View all",
+  "viewAllUnit": "projects",
   "filters": [
-    { "label": "All",           "value": "all" },
-    { "label": "Manufacturing", "value": "manufacturing" },
-    { "label": "Services",      "value": "services" },
-    { "label": "Consumer",      "value": "consumer" },
-    { "label": "Industrial",    "value": "industrial" },
-    { "label": "Healthcare",    "value": "healthcare" },
-    { "label": "Distribution",  "value": "distribution" }
+    { "label": "All",            "value": "all" },
+    { "label": "Infrastructure", "value": "infrastructure" },
+    { "label": "DevOps",         "value": "devops" },
+    { "label": "Security",       "value": "security" },
+    { "label": "Web Dev",        "value": "web" },
+    { "label": "Talks",          "value": "talks" }
   ]
 }

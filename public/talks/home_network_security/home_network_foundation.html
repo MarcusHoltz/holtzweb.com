@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Open Source Home Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="css/theme-cyber.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class="title-slide" data-background-gradient="radial-gradient(ellipse at 40% 50%, rgba(57,255,20,0.06) 0%, transparent 55%), radial-gradient(ellipse at 70% 60%, rgba(192,132,252,0.06) 0%, transparent 55%)">
+        <h1 class="r-fit-text">Open Source Home Network</h1>
+    <h3>The Foundation</h3>
+    <p class="meta"><em>Your ISP gave you a router. It works for your ISP.</em></p>
+    <p class="meta">This is the stack that works for you instead.</p>
+      </section>
+      <section>
+        <h2>Why Replace Your ISP Router?</h2>
+        <ul>
+  <li><strong>Your ISP router reports back to your ISP</strong>
+    <ul>
+      <li>Connected devices, usage patterns, DNS queries — all visible upstream by design</li>
+      <li>Firmware you didn't choose, can't audit, and can't update on your own schedule</li>
+      <li>Remote management ports your ISP can reach — and anyone who finds them can too</li>
+    </ul>
+  </li>
+  <li><strong>Consumer routers are built to a price point, not a security standard</strong>
+    <ul>
+      <li>Security patches stop after 12–18 months — your router runs unpatched for years after that</li>
+      <li>No real VLAN support, no per-device firewall rules, no traffic visibility or logging</li>
+      <li>"Guest WiFi" that doesn't actually isolate the guest from your LAN in practice</li>
+    </ul>
+  </li>
+  <li><strong>Open source gives you the actual controls</strong>
+    <ul>
+      <li>You choose what runs, what updates, what phones home — the answer to the last one is nothing</li>
+      <li>Real VLAN segmentation: IoT devices cannot reach your NAS, full stop</li>
+      <li>Per-device firewall rules, traffic shaping, DNS control, VPN, IDS — all in one box you own</li>
+    </ul>
+  </li>
+  <li><strong>The two-device stack: OpenWRT + OPNsense</strong>
+    <ul>
+      <li>OpenWRT: the access layer — manages WiFi radios, SSIDs, and VLANs at the AP</li>
+      <li>OPNsense: the routing and firewall layer — all policy, all security lives here</li>
+      <li>Split by function: easier to reason about, easier to upgrade each independently</li>
+    </ul>
+  </li>
+  <li><strong>Cost is lower than you think</strong>
+    <ul>
+      <li>OpenWRT AP: GL.iNet travel router (~$40–80) or flash your existing router for free</li>
+      <li>OPNsense box: old mini PC + dual NIC (~$50–100) or Protectli Vault (~$200)</li>
+      <li>Less than one year of a "security" subscription router that does a fraction of this</li>
+    </ul>
+  </li>
+  <li><strong>What you get that your ISP router cannot provide</strong>
+    <ul>
+      <li>Full visibility into every device, every connection, every DNS query on your network</li>
+      <li>Firewall rules your IoT lightbulbs can't bypass, no matter what firmware they run</li>
+    </ul>
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>The Two-Device Architecture</h2>
+        <pre><code class="language-text" data-trim data-noescape data-line-numbers>[ Devices — phones, laptops, IoT, guests ]
+         |
+         |  WiFi / Ethernet
+         ▼
+  ┌─────────────────────────────────────┐
+  │         OpenWRT Access Point        │
+  │                                     │
+  │  SSID: Home    → VLAN 10            │
+  │  SSID: IoT     → VLAN 20            │
+  │  SSID: Guest   → VLAN 30 (OpenNDS)  │
+  │  SSID: 🎯emoji → VLAN 40 (rotating) │
+  └──────────────┬──────────────────────┘
+                 │  Tagged trunk (all VLANs on one cable)
+                 │  "Router on a stick"
+                 ▼
+  ┌─────────────────────────────────────┐
+  │           OPNsense Router           │
+  │                                     │
+  │  ├── VLAN interfaces + DHCP pools   │
+  │  ├── Firewall rules per VLAN        │
+  │  ├── Unbound DNS (per-VLAN views)   │
+  │  ├── Caddy reverse proxy            │
+  │  ├── WireGuard VPN gateway          │
+  │  ├── Suricata IDS/IPS               │
+  │  └── ntopng traffic monitor         │
+  └──────────────┬──────────────────────┘
+                 │
+                 ▼
+         [ Your ISP / Internet ]</code></pre>
+<ul>
+  <li>One cable carries all VLANs between OpenWRT and OPNsense — 802.1Q tagged trunk
+  </li>
+  <li>OPNsense owns all routing decisions: inter-VLAN traffic must pass through it
+  </li>
+  <li>IoT VLAN cannot reach Home VLAN unless OPNsense explicitly allows it — it doesn't
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>OpenWRT — DSA VLAN Segmentation</h2>
+        <p><strong>Source: blog.holtzweb.com/posts/openwrt-dsa-networking-vlans-with-opnsense/</strong></p>
+        <div class="cols-3">
+          <div class="panel">
+            <h3>What DSA Is and Why It Matters</h3>
+            <ul>
+  <li>Distributed Switch Architecture — the new OpenWRT switch management model (OpenWRT 21+)
+  </li>
+  <li>Replaces the old <code>switch</code> section in LuCI — older guides showing a "Switch" tab are outdated
+  </li>
+  <li>Router on a stick: OpenWRT is the AP, OPNsense is the router — one cable carries all VLANs tagged
+  </li>
+  <li>OPNsense defines the VLANs, IP ranges, and DHCP pools — OpenWRT just relays them upstream
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Setting It Up in OpenWRT (DSA)</h3>
+            <ul>
+  <li>Create a bridge device — select the interface plugged into OPNsense as a member
+  </li>
+  <li>Enable Bridge VLAN filtering on that bridge
+  </li>
+  <li>Bridge VLAN filtering tab: set VLAN IDs, mark uplink port as tagged, device-facing ports as untagged
+  </li>
+  <li>Create a separate interface per VLAN using DHCP client mode, bound to <code>br-lan.VLANID</code>
+  </li>
+  <li>Assign each WiFi SSID to its corresponding VLAN interface in the wireless config
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>On the OPNsense Side</h3>
+            <ul>
+  <li>Interfaces → Other Types → VLAN — create one per VLAN ID on the trunk interface
+  </li>
+  <li>Assign each VLAN interface, enable DHCP server per VLAN with its own subnet and range
+  </li>
+  <li>Firewall rules: default is no inter-VLAN communication — add only what you explicitly need
+  </li>
+  <li>Result: IoT VLAN gets internet, cannot ping or scan anything on Home VLAN — OPNsense enforces this
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>OpenWRT — SSID Separation and Client Isolation</h2>
+        <h3>SSID Layout and Purpose</h3>
+<table>
+<thead><tr>
+  <th>SSID</th>
+  <th>VLAN</th>
+  <th>Purpose</th>
+  <th>Internet</th>
+  <th>Sees LAN?</th>
+</tr></thead><tbody>
+<tr>
+  <td>Home</td>
+  <td>10</td>
+  <td>Trusted devices — phones, laptops, desktops</td>
+  <td>Yes</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td>IoT</td>
+  <td>20</td>
+  <td>Smart TVs, bulbs, plugs, printers</td>
+  <td>Yes</td>
+  <td>No</td>
+</tr>
+<tr>
+  <td>Guest</td>
+  <td>30</td>
+  <td>Visitors — hits captive portal first</td>
+  <td>Yes</td>
+  <td>No</td>
+</tr>
+<tr>
+  <td>Select</td>
+  <td>40</td>
+  <td>Rotating credentials — contractors, select access</td>
+  <td>Yes</td>
+  <td>No</td>
+</tr>
+</tbody></table>
+<h3>Client Isolation — Devices on the Same SSID</h3>
+<ul>
+  <li>Without client isolation: two devices on the same SSID can talk to each other directly at L2
+  </li>
+  <li>With client isolation: each device is isolated — they can only reach the router (gateway), not each other
+  </li>
+  <li>OpenWRT: Wireless → Interface → Advanced Settings → <strong>Isolate Clients</strong> → checked
+  </li>
+  <li>Essential on Guest and IoT: you don't want your Roomba scanning your printer
+  </li>
+  <li>Your Roomba is fully capable of scanning your printer — IoT firmware is not to be trusted
+  </li>
+</ul>
+<h3>Why This Matters for IoT Specifically</h3>
+<ul>
+  <li>IoT devices run old firmware with no update path — one compromised bulb is the beachhead for an attacker
+  </li>
+  <li>VLAN isolation: the compromised device can reach the internet (to phone home) and nothing else on LAN
+  </li>
+  <li>Client isolation: the compromised device can't even see other IoT devices on the same SSID
+  </li>
+  <li>ntopng will show you exactly what your IoT devices are calling — then decide if that's acceptable
+  </li>
+  <li>Band steering: same SSID on 2.4GHz and 5GHz — both tied to same VLAN, IoT devices join 2.4GHz naturally
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>OpenWRT — Captive Portal with OpenNDS</h2>
+        <p><strong>Source: holtzweb.com/openwrt-presentation.html</strong></p>
+        <div class="cols-3">
+          <div class="panel">
+            <h3>What a Captive Portal Does and Why</h3>
+            <ul>
+  <li>Intercepts all HTTP traffic from new clients and redirects them to a splash page before internet access
+  </li>
+  <li>Client must accept terms, enter a code, or authenticate — same system hotels and coffee shops run
+  </li>
+  <li>Forces acknowledgment of acceptable use, logged with timestamp — useful for events and workshops
+  </li>
+  <li>Session timeouts: guest access expires automatically — you don't have to revoke passwords
+  </li>
+  <li>Bandwidth limits per client: your guests can't saturate your uplink during a workshop
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>OpenNDS Setup</h3>
+            <ul>
+  <li>Lightweight, runs directly on OpenWRT — no external server needed: <code>opkg update && opkg install openNDS</code>
+  </li>
+  <li>Bind OpenNDS to your guest VLAN interface only — does not affect other SSIDs
+  </li>
+  <li><code>gatewayname</code> — appears on the splash page header
+  </li>
+  <li><code>maxclients</code> — hard cap on simultaneous guest connections (useful for event management)
+  </li>
+  <li><code>sessiontimeout</code> — auto-expire sessions after N minutes (set 0 for no timeout)
+  </li>
+  <li><code>downloadlimit</code> / <code>uploadlimit</code> — bandwidth cap per client in kbps
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Customization and Advanced Auth</h3>
+            <ul>
+  <li>Default template lives in <code>/etc/openNDS/htdocs/</code> — edit <code>splash.html</code> for your logo and terms
+  </li>
+  <li>Add a voucher code field: guests enter today's code, OpenNDS validates before granting access
+  </li>
+  <li><strong>FAS (Forward Authentication Service)</strong>: hands off auth to an external server
+    <ul>
+      <li>Use case: event access codes, time-limited vouchers, integration with booking or ticketing systems</li>
+      <li>External server returns a token; OpenNDS grants or denies based on the response</li>
+    </ul>
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>OpenWRT — Rotating SSID and Password</h2>
+        <p><strong>Source: blog.holtzweb.com/posts/turn-network-services-off-after-business-hours/</strong></p>
+        <div class="cols-3">
+          <div class="panel">
+            <h3>The Concept and Use Cases</h3>
+            <ul>
+  <li>One SSID with credentials that automatically rotate on a schedule — old credentials stop working
+  </li>
+  <li>New SSID name and password generated, applied, and emailed to all authorized recipients automatically
+  </li>
+  <li>Devices not re-added each cycle lose access — useful for contractors, short-term access, events
+  </li>
+  <li>No manual credential distribution: the cron job sends the email, recipients just connect
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>How the Script Works</h3>
+            <ul>
+  <li>Downloads a list of candidate SSID names — most begin with an emoji character
+  </li>
+  <li>Extracts password candidates from a <strong>Voltaire novel</strong> — large natural-language corpus, memorable
+  </li>
+  <li>Filters by configured min/max character length — usable but not trivially short
+  </li>
+  <li>Updates OpenWRT via <code>uci set wireless.@wifi-iface[N].ssid</code> and <code>.key</code>
+  </li>
+  <li>Runs <code>wifi reload</code> to apply changes live — no reboot required
+  </li>
+  <li>Sends summary email via <strong>Brevo API</strong>: "Today's credentials: 🎯weird-ssid / correcthorsebattery"
+  </li>
+  <li>Swap Brevo for any transactional email API — Mailgun, SendGrid, Postmark all work identically
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Why Emoji SSIDs?</h3>
+            <ul>
+  <li>Makes the network visually distinct in any WiFi list — harder to spoof convincingly
+  </li>
+  <li>Slightly confusing to passive WiFi scanners — which is a feature, not a bug
+  </li>
+  <li>Schedule via cron: daily / weekly / monthly depending on paranoia level
+  </li>
+  <li>Combine with after-hours WiFi shutdown: SSID down entirely outside business hours, rotating when up
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>OPNsense — Advanced Firewalling</h2>
+        <p><strong>Source: blog.holtzweb.com/tags/opnsense/</strong></p>
+        <div class="cols-3">
+          <div class="panel">
+            <h3>Stateful Firewall Fundamentals</h3>
+            <ul>
+  <li>Consumer router: "allow everything outbound, block unsolicited inbound" — that's the entire ruleset
+  </li>
+  <li>OPNsense: stateful packet inspection on every interface, every direction, full logging per rule
+  </li>
+  <li>Tracks connection state: new, established, related, invalid — rules match on any combination
+  </li>
+  <li>Default policy is configurable per interface — start with deny-all, add allow rules explicitly
+  </li>
+  <li>Floating rules: apply across all interfaces simultaneously — use for global policies and IP blocklists
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Inter-VLAN Rules — The Critical Part</h3>
+            <ul>
+  <li>By default in OPNsense: VLANs cannot communicate with each other — you add only what you need
+  </li>
+  <li>"Home VLAN can reach NAS on port 445" — one explicit rule, everything else is dropped silently
+  </li>
+  <li>IoT VLAN: allow rule for WAN only — it cannot initiate connections to Home, LAN, or other VLANs
+  </li>
+  <li>Drop, not reject: attackers get no information about whether a host exists behind the firewall
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Aliases — Named Groups for Clean Rules</h3>
+            <ul>
+  <li>Instead of one rule per IP: create alias "HomeDevices" containing all trusted IPs
+  </li>
+  <li>Rules reference the alias — add a device to the alias, all associated rules update automatically
+  </li>
+  <li>Aliases can be: IP lists, network ranges, port groups, or URLs (auto-refreshed for blocklists)
+  </li>
+  <li>IP blocklists: one alias pointing at Firehol or Spamhaus, one block rule — 50,000 IPs covered
+  </li>
+  <li>Firewall → Log Files → Live View: watch traffic hit your rules in real time alongside ntopng
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>OPNsense — Reverse Proxy</h2>
+        <p><strong>Source: blog.holtzweb.com/posts/opnsense-nginx-waf-failover-with-caddy-and-traefik/</strong></p>
+        <div class="cols-2">
+          <div class="panel">
+            <h3>What a Reverse Proxy Does in Your Home Network</h3>
+            <ul>
+  <li>Multiple self-hosted services: Nextcloud, Jellyfin, Home Assistant, Vaultwarden, Gitea
+  </li>
+  <li>One external IP, one port 443 — the proxy routes each request by hostname to the right service
+  </li>
+  <li>Valid HTTPS certificates for all services — no browser certificate warnings, no self-signed exceptions
+  </li>
+  <li>No service listens on a public port directly — only the proxy does, reducing your attack surface
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Caddy on OPNsense — the Current Recommendation</h3>
+            <ul>
+  <li>First-class OPNsense plugin as of 2025 — installed and managed directly from the GUI
+  </li>
+  <li>Automatic HTTPS with Let's Encrypt built in — no separate ACME plugin, no manual cert wiring
+  </li>
+  <li>Simple declarative config: <code>cloud.yourdomain.com</code> → Nextcloud, <code>media.*</code> → Jellyfin, done
+  </li>
+  <li>Feature-rich: reverse proxy, static files, ACME, basic auth, headers, rewrite rules — all in one
+  </li>
+  <li>Actively maintained and responsive to bug reports — support is real and ongoing
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>A Note on HAProxy</h3>
+            <ul>
+  <li>HAProxy (<code>os-haProxy</code>) was the go-to OPNsense reverse proxy for years — it works, but the plugin is effectively unmaintained
+  </li>
+  <li>Bugs accumulated with no resolution path; the plugin lags OPNsense releases and WAF integration was painful
+  </li>
+  <li>If you have existing HAProxy configs they will continue to function — but for new setups, use Caddy
+  </li>
+  <li>Full writeup on why the switch happened: blog.holtzweb.com/posts/opnsense-with-haproxy-and-lets-encrypt/
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Advanced: Caddy → Nginx WAF → Traefik Failover</h3>
+            <ul>
+  <li><strong>Caddy</strong> sits at the front — terminates TLS, handles ACME, routes to backends
+  </li>
+  <li><strong>Nginx + ModSecurity WAF</strong> inspects requests for SQLi, XSS, path traversal before they reach your services
+  </li>
+  <li><strong>Traefik</strong> behind the WAF auto-discovers services via Docker labels — zero manual config per new container
+  </li>
+  <li>Failover: if the WAF is unreachable, traffic routes around it — service stays up, WAF failure is not an outage
+  </li>
+  <li>Full stack walkthrough: blog.holtzweb.com/posts/opnsense-nginx-waf-failover-with-caddy-and-traefik/
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>OPNsense — Traffic Flows and Unbound DNS Views</h2>
+                <div class="cols-2">
+          <div class="panel">
+            <h3>Per-VLAN Routing and Traffic Shaping</h3>
+            <ul>
+  <li>Policy-based routing: different VLANs routed through different gateways — per-interface rules
+  </li>
+  <li>IoT VLAN → direct internet (no VPN overhead for your lightbulbs)
+  </li>
+  <li>Home VLAN → WireGuard exit for privacy on all devices automatically
+  </li>
+  <li>Guest VLAN capped at 20Mbps — guests can't saturate your uplink during a workshop
+  </li>
+  <li>IoT VLAN rate-limited — if something is exfiltrating, it's at least doing it slowly
+  </li>
+  <li>Priority queues: VoIP traffic gets low-latency scheduling regardless of concurrent activity
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Unbound DNS and Split-Horizon Views</h3>
+            <ul>
+  <li>OPNsense runs Unbound as DNS resolver — all devices receive it automatically via DHCP
+  </li>
+  <li>Local DNS records: <code>nas.home</code> → your NAS IP, <code>media.home</code> → Jellyfin — no IP memorization needed
+  </li>
+  <li>DNSSEC validation: reject DNS responses without valid signatures — prevents cache poisoning
+  </li>
+  <li>DNS-over-TLS forwarding: encrypt queries to upstream resolver — ISP can't log them at transit
+  </li>
+  <li><strong>Unbound Views</strong> (blog.holtzweb.com: Unbound Views in OPNsense to Resolve Domains by VLAN/Subnet):
+    <ul>
+      <li>Home VLAN asks <code>cloud.yourdomain.com</code> → gets internal IP (stays on LAN, never leaves router)</li>
+      <li>IoT VLAN asks <code>cloud.yourdomain.com</code> → gets NXDOMAIN (can't even see the service exists)</li>
+      <li>Guest VLAN asks any internal hostname → blocked — guests see only external internet</li>
+    </ul>
+  </li>
+  <li><strong>DNSCrypt</strong> (blog.holtzweb.com: OPNsense Unbound Multi-site Split-DNS with DNSCrypt):
+    <ul>
+      <li>Encrypts and authenticates DNS queries from OPNsense to upstream — prevents ISP interception</li>
+    </ul>
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>OPNsense — WireGuard VPN Gateway</h2>
+        <p><strong>Source: blog.holtzweb.com/tags/opnsense/ — WireGuard Server + Site-to-Site VPN</strong></p>
+        <div class="cols-3">
+          <div class="panel">
+            <h3>Remote Access — Your Phone and Laptop Back to Home</h3>
+            <ul>
+  <li>VPN → WireGuard → Local tab: create the server, assign an IP range for VPN clients
+  </li>
+  <li>Add a peer per client device: each gets its own public key and assigned IP in the VPN range
+  </li>
+  <li>Firewall rule: allow WireGuard interface → Home VLAN — clients on VPN reach everything Home can
+  </li>
+  <li>Client: install WireGuard app, scan QR code from OPNsense — done, connected in under 2 minutes
+  </li>
+  <li>When traveling: all traffic routes through your home OPNsense — your DNS blocklists, your firewall
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Site-to-Site — Two Locations, One Network</h3>
+            <ul>
+  <li>Both OPNsense boxes run a WireGuard instance — each is a peer of the other
+  </li>
+  <li>Each knows the other's public key and endpoint IP — routes configured per subnet
+  </li>
+  <li>"To reach 192.168.2.0/24, use the WireGuard tunnel" — transparent routing between sites
+  </li>
+  <li>Traffic between sites: the internet sees only WireGuard UDP packets on one port
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>Why WireGuard Over OpenVPN</h3>
+            <ul>
+  <li>~4,000 lines of code vs ~100,000 for OpenVPN — dramatically smaller attack surface to audit
+  </li>
+  <li>Modern cryptography: ChaCha20, Poly1305, Curve25519 — faster than OpenVPN's legacy cipher stack
+  </li>
+  <li>Reconnects instantly after network changes: switching WiFi, waking from sleep, no re-auth dance
+  </li>
+  <li>Split tunnel: only traffic destined for home network uses VPN — local internet stays local and fast
+  </li>
+  <li>Kill switch: OPNsense gateway group configuration — block WAN traffic if VPN drops, zero leaks
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>OPNsense — Suricata IDS/IPS</h2>
+                <div class="cols-3">
+          <div class="panel">
+            <h3>Deployment and Rule Sets</h3>
+            <ul>
+  <li>IDS mode: alert and log without blocking — start here for a week before switching to IPS
+  </li>
+  <li>IPS mode: drops matching packets — effective once you've tuned out false positives
+  </li>
+  <li>Enable on WAN (stop inbound threats) and LAN (catch compromised devices calling out)
+  </li>
+  <li><strong>ET Open (Emerging Threats)</strong> — free, updated daily, covers malware C2, exploit kits, scanners
+  </li>
+  <li><strong>Abuse.ch Feodo / URLhaus</strong> — botnet C2 IPs and domains updated in near-real-time
+  </li>
+  <li><strong>ET Pro</strong> — paid, lower false positive rate, more comprehensive coverage for production use
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>What Suricata Catches That Firewalls Miss</h3>
+            <ul>
+  <li>Known malware C2 over HTTPS on port 443 — certificate is valid, JA3 fingerprint is flagged
+  </li>
+  <li>DNS exfiltration: data encoded in subdomain strings — <code>a2f3b1.exfil.bad.com</code> — dedicated rules
+  </li>
+  <li>Port scanning originating from inside your LAN — a device is compromised and mapping your network
+  </li>
+  <li>Exploit kit traffic patterns: specific URI structures, headers, response sequencing
+  </li>
+  <li>Cryptocurrency mining pool connections — distinct protocol fingerprints, easy to detect and block
+  </li>
+</ul>
+          </div>
+          <div class="panel">
+            <h3>JA3 Fingerprinting — How It Sees Encrypted C2</h3>
+            <ul>
+  <li>TLS handshakes expose a fingerprint: which cipher suites and extensions the client offers
+  </li>
+  <li>Malware families use the same compiled TLS library → same JA3 hash on every infected machine
+  </li>
+  <li>Suricata: "this HTTPS connection to a valid CDN has a JA3 matching known Emotet behavior"
+  </li>
+  <li>No decryption required — the handshake pattern alone identifies the malware family
+  </li>
+  <li>Tuning: suppress false positives for Steam, game launchers, CDNs — then switch categories to IPS
+  </li>
+</ul>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>The Complete Open Source Home Network Stack</h2>
+        <pre><code class="language-text" data-trim data-noescape data-line-numbers>INTERNET
+    |
+    ▼
+[ OPNsense WAN ]
+    |
+    ├── Suricata IDS/IPS          ← inspect all inbound/outbound
+    ├── IP Blocklists (Aliases)   ← drop known bad at border
+    |
+    ▼
+[ OPNsense Routing &amp; Policy ]
+    ├── VLAN 10 — Home ──────────── Full LAN access
+    │     └── Unbound DNS view: internal hostnames resolve
+    ├── VLAN 20 — IoT ───────────── Internet only · 10Mbps cap
+    │     └── DNS view: internal domains → NXDOMAIN
+    ├── VLAN 30 — Guest ─────────── Internet only · captive portal
+    │     └── OpenNDS: splash page, bandwidth limit, session timeout
+    ├── VLAN 40 — Select ────────── Internet only · rotating SSID
+    │     └── Cron: new SSID+PSK daily via Brevo email API
+    ├── WireGuard ───────────────── Remote access from anywhere
+    ├── Caddy ───────────────────── Self-hosted services + HTTPS
+    ├── ntopng ─────────────────── Visibility into everything above
+    └── Unbound + blocklists ───── Block before resolve, all VLANs
+          |
+          ▼
+[ OpenWRT Access Point ]
+    ├── SSID: Home     → VLAN 10 (trusted)
+    ├── SSID: IoT      → VLAN 20 (client isolated)
+    ├── SSID: Guest    → VLAN 30 (client isolated + OpenNDS)
+    └── SSID: 🎯emoji  → VLAN 40 (rotates daily via cron)</code></pre>
+<ul>
+  <li>No device can see another VLAN without an explicit firewall rule — the default is deny
+  </li>
+  <li>All DNS is filtered for every device on every VLAN simultaneously — no exceptions
+  </li>
+  <li>Malware behavior is detected even over encrypted connections via JA3 fingerprinting
+  </li>
+  <li>You can connect securely from anywhere in the world via WireGuard back to your home network
+  </li>
+</ul>
+      </section>
+      <section>
+        <h2>Resources</h2>
+        <table>
+<thead><tr>
+  <th>Topic</th>
+  <th>Link</th>
+</tr></thead><tbody>
+<tr>
+  <td><strong>DSA VLANs with OPNsense</strong></td>
+  <td>blog.holtzweb.com/posts/openwrt-dsa-networking-vlans-with-opnsense/</td>
+</tr>
+<tr>
+  <td><strong>OpenWRT captive portal + isolation</strong></td>
+  <td>holtzweb.com/openwrt-presentation.html</td>
+</tr>
+<tr>
+  <td><strong>Rotating SSID script</strong></td>
+  <td>blog.holtzweb.com/posts/turn-network-services-off-after-business-hours/</td>
+</tr>
+<tr>
+  <td><strong>All OPNsense posts</strong></td>
+  <td>blog.holtzweb.com/tags/opnsense/</td>
+</tr>
+<tr>
+  <td><strong>Caddy + Nginx WAF + Traefik</strong></td>
+  <td>blog.holtzweb.com/posts/opnsense-nginx-waf-failover-with-caddy-and-traefik/</td>
+</tr>
+<tr>
+  <td><strong>WireGuard server + site-to-site</strong></td>
+  <td>blog.holtzweb.com — OPNsense as a WireGuard Server</td>
+</tr>
+<tr>
+  <td><strong>Unbound DNS Views per VLAN</strong></td>
+  <td>blog.holtzweb.com — Unbound Views in OPNsense</td>
+</tr>
+<tr>
+  <td><strong>Nginx WAF + Caddy + Traefik failover</strong></td>
+  <td>blog.holtzweb.com — Transparent Nginx WAF Failover</td>
+</tr>
+<tr>
+  <td><strong>DNSCrypt + Split-DNS</strong></td>
+  <td>blog.holtzweb.com — OPNsense Unbound Multi-site Split-DNS</td>
+</tr>
+<tr>
+  <td><strong>Geofiltered IP blocklists</strong></td>
+  <td>blog.holtzweb.com — Geofiltered IP Address Blocklists Aggregator</td>
+</tr>
+<tr>
+  <td><strong>OPNsense docs</strong></td>
+  <td>docs.opnsense.org</td>
+</tr>
+<tr>
+  <td><strong>OpenWRT hardware table</strong></td>
+  <td>openwrt.org/toh</td>
+</tr>
+<tr>
+  <td><strong>GL.iNet routers</strong></td>
+  <td>gl-inet.com — OpenWRT pre-installed, travel or home AP</td>
+</tr>
+<tr>
+  <td><strong>Protectli Vault FW4B/FW6</strong></td>
+  <td>protectli.com — fanless x86 purpose-built OPNsense appliance</td>
+</tr>
+</tbody></table>
+      </section>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      transition: 'fade',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      fragments: false,
+      progress: true,
+      slideNumber: 'c/t',
+      autoAnimateEasing: 'ease-out',
+      autoAnimateDuration: 0.65,
+      plugins: [ RevealHighlight, RevealNotes ]
+    });
+  </script>
+</body>
+</html>

@@ -1,53 +1,11 @@
 [
   {
-    "slug": "acquisition-intake",
-    "title": "Acquisition & Intake",
-    "tagline": "Disciplined capital deployment through rigorous origination and transaction execution.",
-    "description": "We identify operating businesses with durable fundamentals, structure acquisitions across all deal configurations, and execute through close. Integration planning begins prior to signing.",
-    "iconKey": "building-office",
-    "highlights": ["Due diligence & valuation", "Deal structure & negotiation", "Capital deployment", "Entity formation & integration"],
-    "theme": {
-      "color": "from-amber-500/20 to-amber-600/5",
-      "border": "border-amber-500/20 hover:border-amber-500/40",
-      "accent": "text-amber-400",
-      "borderAccent": "border-amber-500/20",
-      "badgeBorder": "border-amber-500/30",
-      "badgeBg": "bg-amber-500/5"
-    },
-    "pageMeta": {
-      "title": "Acquisition & Intake",
-      "description": "Strategic business acquisition, due diligence, deal structuring, and portfolio integration. Apex Capital Group deploys capital with conviction."
-    },
-    "intro": {
-      "badge": "Acquisition",
-      "heading": "Acquisition & Intake",
-      "subHeading": "Every holding begins with a transaction. We identify operating businesses with durable fundamentals, conduct rigorous due diligence, and structure deals to close. Integration planning begins before the ink is dry."
-    },
-    "capabilities": [
-      { "title": "Target Identification", "description": "Proprietary deal sourcing across sectors: direct outreach, broker relationships, and management team referrals. Sourcing is conducted with a defined mandate applied consistently across channels." },
-      { "title": "Due Diligence", "description": "Financial, operational, legal, and market due diligence conducted with the rigor appropriate to acquiring an operating business. Every material item is reviewed and documented prior to close." },
-      { "title": "Valuation & Pricing", "description": "DCF, comparable transaction, and earnings-based modeling applied to every target. Pricing discipline is maintained consistently across deal size and sector." },
-      { "title": "Deal Structuring", "description": "Equity, debt, earnouts, seller financing — we structure transactions to align incentives and achieve close. Experience across deal configurations enables efficient execution regardless of complexity." },
-      { "title": "LOI & Definitive Agreement", "description": "From letter of intent through purchase agreement, executed with precision and urgency. Timelines are managed to maintain deal momentum through all intermediate milestones." },
-      { "title": "Regulatory & Compliance Review", "description": "HSR, licensing, environmental, and sector-specific regulatory requirements reviewed pre-close. Material compliance items are resolved before they become conditions to closing." },
-      { "title": "Debt Financing & Capital Stack", "description": "Senior debt, mezzanine, preferred equity — we build capital structures that leave room to operate without sacrificing returns. Lender relationships are maintained across institution types and deal sizes." },
-      { "title": "Management Retention Planning", "description": "Identifying which members of the incumbent leadership team to retain — and structuring the compensation and equity economics to make that retention durable." },
-      { "title": "Integration Planning", "description": "Day-one operational continuity, systems consolidation roadmaps, and vendor transition timelines developed pre-close so operational continuity is maintained through the ownership transfer." },
-      { "title": "Post-Close Reporting Framework", "description": "Board reporting cadences, financial dashboards, and KPI frameworks established in the first 90 days. What gets measured gets managed." }
-    ],
-    "cta": {
-      "heading": "Have a business we should look at?",
-      "body": "We review opportunities across sectors. Submit the details and we will respond with a preliminary assessment of fit against our mandate.",
-      "label": "Submit an Opportunity →"
-    }
-  },
-  {
-    "slug": "operational-efficiency",
-    "title": "Operational Efficiency",
-    "tagline": "Systematic performance improvement across portfolio company operations.",
-    "description": "Each portfolio company receives a structured operational review following acquisition. Improvement roadmaps are prioritized by measurable impact, resourced appropriately, and tracked against baseline metrics.",
-    "iconKey": "chart-bar-square",
-    "highlights": ["Process optimization", "Cost structure analysis", "Vendor consolidation", "KPI establishment"],
+    "slug": "wordpress-web-development",
+    "title": "WordPress & Web Development",
+    "tagline": "Sites that excite. Custom websites build audiences.",
+    "description": "Custom WordPress sites, theme development, plugin integrations, WooCommerce, SEO, headless CMS builds, and ongoing maintenance. We build fast, secure, accessible websites that are built for maximum online visibility.",
+    "iconKey": "wordpress-dots",
+    "highlights": ["Custom WordPress builds", "WooCommerce & eCommerce", "Headless / Astro sites", "SEO & Security"],
     "theme": {
       "color": "from-blue-500/20 to-blue-600/5",
       "border": "border-blue-500/20 hover:border-blue-500/40",
@@ -57,39 +15,43 @@
       "badgeBg": "bg-blue-500/5"
     },
     "pageMeta": {
-      "title": "Operational Efficiency",
-      "description": "Portfolio company optimization: process improvement, cost structure analysis, vendor consolidation, and KPI-driven performance management."
+      "title": "WordPress & Web Development",
+      "description": "Custom WordPress development, WooCommerce builds, headless CMS, performance optimization, and ongoing maintenance. Holtzweb builds websites that work."
     },
     "intro": {
-      "badge": "Operations",
-      "heading": "Operational Efficiency",
-      "subHeading": "We do not acquire businesses to leave them as-is. Every portfolio company receives a structured operational review, a prioritized improvement roadmap, and the resources to execute against it."
+      "badge": "Web Development",
+      "heading": "WordPress & Web Development",
+      "subHeading": "Websites that are fast, secure, accessible, and clients enjoy using. We specialize in modern web platforms. WordPress, Drupal, Astro, .NET, Shopify, WooCommerce, Contentful... you name it, we've worked on it."
     },
     "capabilities": [
-      { "title": "Operational Assessment", "description": "Top-to-bottom review of people, processes, and systems within the first 60 days. We identify what is working, what is broken, and what represents unproductive overhead." },
-      { "title": "Cost Structure Analysis", "description": "Line-by-line P&L review. Costs accumulated through years of inattention are identified and eliminated systematically." },
-      { "title": "Vendor & Supplier Consolidation", "description": "Portfolio-wide purchasing leverage applied to individual company relationships. Fewer vendors. Better terms. Less time managing paperwork." },
-      { "title": "Process Documentation & Standardization", "description": "Institutional knowledge extracted from key personnel and converted into documented, repeatable processes. Institutional knowledge is documented to reduce single-point-of-failure risk across key roles." },
-      { "title": "KPI Framework Deployment", "description": "Identifying the 6-12 metrics that actually predict performance for each business, then building the reporting infrastructure to track them weekly. No vanity metrics." },
-      { "title": "Technology & Systems Audit", "description": "Evaluating existing software, hardware, and workflow tools. We replace what is costing more than it earns and invest in what multiplies output per headcount." },
-      { "title": "Working Capital Optimization", "description": "A/R collection, inventory management, and payment terms renegotiated to free cash flow from the balance sheet. Cash that is sitting is cash that is not working." },
-      { "title": "Headcount & Organizational Design", "description": "Right-sizing the org chart for current revenue and projected growth. Roles are clarified. Accountability is assigned. Structural redundancy is resolved through a defined review process." },
-      { "title": "Margin Improvement Programs", "description": "Pricing analysis, product mix review, and direct cost reduction initiatives layered to systematically improve gross and operating margins over 12-24 months." },
-      { "title": "Performance Incentive Design", "description": "Compensation structures aligned to outcomes. If the business hits its targets, the people who drove those results share in them." }
+      { "title": "Custom WordPress Builds", "description": "Gutenberg block-editor themes, custom post types, react components, REST API integrations." },
+      { "title": "WooCommerce & E-commerce", "description": "Store setup, payment gateway integration, and inventory management, for a variety of online shops." },
+      { "title": "Web Application Development", "description": "Custom web applications beyond the CMS — dashboards, client portals, internal tools. Secure and custom for your needs." },
+      { "title": "Theme Development", "description": "Custom themes built around your brand, product, or service — from blank slate to pixel-perfect build." },
+      { "title": "Performance & Core Web Vitals", "description": "Lighthouse audits, INP/LCP/CLS remediation, asset optimization, critical CSS, edge caching. Increasing website ranking and customer conversions." },
+      { "title": "Migration & Maintenance", "description": "Moving from another provider? Want to switch platforms? Need help with a broken update? We are full service." },
+      { "title": "API Design & Third-Party Integrations", "description": "REST, API design, webhook architecture, and integrations with CRMs, ERPs, payment processors, and marketing platforms. We connect your web presence to the systems your business runs on." },
+      { "title": "Analytics & Conversion Optimization", "description": "Setting up A/B testing hooks, privacy-first data collection, SERP analysis, competitor content, search intent, event tracking and user journey analysis. Know your visitors' interests." },
+      { "title": "Monthly SEO & Performance Reporting", "description": "Monthly reporting covering rankings, traffic, technical health, and content performance. We deliver reports with plain-English commentary on what changed, why, and what's next." },
+      { "title": "Competitor Intelligence & SERP Monitoring", "description": "Want to know how the competition is doing? We do rank tracking, competitor content monitoring, and feature analysis. Know when a competitor moves before it shows up in your traffic drop." },
+      { "title": "Plugin Development", "description": "Custom sites often require custom integrations. We build any required features you may need and cannot get off-the-shelf." },
+      { "title": "Headless WordPress", "description": "Your website as headless CMS with Astro, Next.js, Gatsby, whatever your system uses - we can integrate it." },
+      { "title": "CI/CD & Deployment Pipelines", "description": "Automated deployment workflows with staging environments, phased blue green deployments, and rollback options." },
+      { "title": "Accessibility (WCAG) Compliance", "description": "WCAG 2.2 AA audits, keyboard navigation, screen reader support, color and contrast, and ARIA implementation." }
     ],
     "cta": {
-      "heading": "Operational improvement is not a one-time event.",
-      "body": "It is a discipline. We build that discipline into every company we hold.",
-      "label": "Learn How We Operate →"
+      "heading": "Considering a new project?",
+      "body": "Let's talk. We'll discuss the idea and find exactly what you'll need.",
+      "label": "Start the Conversation →"
     }
   },
   {
-    "slug": "portfolio-disposition",
-    "title": "Portfolio Disposition",
-    "tagline": "Structured exit execution from strategic positioning through close.",
-    "description": "Strategic exit planning begins at acquisition. When market conditions and asset performance align, we execute dispositions with the same analytical rigor applied to original underwriting.",
-    "iconKey": "arrow-trending-up",
-    "highlights": ["Exit strategy development", "M&A advisory", "Buyer identification", "Transaction management"],
+    "slug": "linux-server-administration",
+    "title": "Linux Server Administration",
+    "tagline": "Infrastructure that runs without concern.",
+    "description": "Server environments built and managed at scale. We cover infrastructure design, CI/CD, pipeline security, maintenance, and keeping everything monitored.",
+    "iconKey": "server-rack",
+    "highlights": ["Infrastructure design", "CI/CD pipeline engineering", "Security hardening & compliance", "Systems monitoring & observability"],
     "theme": {
       "color": "from-emerald-500/20 to-emerald-600/5",
       "border": "border-emerald-500/20 hover:border-emerald-500/40",
@@ -99,39 +61,39 @@
       "badgeBg": "bg-emerald-500/5"
     },
     "pageMeta": {
-      "title": "Portfolio Disposition",
-      "description": "Strategic exit planning, M&A advisory, buyer identification, and transaction management for portfolio company divestitures."
+      "title": "Linux Server Administration",
+      "description": "Whatever your infrastructure we can find the best solution to meet your needs. Software agnostic, we keep everything running under all conditions."
     },
     "intro": {
-      "badge": "Disposition",
-      "heading": "Portfolio Disposition",
-      "subHeading": "An acquisition is only as good as the exit that follows it. We plan for disposition from the day we close, so when the time is right, we are positioned to execute — not to prepare."
+      "badge": "Server Administration",
+      "heading": "Linux Server Administration",
+      "subHeading": "Server environments built and managed at scale. We cover infrastructure design, CI/CD, pipeline security hardening, and keeping everything monitored."
     },
     "capabilities": [
-      { "title": "Exit Strategy Development", "description": "Strategic sale, secondary buyout, IPO, or recapitalization — we evaluate the right exit path for each asset based on market timing, buyer landscape, and investor objectives." },
-      { "title": "Business Preparation", "description": "Clean financial statements, documented processes, resolved contingent liabilities, and a management team that can present confidently. We prepare our companies to be acquired with the same discipline we applied at intake." },
-      { "title": "Valuation & Positioning", "description": "Current-market valuation and narrative development. We identify what buyers pay for and ensure our companies communicate that story clearly and with supporting data." },
-      { "title": "Buyer Universe Mapping", "description": "Strategic buyers, financial sponsors, family offices, and management buyout candidates identified and qualified. The right buyer is often not the first one who calls." },
-      { "title": "Marketing Process Management", "description": "Confidential information memorandum, management presentations, and data room managed with discretion. Information goes to qualified buyers, not the market at large." },
-      { "title": "Bid Process & Negotiation", "description": "First-round indications, management meetings, second-round bids, and final negotiations conducted with the experience of a team that has been on both sides of the table." },
-      { "title": "Due Diligence Support", "description": "Buyer diligence is the mirror image of what we conducted on intake. We respond to requests promptly, completely, and without delays that erode buyer confidence." },
-      { "title": "Transaction Structuring", "description": "Purchase price adjustments, representations and warranties, escrows, earnouts, and rollover equity negotiated to protect seller value and close the transaction." },
-      { "title": "Regulatory Clearance", "description": "Antitrust review, sector-specific regulatory approvals, and third-party consents managed from LOI through close." },
-      { "title": "Post-Close Obligations", "description": "Transition services agreements, non-competes, and earnout tracking managed through close and the subsequent obligations period. A deal is not done when it closes." }
+      { "title": "Server Provisioning", "description": "Bare metal, VPS, cloud instance, or dedicated GPU node. Whatever your environment we provide custom and well documented systems." },
+      { "title": "Security Hardening", "description": "CIS Level 2 benchmarks, rootless containers, AppArmor/SELinux profiles, WireGuard, and supply chain controls." },
+      { "title": "High Availability & Failover", "description": "Kubernetes, Swarm, Incus, HAProxy, Nginx, Postgres, all kept in sync. Ready and designed for any possible failure." },
+      { "title": "Backup & Disaster Recovery", "description": "Immutable off-site backups, tested restore runbooks, and documented RTO/RPO. We run the drills so the drill isn't your outage." },
+      { "title": "Kubernetes & Orchestration", "description": "Docker Swarm, clusters on bare metal, failover, or managed cloud kubernetes - we provide secure automated deployments for any environment." },
+      { "title": "Container & Virtualization", "description": "Secure, well managed scopes. Rootless, isolated micro-VMs, namespace and resource limited. Dev and Prod live in harmony." },
+      { "title": "Web Server Configuration", "description": "Nginx, Caddy, and Traefik with automated TLS, HTTP/3, edge caching, and zero-downtime reload. Apache is always available for legacy stacks." },
+      { "title": "Observability Stack", "description": "Prometheus, Grafana, Loki, Mimir, Tempo, and OpenTelemetry. Full metrics, logs, and traces in one pane. Alerts that provide details not noise." },
+      { "title": "GitOps & CI/CD Integration", "description": "ArgoCD, Flux, and GitHub, GitLab, or Jenkins. We write pipelines that work. Safety, with policies, rollback gates, and environment var protection built in." },
+      { "title": "Infrastructure as Code", "description": "Terraform, OpenTofu, and Ansible. Git checked, idempotent, easily reviewed, and version-controlled. Your infrastructure lives in Git, not in someone's head." }
     ],
     "cta": {
-      "heading": "Thinking about an exit?",
-      "body": "Early planning produces better outcomes regardless of timeline. We are available for a preliminary conversation at any stage.",
-      "label": "Talk to Our Deal Team →"
+      "heading": "Servers that run themselves (almost)",
+      "body": "Whether you need zero-downtime Kubernetes deployments, security policies baked into your CI/CD pipeline, or just want your infrastructure in Git, not in someone's head - we are here to help.",
+      "label": "What Can We Do For You →"
     }
   },
   {
-    "slug": "leadership-transition",
-    "title": "Leadership Transition & Stakeholder Relations",
-    "tagline": "Disciplined management of executive succession and stakeholder communication.",
-    "description": "Leadership transitions following acquisition present operational and stakeholder risk if not managed with structure. We apply a defined framework covering executive continuity, governance, and communications across every portfolio company.",
-    "iconKey": "user-plus",
-    "highlights": ["Executive onboarding", "Stakeholder communications", "Board governance", "Cultural integration"],
+    "slug": "networking-infrastructure",
+    "title": "Networking & Infrastructure",
+    "tagline": "The foundational systems serving technology.",
+    "description": "LAN/WAN design, edge router configuration, VPN setup, Wi-Fi deployments, mesh networking, zero trust services. Every deployment comes with documentation your team actually enjoys using.",
+    "iconKey": "network-grid",
+    "highlights": ["Firewall & VPN config", "Vendor agnostic networking", "Hardware selection", "Network assessments"],
     "theme": {
       "color": "from-violet-500/20 to-violet-600/5",
       "border": "border-violet-500/20 hover:border-violet-500/40",
@@ -141,30 +103,70 @@
       "badgeBg": "bg-violet-500/5"
     },
     "pageMeta": {
-      "title": "Leadership Transition & Stakeholder Relations",
-      "description": "Executive onboarding, board governance, stakeholder communications, and cultural integration management for portfolio company leadership transitions."
+      "title": "Networking & Infrastructure",
+      "description": "Network design, firewall configuration, VPN, VLAN segmentation, Wi-Fi deployment (Ubiquiti/Aruba), and network assessments."
     },
     "intro": {
-      "badge": "Leadership",
-      "heading": "Leadership Transition & Stakeholder Relations",
-      "subHeading": "The people side of an acquisition is where most deals underperform after close. We have developed a structured framework for managing transitions that covers planning, communication, and governance — applied consistently across every holding."
+      "badge": "Networking",
+      "heading": "Networking & Infrastructure",
+      "subHeading": "Solid network infrastructure is the foundation that runs most businesses today. We design, deploy, and document networks - in the cloud or on premise."
     },
     "capabilities": [
-      { "title": "Transition Planning", "description": "Pre-close planning for Day 1, Week 1, Month 1, and Quarter 1. Each milestone has an owner, a communication plan, and a definition of success." },
-      { "title": "Executive Assessment & Retention", "description": "Evaluating incumbent executives against the company's next-phase needs. Those who fit stay, with updated economics. Those who do not fit are transitioned through a structured offboarding process." },
-      { "title": "New Leadership Recruitment", "description": "When the role requires an upgrade, we recruit from our network or engage search firms with specific briefs. Selection is based on capability assessment, not résumé review alone." },
-      { "title": "Executive Onboarding", "description": "Structured 90-day onboarding for incoming executives: key relationships, operational overview, quick-win identification, and expectation alignment with the board." },
-      { "title": "Board Governance & Composition", "description": "Board seats, committee structures, information rights, and reporting cadences established post-close to provide appropriate oversight without impeding management." },
-      { "title": "Employee Communication Strategy", "description": "Transparent, consistent communication to the workforce about the acquisition, the new ownership, and what changes and what does not. Uncertainty is the primary driver of attrition during transitions." },
-      { "title": "Customer & Vendor Notification", "description": "Key account outreach, vendor relationship continuity, and contract assignment managed to prevent relationship disruption during the transition period." },
-      { "title": "Cultural Integration Assessment", "description": "Understanding the acquired company's culture — what it values, how it makes decisions, where informal authority sits — before attempting to change anything. Assessment precedes optimization." },
-      { "title": "Stakeholder Reporting", "description": "Investor updates, lender compliance reporting, and board packages delivered on schedule with the information stakeholders need to evaluate performance." },
-      { "title": "Conflict Resolution & Change Management", "description": "When transitions produce friction — and they sometimes do — we have experienced operators who can diagnose the source, mediate the parties, and move the business forward." }
+      { "title": "Network Design & Architecture", "description": "LAN/WAN topology designed for security, redundancy, segmentation, and growth. Documented, diagrammed, and built to serve the next engineer." },
+      { "title": "Firewall & Policy Management", "description": "Zero-trust rule bases, VLANs, application-aware policies, and geo-blocking. No implicit trust, no legacy rules left behind. We will bring your current system up to compliance." },
+      { "title": "VPN & Remote Workers", "description": "Remote access with MFA enforced, split-tunneling governed, RBAC, monitored, and failover tested. No down time, no trust concerns." },
+      { "title": "Cloud Networking (AWS / Azure / GCP)", "description": "Strategic design and deployment of secure, scalable multi-cloud network architectures. We engineer isolated VPC/VNet topologies with subnet segmentation and routing optimizations." },
+      { "title": "Cloud-to-On-Premise Connectivity", "description": "AWS Direct Connect, Azure ExpressRoute, and GCP Partner Interconnect are public cloud offerings dedicated to private paths between you and your data center." },
+      { "title": "Enterprise Wi-Fi Deployment", "description": "Know where your devices, employees, or customers are. Wifi and Bluetooth presense. Centralized secure sign in. Let your network work for you." },
+      { "title": "Vendor Neutral Deployments", "description": "Open Source and Enterprise systems, we handle it all. pfSense, OPNsense, OpenWRT, Aruba, Meraki, Ubiquiti, Juniper, Fortinet, and Palo Alto, to name a few." },
+      { "title": "Cloud Firewall & Perimeter", "description": "AWS Network Firewall, Azure Firewall Premium, and GCP Cloud Armor provide egress inspection, IDS/IPS, and layer 7 policy routing and enforcement across all workloads." },
+      { "title": "Multi-Cloud WAN & Interconnect", "description": "Unifying AWS Transit Gateway, Azure Virtual WAN, and GCP Network. We replace default route propagation with intent-based, policy-driven traffic engineering—ensuring every packet traverses the network as designed." },
+      { "title": "Network Observability & Flow Analysis", "description": "NetFlow/IPFIX, sFlow, and cloud VPC flow logs feeding into Security Onion, AlienVault for anomaly detection. Every conversation traceable across the entire network stack." }
+    ],
+    "vendors": ["Ubiquiti", "Aruba", "Cisco", "Fortinet", "pfSense", "OPNsense", "GL.iNet", "OpenWRT", "Palo Alto", "Meraki", "Juniper", "SonicWall", "VyOS", "Ruckus"],
+    "vendorsLabel": "Hardware and software we often use",
+    "cta": {
+      "heading": "Get your network audited",
+      "body": "We can assess any part of your network as needed. From the cables in the ground to the data in the cloud.",
+      "label": "Contact Us →"
+    }
+  },
+  {
+    "slug": "consulting-project-support",
+    "title": "Consulting & Project Support",
+    "tagline": "A straight answer about what your IT needs.",
+    "description": "Not sure what you need? Contact us. We'll talk about your current setup, translate wishes into features, identify gaps, and give you a roadmap. We'll figure it out together, then you decide what to do.",
+    "iconKey": "lightbulb-alt",
+    "highlights": ["IT infrastructure audits", "Technology roadmapping", "Vendor selection", "Project management"],
+    "theme": {
+      "color": "from-amber-500/20 to-amber-600/5",
+      "border": "border-amber-500/20 hover:border-amber-500/40",
+      "accent": "text-amber-400",
+      "borderAccent": "border-amber-500/20",
+      "badgeBorder": "border-amber-500/30",
+      "badgeBg": "bg-amber-500/5"
+    },
+    "pageMeta": {
+      "title": "Consulting & Project Support",
+      "description": "IT consulting, infrastructure audits, technology roadmapping, vendor selection, and project management."
+    },
+    "intro": {
+      "badge": "Consulting",
+      "heading": "Consulting & Project Support",
+      "subHeading": "Help from the start, middle, or end. We are available for almost any project or service. Complete setup, one-time training, or an additional staff member - we can provide any level of support."
+    },
+    "capabilities": [
+      { "title": "IT Infrastructure Audits", "description": "Just want to sit down for a review? We can review an idea or your current environment to identify misconfigurations or wasted resources." },
+      { "title": "Cloud Migration Planning", "description": "Step by step migration plans. If you're moving into the cloud or stepping back to the ground, we make sure moving doesnt break anything along the way, with rollback and blue green testing." },
+      { "title": "Project Management & Delivery", "description": "Driving complex, cross-functional IT projects from kickoff to close. We manage timelines, risks, and deliverables for a variety of projects, industries, and services." },
+      { "title": "Team Augmentation", "description": "Providing engineers to work alongside your team for a sprint, a project phase, or an extended engagement. No business sector left behind, no knowledge gap that cannot be closed, we do it all." },
+      { "title": "Vendor Evaluation & Selection", "description": "We're vendor-agnostic and have no referral agreements. We have seen it all, and with our experience we help evaluate options against your actual requirements and tell you honestly what we'd choose." },
+      { "title": "Staff Training & Knowledge Transfer", "description": "Hands on training and clear procedures so your team can confidently move forward. Documentation and knowledge base hosted on prem or in cloud." }
     ],
     "cta": {
-      "heading": "Leadership transitions require structured execution.",
-      "body": "We have developed repeatable frameworks for managing them without disruption to operations or stakeholder confidence.",
-      "label": "Contact Our Operating Team →"
+      "heading": "Let's talk through your situation",
+      "body": "Drop us your thoughts. Sometimes a small conversation is enough to clear a blocker, & get you where you need to go.",
+      "label": "Let's Talk →"
     }
   }
 ]

@@ -1,0 +1,5 @@
+---
+// FIX-FEATURE-CONITADD: Concierge IT component disabled.
+// Full source preserved in: src/components/ConciergeIT.astro.disabled
+// Restore by copying .disabled back over this file.
+---
